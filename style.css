@@ -7,6 +7,35 @@
     font-style: normal;
 }
 
+html, body {
+  cursor: url('./imgs/WiiHand/CursorNormal32.png') 16 16, auto;
+  cursor:grab url
+}
+
+ #welcome {
+  position: absolute;
+  z-index: 9;
+  background-color: #f1f1f1;
+  border: 1px solid #d3d3d3;
+  text-align: center;
+}
+
+#welcomeheader {
+  padding: 10px;
+  cursor: url('./imgs/WiiHand/CursorPoint32.png') 16 16, auto;
+  z-index: 10;
+  background-color: #2196F3;
+  color: #fff;
+}
+
+#welcomeheader:active {
+  padding: 10px;
+  cursor: url('./imgs/WiiHand/CursorGrab32.png') 16 16, auto;
+  z-index: 10;
+  background-color: #2c5475;
+  color: #fff;
+}
+
 :root{
     --white-color: #fff;
     --dark-color: #252525;
@@ -41,52 +70,61 @@ a{
 }
 
 button{
-    cursor: pointer;
+    cursor: url('./imgs/WiiHand/CursorPoint32.png') 3 3, auto;
     border: none;
     background: none;
+}
+
+area{
+    cursor: url('./imgs/WiiHand/CursorPoint32.png') 3 3, auto;
 }
 
 img{
     width: 100%;
 }
 
-.section-content{
-    margin: 0 auto;
-    padding: 0 20px;
-    max-width: var(--site-max-width);
+body{
+    background-image: url('./imgs/background.png');
 }
 
 header{
     background: var(--primary-color);
+    background-repeat: no-repeat;
 }
 
-header .navbar{
-    display: flex;
-    padding: 20px;
+.navbar{
+    padding: 5px;
+    background-color: #0000002a;
+    backdrop-filter: blur(10px);
     align-items: center;
-    justify-content: space-between;
-}
-
-.navbar .nav-logo .logo-text{
-    color: var(--dark-color);
-    font-size: var(--font-size-xl);
-    font-weight: var(--font-weight-semibold);
-}
-
-.navbar .nav-menu{
     display: flex;
-    gap: 10px;
+    border: solid;
+
+    justify-content: space-between;
+
+    border-radius: 16px;
 }
 
-.navbar .nav-menu .nav-link{
-    padding: 10px 18px;
+.navbar .companion-seal{
+    margin-left: 10px;
+
+    width: 64px;
+    height: 64px;
+
+    justify-content: flex-start;
+}
+
+.navbar .clock-text{
+    margin-right: 10px;
     color: var(--dark-color);
-    font-size: var(--secondary-color);
-    border-radius: var(--border-radius-m);
-    transition: 0.3s ease;
-}
+    font-size: var(--font-size-m);
+    font-weight: var(--font-weight-semibold);
 
-.navbar .nav-menu .nav-link:hover{
-    color: var(--primary-color);
-    background: var(--secondary-color);
+    color: #c0f7f3;
+
+    justify-content: flex-end;
+
+    background-color: #0000002a;
+    padding: 4px 12px;
+    border-radius: 16px;
 }

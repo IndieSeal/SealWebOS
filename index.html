@@ -5,38 +5,26 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Seal OS</title>
         <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="cursor-style.css">
     </head>
     <body>
-        <!-- Navigation Bar -->
-        <header>
-            <nav class="navbar section-content">
-                <a href="#" class="nav-logo">
-                    <h2 class="logo-text">Seals</h2>
-                </a>
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">About</a>
-                    </li>
-                </ul>
-            </nav>
-        </header>
+        <!-- NAVIGATION BAR -->
+        <div class="navbar">
+            <img class="companion-seal" src="./imgs/NormalSeal/Closed_Idle.png" alt="AppSeal" usemap="#appseal">
+            <map name="appseal">
+                <area shape="rect" coords="0,0,4000,4000" alt="Temp" href="https://indie-seal.itch.io/">
+            </map>
+            <script src="./scripts/time.js"></script>
+            <p id="timeElement" class="clock-text">
+                Loading time...
+            </p>
+        </div>
 
-        <main>
-            <section class="hero-section">
-                <div class="section-content">
-                    <div class="hero-details">
-                        <h2 class="title">Cutest Seals</h2>
-                        <h3 class="subtitle">Look at the cutest of seals!</h3>
-                        <p class="description">Welcome to my own personalized WebOS focused on Seals!</p>
-                    </div>
-                </div>
-            </section>
-        </main>
+        <!-- DRAGGABLE WINDOW -->
+        <div id="welcome">
+            <div id="welcomeheader">welcome screen content</div>
+        </div>
+        <script src="./scripts/drag.js"></script>
     </body>
+
 </html>
