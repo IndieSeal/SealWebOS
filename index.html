@@ -5,26 +5,54 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Seal OS</title>
         <link rel="stylesheet" href="style.css">
-        <link rel="stylesheet" href="cursor-style.css">
     </head>
-    <body>
+    <body id="body">
         <!-- NAVIGATION BAR -->
         <div class="navbar">
-            <img class="companion-seal" src="./imgs/NormalSeal/Closed_Idle.png" alt="AppSeal" usemap="#appseal">
+            <img class="companion-seal" src="./imgs/NormalSeal/Closed_Idle.png" usemap="#appseal">
             <map name="appseal">
-                <area shape="rect" coords="0,0,4000,4000" alt="Temp" href="https://indie-seal.itch.io/">
+                <area shape="rect" coords="0,0,4000,4000" href="https://indie-seal.itch.io/">
             </map>
-            <script src="./scripts/time.js"></script>
             <p id="timeElement" class="clock-text">
                 Loading time...
             </p>
         </div>
 
-        <!-- DRAGGABLE WINDOW -->
-        <div id="welcome">
-            <div id="welcomeheader">welcome screen content</div>
+        <div id="desktopApps" style="padding-top: 64px; padding-left: 16px;">
+            <div id="selected_appwelcome" class="desktop_app_icon">
+                <img src="./imgs/AppIcons/PANKETO.png" style="width: 64px; height: 64px; border-radius: 16px;" usemap="#appwelcome">
+                <map name="appwelcome">
+                    <area shape="rect" coords="0,0,1545,2000" id="welcomeopen">
+                </map>
+                <p class="desktop_app_icon_text">Welcome</p>
+            </div>
         </div>
+        
+        <!-- DRAGGABLE WINDOW -->
+        <div id="welcome" class="windows" style="display: none;">
+            <div class="windows_header" id="welcomeheader">
+                <!-- Window/App Details -->
+                <div style="display: flex; justify-content: flex-start; align-items: center;">
+                    <img class="windows_image" src="./imgs/AppIcons/PANKETO.png">
+                    <p>Welcome</p>
+                </div>
+
+                <!-- Minimize/Close -->
+                <div style="display: flex; justify-content: flex-end; align-items: center;">
+                    <button class="windows_header_minimize-button" id="welcomeminimize">-</p>
+                    <button class="windows_header_close-button" id="welcomeclose">X</p>
+                </div>
+            </div>
+
+            <div class="windows_body">
+                <p>Hello there!</p>
+            </div>
+        </div>
+
+        <!-- Apply Scripts -->
+        <script src="./scripts/time.js"></script>
         <script src="./scripts/drag.js"></script>
+        <script src="./scripts/welcome_window.js"></script>
     </body>
 
 </html>

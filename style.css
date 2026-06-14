@@ -22,18 +22,113 @@ html, body {
 
 #welcomeheader {
   padding: 10px;
-  cursor: url('./imgs/WiiHand/CursorPoint32.png') 16 16, auto;
-  z-index: 10;
-  background-color: #2196F3;
-  color: #fff;
+  cursor: url('./imgs/WiiHand/CursorPoint32.png') 3 3, auto;
+  z-index: 5;
+  background-color: var(--window-header-color);
+  position: relative;
 }
 
 #welcomeheader:active {
   padding: 10px;
   cursor: url('./imgs/WiiHand/CursorGrab32.png') 16 16, auto;
-  z-index: 10;
+  z-index: 5;
+  position: relative;
   background-color: #2c5475;
-  color: #fff;
+  
+}
+
+.desktop_app_icon{
+    text-align: center;
+    padding: 16px;
+    filter: drop-shadow(0 0 8px rgb(75, 101, 114));
+    width: fit-content;
+}
+
+.desktop_app_icon:hover{
+    background-color: #2195f376;
+
+    backdrop-filter: blur(10px);
+
+    cursor: url('./imgs/WiiHand/CursorPoint32.png') 3 3, auto;
+}
+
+.desktop_app_icon.selected{
+    background-color: #2196F3;
+}
+
+.desktop_app_icon_text{
+    margin: 0px;
+    color: #ffffff;
+    -webkit-text-stroke-width: 0.3px;
+    -webkit-text-stroke-color: #000000;
+}
+
+.windows{
+    border: solid;
+    border-color: var(--window-header-color);
+}
+
+.windows_image{
+    width: 32px;
+    height: 32px;
+
+    border: none;
+}
+
+.windows_body{
+    display: flex;
+    height: 300px;
+}
+
+.windows_header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    position: relative;
+
+    width: 300px;
+    height: 15px;
+
+    z-index: 5;
+}
+
+.windows_header_minimize-button{
+  border-color: #00000000;
+  border-radius: var(--border-radius-s);
+
+  color: white;
+  background-color: gray;
+
+  width: 30px;
+  height: 30px;
+
+  text-align: center;
+
+  z-index: 10;
+}
+
+.windows_header_minimize-button:hover{
+  background-color: rgb(77, 77, 77);
+}
+
+.windows_header_close-button{
+  border-color: #00000000;
+  border-radius: var(--border-radius-s);
+
+  color: white;
+  background-color: red;
+
+  width: 30px;
+  height: 30px;
+
+  text-align: center;
+
+  z-index: 10;
+}
+
+.windows_header_close-button:hover{
+    background-color: rgb(175, 0, 0);
 }
 
 :root{
@@ -42,6 +137,8 @@ html, body {
     --primary-color: #c0f7f3;
     --secondary-color: #f3961c;
 
+    --window-header-color: #2196F3;
+    
     --font-size-s: 0.9rem;
     --font-size-n: 1rem;
     --font-size-m: 1.12rem;
@@ -57,16 +154,6 @@ html, body {
     --border-radius-s: 8px;
     --border-radius-m: 30px;
     --border-radius-circle: 50%;
-
-    --site-max-width: 1300px;
-}
-
-ul{
-    list-style: none;
-}
-
-a{
-    text-decoration: none;
 }
 
 button{
@@ -81,6 +168,7 @@ area{
 
 img{
     width: 100%;
+    object-fit: cover;
 }
 
 body{
@@ -110,8 +198,6 @@ header{
 
     width: 64px;
     height: 64px;
-
-    justify-content: flex-start;
 }
 
 .navbar .clock-text{
@@ -121,8 +207,6 @@ header{
     font-weight: var(--font-weight-semibold);
 
     color: #c0f7f3;
-
-    justify-content: flex-end;
 
     background-color: #0000002a;
     padding: 4px 12px;

@@ -1,5 +1,5 @@
 function updateTime(){
-    var sealTime = new Date().toLocaleString();
+    var sealTime = new Date().toLocaleString('en-GB');
     var timeText = document.querySelector("#timeElement");
     timeText.innerHTML = sealTime;
 }
