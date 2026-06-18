@@ -1,3 +1,5 @@
+import { startDragAudio, stopDragAudio } from "./audio.js";
+
 // Make the DIV element draggable:
 dragElement(document.getElementById("welcome"));
 
@@ -10,10 +12,10 @@ function dragElement(element) {
   var currentY = 0;
 
   // Step 3: Check if there is a special header element associated with the draggable element.
-  if (document.getElementById(element.id + "header")) {
+  if (document.getElementById(element.id + "_header")) {
     // Step 4: If present, assign the `dragMouseDown` function to the header's `onmousedown` event.
     // This allows you to drag the window around by its header.
-    document.getElementById(element.id + "header").onmousedown = startDragging;
+    document.getElementById(element.id + "_header").onmousedown = startDragging;
   } else {
     // Step 5: If not present, assign the function directly to the draggable element's `onmousedown` event.
     // This allows you to drag the window by holding down anywhere on the window.
@@ -30,6 +32,8 @@ function dragElement(element) {
     // Step 8: Set up event listeners for mouse movement (`elementDrag`) and mouse button release (`closeDragElement`).
     document.onmouseup = stopDragging;
     document.onmousemove = dragElement;
+
+    startDragAudio();
   }
 
   // Step 9: Define the `elementDrag` function to calculate the new position of the element based on mouse movement.
@@ -42,6 +46,16 @@ function dragElement(element) {
     initialX = e.clientX;
     initialY = e.clientY;
     // Step 11: Update the element's new position by modifying its `top` and `left` CSS properties.
+
+    const rect = element.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    var offset = -100;
+    if (rect.top + offset < 0) {
+      currentY = rect.top + offset;
+    }
+    
     element.style.top = (element.offsetTop - currentY) + "px";
     element.style.left = (element.offsetLeft - currentX) + "px";
   }
@@ -50,5 +64,7 @@ function dragElement(element) {
   function stopDragging() {
     document.onmouseup = null;
     document.onmousemove = null;
+
+    stopDragAudio();
   }
 }

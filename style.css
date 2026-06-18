@@ -14,24 +14,21 @@ html, body {
 
  #welcome {
   position: absolute;
-  z-index: 9;
   background-color: #f1f1f1;
   border: 1px solid #d3d3d3;
   text-align: center;
 }
 
-#welcomeheader {
+#welcome_header {
   padding: 10px;
   cursor: url('./imgs/WiiHand/CursorPoint32.png') 3 3, auto;
-  z-index: 5;
   background-color: var(--window-header-color);
   position: relative;
 }
 
-#welcomeheader:active {
+#welcome_header:active {
   padding: 10px;
   cursor: url('./imgs/WiiHand/CursorGrab32.png') 16 16, auto;
-  z-index: 5;
   position: relative;
   background-color: #2c5475;
   
@@ -44,6 +41,13 @@ html, body {
     width: fit-content;
 }
 
+.desktop_app_icon_image{
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    box-shadow: 0 2px 4px black;
+}
+
 .desktop_app_icon:hover{
     background-color: #2195f376;
 
@@ -53,7 +57,7 @@ html, body {
 }
 
 .desktop_app_icon.selected{
-    background-color: #2196F3;
+    background-color: --window-header-color;
 }
 
 .desktop_app_icon_text{
@@ -66,6 +70,59 @@ html, body {
 .windows{
     border: solid;
     border-color: var(--window-header-color);
+
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
+    transform: scale(1);
+
+    animation-name: scale;
+    animation-iteration-count: 1;
+    animation-duration: 0.25s;
+}
+
+.windows.close{
+    transform: scale(0);
+    
+    animation-name: scaledown;
+    animation-iteration-count: 1;
+    animation-duration: 0.25s;
+}
+
+@keyframes scale {
+    from{
+        transform: scale(0);
+    }
+
+    to{
+        transform: scale(1);
+    }
+}
+
+@keyframes scaledown {
+    from{
+        transform: scale(1);
+    }
+
+    to{
+        transform: scale(0);
+    }
+}
+
+.taskbar_element{
+    border-radius: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.taskbar_element:hover{
+    cursor: url('./imgs/WiiHand/CursorPoint32.png') 3 3, auto;
+}
+
+.taskbar_element_image{
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
 }
 
 .windows_image{
@@ -85,12 +142,21 @@ html, body {
     justify-content: space-between;
     align-items: center;
 
+    border-color: var(#2196F3);
+
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+
+    margin-top: -2px;
+    margin-bottom: -2px;
+
+    margin-left: -1px;
+    margin-right: -1px;
+
     position: relative;
 
     width: 300px;
     height: 15px;
-
-    z-index: 5;
 }
 
 .windows_header_minimize-button{
@@ -104,8 +170,6 @@ html, body {
   height: 30px;
 
   text-align: center;
-
-  z-index: 10;
 }
 
 .windows_header_minimize-button:hover{
@@ -123,8 +187,6 @@ html, body {
   height: 30px;
 
   text-align: center;
-
-  z-index: 10;
 }
 
 .windows_header_close-button:hover{
@@ -145,11 +207,6 @@ html, body {
     --font-size-l: 1.5rem;
     --font-size-xl: 2rem;
     --font-size-xxl: 2.3rem;
-
-    --font-weight-normal: 400;
-    --font-weight-medium: 500;
-    --font-weight-semibold: 600;
-    --font-weight-bold: 700;
 
     --border-radius-s: 8px;
     --border-radius-m: 30px;
@@ -181,6 +238,10 @@ header{
 }
 
 .navbar{
+    position: relative;
+    top: 50%;
+    left: 0%;
+
     padding: 5px;
     background-color: #0000002a;
     backdrop-filter: blur(10px);
@@ -191,6 +252,15 @@ header{
     justify-content: space-between;
 
     border-radius: 16px;
+
+    z-index: 3000;
+}
+
+.navbar.sub{
+    background-color: transparent;
+    border: none;
+
+    backdrop-filter: none;
 }
 
 .navbar .companion-seal{
@@ -201,8 +271,10 @@ header{
 }
 
 .navbar .clock-text{
+    text-align: right;
+    
     margin-right: 10px;
-    color: var(--dark-color);
+    color: black;
     font-size: var(--font-size-m);
     font-weight: var(--font-weight-semibold);
 

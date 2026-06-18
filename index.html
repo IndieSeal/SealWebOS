@@ -8,29 +8,55 @@
     </head>
     <body id="body">
         <!-- NAVIGATION BAR -->
-        <div class="navbar">
-            <img class="companion-seal" src="./imgs/NormalSeal/Closed_Idle.png" usemap="#appseal">
-            <map name="appseal">
-                <area shape="rect" coords="0,0,4000,4000" href="https://indie-seal.itch.io/">
-            </map>
-            <p id="timeElement" class="clock-text">
-                Loading time...
-            </p>
+        <div class="navbar" id="top">
+            <div class="navbar sub" style="width: 20%; justify-content: left;">
+                <img class="companion-seal" src="./imgs/NormalSeal/Closed_Idle.png" usemap="#appseal">
+                <map name="appseal">
+                    <area shape="rect" coords="0,0,4000,4000" href="https://indie-seal.itch.io/">
+                </map>
+            </div>
+
+            <div class="navbar sub" style="width: 60%; justify-content: center;">
+                <p class="taskbar_element">bonjou</p>
+                <p class="taskbar_element">bonjou</p>
+                <div data-group="aaa" class="taskbar_element" id="welcome_taskbar", style="display: none">
+                    <img src="./imgs/AppIcons/PANKETO.png" class="taskbar_element_image">
+                </div>
+
+            </div>
+
+            <div class="navbar sub" style="width: 20%; justify-content: right;">
+                <p id="timeElement" class="clock-text">
+                    00/00/00, 00:00:00
+                </p>
+            </div>
         </div>
 
         <div id="desktopApps" style="padding-top: 64px; padding-left: 16px;">
-            <div id="selected_appwelcome" class="desktop_app_icon">
-                <img src="./imgs/AppIcons/PANKETO.png" style="width: 64px; height: 64px; border-radius: 16px;" usemap="#appwelcome">
-                <map name="appwelcome">
-                    <area shape="rect" coords="0,0,1545,2000" id="welcomeopen">
-                </map>
+            <div id="welcome_open" class="desktop_app_icon">
+                <img src="./imgs/AppIcons/PANKETO.png" class="desktop_app_icon_image">
                 <p class="desktop_app_icon_text">Welcome</p>
             </div>
         </div>
+
+        <audio id="hoverAudio">
+            <source src="./sounds/beep.wav" type="audio/wav">
+            Your browser does not support the audio element.
+        </audio>
         
+        <audio id="selectAudio">
+            <source src="./sounds/select.wav" type="audio/wav">
+            Your browser does not support the audio element.
+        </audio>
+
+        <audio id="dragAudio">
+            <source src="./sounds/drag.wav" type="audio/wav">
+            Your browser does not support the audio element.
+        </audio>
+
         <!-- DRAGGABLE WINDOW -->
         <div id="welcome" class="windows" style="display: none;">
-            <div class="windows_header" id="welcomeheader">
+            <div class="windows_header" id="welcome_header">
                 <!-- Window/App Details -->
                 <div style="display: flex; justify-content: flex-start; align-items: center;">
                     <img class="windows_image" src="./imgs/AppIcons/PANKETO.png">
@@ -39,20 +65,21 @@
 
                 <!-- Minimize/Close -->
                 <div style="display: flex; justify-content: flex-end; align-items: center;">
-                    <button class="windows_header_minimize-button" id="welcomeminimize">-</p>
-                    <button class="windows_header_close-button" id="welcomeclose">X</p>
+                    <button class="windows_header_minimize-button" id="welcome_minimize">-</p>
+                    <button class="windows_header_close-button" id="welcome_close">X</p>
                 </div>
             </div>
 
             <div class="windows_body">
-                <p>Hello there!</p>
+                <p style="padding-left: 5px; padding-top: 0px;">Hello there!</p>
             </div>
         </div>
 
         <!-- Apply Scripts -->
-        <script src="./scripts/time.js"></script>
-        <script src="./scripts/drag.js"></script>
-        <script src="./scripts/welcome_window.js"></script>
+        <script type="module" src="./scripts/time.js"></script>
+        <script type="module" src="./scripts/drag.js"></script>
+        <script type="module" src="./scripts/window_manager.js"></script>
+        <script type="module" src="./scripts/audio.js"></script>
     </body>
 
 </html>
