@@ -57,7 +57,9 @@ html, body {
 }
 
 .desktop_app_icon.selected{
-    background-color: --window-header-color;
+    background-color: #2196F3;
+
+    backdrop-filter: blur(0px);
 }
 
 .desktop_app_icon_text{
@@ -109,14 +111,64 @@ html, body {
     }
 }
 
+@keyframes smallBaseScale {
+    from{
+        transform: scale(1);
+    }
+
+    to{
+        transform: scale(1.2);
+    }
+}
+
+@keyframes smallBaseScaleDown {
+    from{
+        transform: scale(1.2);
+    }
+
+    to{
+        transform: scale(1);
+    }
+}
+
+@keyframes smallTilt {
+    from{
+        transform: rotate(0deg);
+    }
+
+    to{
+        transform: rotate(10deg);
+    }
+}
+
+@keyframes smallTiltReverse {
+    from{
+        transform: rotate(10deg);
+    }
+
+    to{
+        transform: rotate(0deg);
+    }
+}
+
 .taskbar_element{
     border-radius: 5px;
     padding-left: 15px;
     padding-right: 15px;
+
+    transform: scale(1);
+    animation-name: smallBaseScaleDown;
+    animation-iteration-count: 1;
+    animation-duration: 0.25s;
 }
 
 .taskbar_element:hover{
     cursor: url('./imgs/WiiHand/CursorPoint32.png') 3 3, auto;
+
+    transform: scale(1.2);
+    animation-name: smallBaseScale;
+    animation-iteration-count: 1;
+    animation-duration: 0.25s;
 }
 
 .taskbar_element_image{
@@ -142,7 +194,7 @@ html, body {
     justify-content: space-between;
     align-items: center;
 
-    border-color: var(#2196F3);
+    border-color: var(--window-header-color);
 
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -170,10 +222,20 @@ html, body {
   height: 30px;
 
   text-align: center;
+
+  transform: scale(1);
+  animation-name: smallBaseScaleDown;
+  animation-iteration-count: 1;
+  animation-duration: 0.25s;
 }
 
 .windows_header_minimize-button:hover{
   background-color: rgb(77, 77, 77);
+
+  transform: scale(1.2);
+  animation-name: smallBaseScale;
+  animation-iteration-count: 1;
+  animation-duration: 0.25s;
 }
 
 .windows_header_close-button{
@@ -187,10 +249,20 @@ html, body {
   height: 30px;
 
   text-align: center;
+
+  transform: scale(1);
+  animation-name: smallBaseScaleDown;
+  animation-iteration-count: 1;
+  animation-duration: 0.25s;
 }
 
 .windows_header_close-button:hover{
     background-color: rgb(175, 0, 0);
+
+    transform: scale(1.2);
+    animation-name: smallBaseScale;
+    animation-iteration-count: 1;
+    animation-duration: 0.25s;
 }
 
 :root{
@@ -263,11 +335,25 @@ header{
     backdrop-filter: none;
 }
 
-.navbar .companion-seal{
+.navbar_companion-seal{
     margin-left: 10px;
+
+    padding: 0px;
 
     width: 64px;
     height: 64px;
+
+    transform: rotate(0deg);
+    animation-name: smallTiltReverse;
+    animation-iteration-count: 1;
+    animation-duration: 0.25s;
+}
+
+.navbar .companion-seal:hover{
+    transform: rotate(10deg);
+    animation-name: smallTilt;
+    animation-iteration-count: 1;
+    animation-duration: 0.25s;
 }
 
 .navbar .clock-text{

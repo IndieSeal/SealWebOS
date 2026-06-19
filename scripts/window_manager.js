@@ -19,6 +19,7 @@ function initializeWindow(elementName){
     handleWindowTap(window)
   )
 
+  setupEvents(windowOpener);
   setupEvents(taskbar);
   taskbar.addEventListener("click", function(){
     openWindowFunc(window, taskbar);
@@ -51,7 +52,6 @@ function minimizeWindowFunc(window) {
 }
 
 function closeWindowFunc(window, taskbar) {
-//  window.style.display = "none";
   window.classList.add("close");
 
   taskbar.style.display = "none";
@@ -89,7 +89,6 @@ function handleWindowTap(window) {
 
   topBar.style.zIndex = biggestIndex + 1;
   
-  console.log(biggestIndex);
   unselectIcon(selectedIcon);
 }
 
