@@ -7,9 +7,14 @@
     font-style: normal;
 }
 
-html, body {
+html {
   cursor: url('./imgs/WiiHand/CursorNormal32.png') 16 16, auto;
   cursor:grab url
+}
+
+body{
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
  #welcome {
@@ -17,6 +22,9 @@ html, body {
   background-color: #f1f1f1;
   border: 1px solid #d3d3d3;
   text-align: center;
+
+  top: calc(50% - 90px);
+  left: calc(50% - 180px);
 }
 
 #welcome_header {

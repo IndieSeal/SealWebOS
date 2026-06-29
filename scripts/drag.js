@@ -1,86 +1,97 @@
 import { setDragAudioVolume, startDragAudio, stopDragAudio } from "./audio.js";
+import { abs, lerp } from "./mathf.js";
 
-// Make the DIV element draggable:
-dragElement(document.getElementById("welcome"));
+// So, why did I do it this way? Cause who the heck would like to be duplicating scripts and changing names when you can have a class that manages it, like come on!
+// i use c# so this feels hella familiar
 
-// Step 1: Define a function called `dragElement` that makes an HTML element draggable.
-function dragElement(element) {
-  // Step 2: Set up variables to keep track of the element's position.
-  var initialX = 0;
-  var initialY = 0;
-  var currentX = 0;
-  var currentY = 0;
-  var cursorX = 0;
-  var cursorY = 0;
+class DraggableWindow{
+  initialX = 0;
+  initialY = 0;
+  currentX = 0;
+  currentY = 0;
+  cursorX = 0;
+  cursorY = 0;
+
+  hasInitialDrag = false;
+  dragging = false;
+
+  constructor(id){
+    this.myId = id;
+    this.element = document.getElementById(id);
+    this.header = document.getElementById(id + "_header");
+
+    this.setup();
+  }
   
-  // Step 3: Check if there is a special header element associated with the draggable element.
-  if (document.getElementById(element.id + "_header")) {
-    // Step 4: If present, assign the `dragMouseDown` function to the header's `onmousedown` event.
-    // This allows you to drag the window around by its header.
-    document.getElementById(element.id + "_header").onmousedown = startDragging;
-  } else {
-    // Step 5: If not present, assign the function directly to the draggable element's `onmousedown` event.
-    // This allows you to drag the window by holding down anywhere on the window.
-    element.onmousedown = startDragging;
+  setup = () => {
+    if(this.element == null) {
+      console.log("There's no window with that ID");
+      return;
+    }
+    if(this.header == null){
+      console.log("There's no window header!")
+    }
+
+    this.header.onmousedown = this.startDragging;
+
+    this.moveWindowFunction();
   }
 
-  moveWindowFunction();
-  var dragging = false;
-  
-  // Step 6: Define the `startDragging` function to capture the initial mouse position and set up event listeners.
-  function startDragging(e) {
+  startDragging = (e) => {
     e = e || window.event;
     e.preventDefault();
-    // Step 7: Get the mouse cursor position at startup.
 
-    const rect = element.getBoundingClientRect();
-    initialX = e.clientX - rect.left;
-    initialY = e.clientY - rect.top;
+    const rect = this.element.getBoundingClientRect();
+    this.initialX = e.clientX - rect.left;
+    this.initialY = e.clientY - rect.top;
+
+    this.currentX = rect.left;
+    this.currentY = rect.top;
+    this.cursorX = this.currentX;
+    this.cursorY = this.currentY;
     
-    // Step 8: Set up event listeners for mouse movement (`elementDrag`) and mouse button release (`closeDragElement`).
-    document.onmouseup = stopDragging;
-    document.onmousemove = dragElement;
+    document.onmouseup = this.stopDragging;
+    document.onmousemove = this.dragElement;
 
     startDragAudio();
 
-    dragging = true;
+    this.dragging = true;
+    this.hasInitialDrag = true;
   }
 
-  var curVolume = 1;
-
-  // Step 9: Define the `elementDrag` function to calculate the new position of the element based on mouse movement.
-  function dragElement(e) {
+  dragElement = (e) => {
     e = e || window.event;
     e.preventDefault();
-    // Step 10: Calculate the new cursor position.
-    cursorX = e.clientX - initialX;
-    cursorY = e.clientY - initialY;
+
+    this.cursorX = e.clientX - this.initialX;
+    this.cursorY = e.clientY - this.initialY;
   }
 
-  // Step 12: Define the `stopDragging` function to stop tracking mouse movement by removing the event listeners.
-  function stopDragging() {
+  stopDragging = () => {
     document.onmouseup = null;
     document.onmousemove = null;
 
     stopDragAudio();
 
-    dragging = false;
+    this.dragging = false;
   }
 
-  function moveWindowFunction() {
-    currentX = lerp(currentX, cursorX, .075);
-    currentY = lerp(currentY, cursorY, .075);
+  moveWindowFunction = () => {
+    requestAnimationFrame(this.moveWindowFunction);
+
+    if(!this.hasInitialDrag) return;
     
-    // Step 11: Update the element's new position by modifying its `top` and `left` CSS properties.
-    element.style.left = (currentX) + "px";
-    element.style.top = (currentY) + "px";
+    this.currentX = lerp(this.currentX, this.cursorX, .075);
+    this.currentY = lerp(this.currentY, this.cursorY, .075);
 
-    //Later on add a volume modification based on how fast you're moving the window
+    var xVolume = abs(this.currentX/this.cursorX) / 2;
+    var yVolume = abs(this.currentY/this.cursorY) / 2;
 
-    requestAnimationFrame(moveWindowFunction);
+    setDragAudioVolume(abs(lerp(1, 0, xVolume + yVolume)) * 5);
+    
+    this.element.style.left = (this.currentX) + "px";
+    this.element.style.top = (this.currentY) + "px";
   }
 }
 
-function lerp(currentPosition, targetPosition, clamp) {
-  return (1 - clamp) * currentPosition + clamp * targetPosition;
-}
+var welcomeWindow = new DraggableWindow("welcome");
