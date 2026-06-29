@@ -1,5 +1,6 @@
 import { setDragAudioVolume, stopDragAudio } from "./audio.js";
 import { abs, lerp } from "./mathf.js";
+import { MINIMIZE_SUFFIX, CLOSE_SUFFIX } from "./window_global.js";
 
 // So, why did I do it this way? Cause who the heck would like to be duplicating scripts and changing names when you can have a class that manages it, like come on!
 // i use c# so this feels hella familiar
@@ -29,16 +30,16 @@ class DraggableWindow{
       return;
     }
     if(this.header == null){
-      console.log("There's no window header!")
+      console.log("There's no window header!");
+      return;
     }
 
     this.header.onmousedown = this.startDragging;
-
     this.moveWindowFunction();
   }
 
   startDragging = (e) => {
-    if(e.target.id === this.myId + "_minimize" || e.target.id === this.myId + "_close") return;
+    if(e.target.id == this.myId + MINIMIZE_SUFFIX || e.target.id == this.myId + CLOSE_SUFFIX) return;
 
     e = e || window.event;
     e.preventDefault();
@@ -95,9 +96,12 @@ class DraggableWindow{
 }
 
 var allWindows = [];
+export function createDraggableWindow(id){
+  let myWindow = new DraggableWindow(id);
+  allWindows.push(myWindow);
 
-var welcomeWindow = new DraggableWindow("welcome");
-allWindows.push(welcomeWindow);
+  return myWindow;
+}
 
 export function getDraggableWindow(id){
   for(let i = 0; i < allWindows.length; i++){

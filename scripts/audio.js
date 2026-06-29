@@ -2,14 +2,14 @@ import { clamp, lerp } from "./mathf.js";
 
 var buttons = document.querySelectorAll('button');
 buttons.forEach(button => {
-  setupEvents(button);
+  setupAudioEvents(button);
 });
 var areas = document.querySelectorAll('area');
 areas.forEach(area => {
-  setupEvents(area);
+  setupAudioEvents(area);
 });
 
-export function setupEvents(element){
+export function setupAudioEvents(element){
   element.addEventListener("mouseenter", () => {
     playHoverAudio();
   });
@@ -49,6 +49,8 @@ const MAX_VOLUME = 0.6;
 
 export function setDragAudioVolume(value){
   currentValue = clamp(0, MAX_VOLUME, (lerp(currentValue, value, 0.045))).toFixed(3);
+
+  if(currentValue < 0.012) currentValue = 0;
   dragAudio.volume = currentValue;
 }
 
