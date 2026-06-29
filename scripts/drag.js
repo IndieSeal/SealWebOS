@@ -1,4 +1,4 @@
-import { setDragAudioVolume, startDragAudio, stopDragAudio } from "./audio.js";
+import { setDragAudioVolume, stopDragAudio } from "./audio.js";
 import { abs, lerp } from "./mathf.js";
 
 // So, why did I do it this way? Cause who the heck would like to be duplicating scripts and changing names when you can have a class that manages it, like come on!
@@ -38,6 +38,8 @@ class DraggableWindow{
   }
 
   startDragging = (e) => {
+    if(e.target.id === this.myId + "_minimize" || e.target.id === this.myId + "_close") return;
+
     e = e || window.event;
     e.preventDefault();
 
@@ -52,8 +54,6 @@ class DraggableWindow{
     
     document.onmouseup = this.stopDragging;
     document.onmousemove = this.dragElement;
-
-    startDragAudio();
 
     this.dragging = true;
     this.hasInitialDrag = true;
@@ -94,4 +94,16 @@ class DraggableWindow{
   }
 }
 
+var allWindows = [];
+
 var welcomeWindow = new DraggableWindow("welcome");
+allWindows.push(welcomeWindow);
+
+export function getDraggableWindow(id){
+  for(let i = 0; i < allWindows.length; i++){
+    let dragWindow = allWindows[i];
+    if(id == dragWindow.myId) return dragWindow;
+  }
+
+  return undefined;
+}

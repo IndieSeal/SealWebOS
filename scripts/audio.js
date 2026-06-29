@@ -45,12 +45,10 @@ dragAudio.play();
 
 var currentValue = 0;
 
-export function startDragAudio(){
-  //canPlay = true;
-}
+const MAX_VOLUME = 0.6;
 
 export function setDragAudioVolume(value){
-  currentValue = clamp(0, 1, (lerp(currentValue, value, 0.035)));
+  currentValue = clamp(0, MAX_VOLUME, (lerp(currentValue, value, 0.045))).toFixed(3);
   dragAudio.volume = currentValue;
 }
 

@@ -1,4 +1,5 @@
 import { setupEvents } from "./audio.js";
+import { getDraggableWindow } from "./drag.js"
 
 var selectedIcon = undefined;
 
@@ -15,6 +16,19 @@ function initializeWindow(elementName){
   var windowMinimizer = document.getElementById(elementName + "_minimize");
   var windowCloser = document.getElementById(elementName + "_close");
 
+  var draggableWindow = getDraggableWindow("welcome");
+  CheckIfDragging();
+
+  function CheckIfDragging(){
+
+    //Make buttons unavailable (close and minimize)
+    windowMinimizer.inert = draggableWindow.dragging;
+    windowCloser.inert = draggableWindow.dragging;
+
+    requestAnimationFrame(CheckIfDragging);
+  }
+
+  
   window.addEventListener("mousedown", () =>
     handleWindowTap(window)
   )
@@ -85,13 +99,13 @@ function handleIconTap(icon, window, taskbar){
 
 function handleWindowTap(window) {
   biggestIndex++;
+  
   window.style.zIndex = biggestIndex;
-
   topBar.style.zIndex = biggestIndex + 1;
   
   unselectIcon(selectedIcon);
 }
 
 function toggleWindow(window){
-
+  
 }
