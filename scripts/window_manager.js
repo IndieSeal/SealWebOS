@@ -62,7 +62,6 @@ class Window{
 
   minimizeWindowFunc = () => {
     this.window.classList.add("close");
-    //this.window.style.display = "none";
   }
 
   closeWindowFunc = () => {
@@ -111,3 +110,4 @@ class Window{
 }
 
 var welcomeWindow = new Window("welcome");
+var welcomeWindow = new Window("sealclicker");

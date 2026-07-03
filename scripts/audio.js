@@ -21,12 +21,19 @@ export function setupAudioEvents(element){
 
 var hoverAudio = document.getElementById("hoverAudio"); 
 export function playHoverAudio(){
+  stopAudio(hoverAudio);
   hoverAudio.play();
 }
 
 var selectAudio = document.getElementById("selectAudio"); 
 export function playSelectAudio(){
+  stopAudio(selectAudio);
   selectAudio.play();
+}
+
+function stopAudio(audio){
+  audio.pause();
+  audio.currentTime = 0;
 }
 
 //https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Using_Web_Audio_API

@@ -3,7 +3,10 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
         <title>Seal OS</title>
+        <link rel="icon" type="image/x-icon" href="./imgs/icon.png">
+        
         <link rel="stylesheet" href="style.css">
     </head>
     <body id="body">
@@ -22,7 +25,9 @@
                 <div class="taskbar_element" id="welcome_taskbar", style="display: none">
                     <img src="./imgs/AppIcons/PANKETO.png" class="taskbar_element_image">
                 </div>
-
+                <div class="taskbar_element" id="sealclicker_taskbar", style="display: none">
+                    <img src="./imgs/AppIcons/PANKETO.png" class="taskbar_element_image">
+                </div>
             </div>
 
             <div class="navbar sub" style="width: 20%; justify-content: right;">
@@ -37,25 +42,19 @@
                 <img src="./imgs/AppIcons/PANKETO.png" class="desktop_app_icon_image">
                 <p class="desktop_app_icon_text">Welcome</p>
             </div>
+            <div id="sealclicker_open" class="desktop_app_icon">
+                <img src="./imgs/AppIcons/PANKETO.png" class="desktop_app_icon_image">
+                <p class="desktop_app_icon_text">Seal Clicker</p>
+            </div>
         </div>
 
-        <audio id="hoverAudio">
-            <source src="./sounds/beep.wav" type="audio/wav">
-            Your browser does not support the audio element.
-        </audio>
-        
-        <audio id="selectAudio">
-            <source src="./sounds/select.wav" type="audio/wav">
-            Your browser does not support the audio element.
-        </audio>
-
-        <audio id="dragAudio">
-            <source src="./sounds/drag.wav" type="audio/wav">
-            Your browser does not support the audio element.
-        </audio>
+        <!-- Appreciate the help w3schools, they're the goats https://www.w3schools.com/html/html5_audio.asp -->
+        <audio id="hoverAudio"> <source src="./sounds/beep.wav" type="audio/wav"> </audio>
+        <audio id="selectAudio"> <source src="./sounds/select.wav" type="audio/wav"> </audio>
+        <audio id="dragAudio"> <source src="./sounds/drag.wav" type="audio/wav"> </audio>
 
         <!-- DRAGGABLE WINDOW -->
-        <div id="welcome" class="windows" style="display: none;">
+        <div id="welcome" class="windows">
             <div class="windows_header" id="welcome_header">
                 <!-- Window/App Details -->
                 <div style="display: flex; justify-content: flex-start; align-items: center;">
@@ -70,10 +69,53 @@
                 </div>
             </div>
 
-            <div class="windows_body">
-                <p style="padding-left: 5px; padding-top: 0px;">Hello there!</p>
+            <div class="windows_header body">
+                <p>Hello there!</p>
+                <p>Welcome to <b>Seal OS</b>!</p>
+                <p>Wanna try some fun stuff? Go to the Games App!! ALSO CHECKING SOMETHINGGGGGGG</p>
+                <div class="socials">
+                    <!-- Recently learned you can do this in Hack Club's summer camp :D -->
+                    <img class="socials" src="https://cdn-icons-png.flaticon.com/512/25/25231.png">
+                    <a href="https://github.com/IndieSeal">GitHub</a>
+                </div>
+                <div class="socials">
+                    <img class="socials" src="https://img.icons8.com/ios11/600/FA5252/itch-io.png">
+                    <a href="https://indie-seal.itch.io/">itch.io</a>
+                </div>
             </div>
         </div>
+
+        <div id="sealclicker" class="windows" style="display: none;">
+            <div class="windows_header" id="sealclicker_header">
+                <!-- Window/App Details -->
+                <div style="display: flex; justify-content: flex-start; align-items: center;">
+                    <img class="windows_image" src="./imgs/AppIcons/PANKETO.png">
+                    <p>Welcome</p>
+                </div>
+
+                <!-- Minimize/Close -->
+                <div style="display: flex; justify-content: flex-end; align-items: center;">
+                    <button class="windows_header_minimize-button" id="sealclicker_minimize">-</button>
+                    <button class="windows_header_close-button" id="sealclicker_close">X</button>
+                </div>
+            </div>
+
+            <div class="windows_header body">
+                <p>Hello there!</p>
+            </div>
+        </div>
+
+        <!-- Apply Scripts -->
+        <div class="waves">
+            <div class="wave" id="wave1"></div>
+            <div class="wave" id="wave2"></div>
+            <div class="wave" id="wave3"></div>
+            <div class="wave" id="wave4"></div>
+            <div class="fish">
+                <img src="./imgs/fish.png">
+            </div>
+        </div>
+
 
         <!-- Apply Scripts -->
         <script type="module" src="./scripts/time.js"></script>
