@@ -5,7 +5,7 @@ import { MINIMIZE_SUFFIX, CLOSE_SUFFIX } from "./window_global.js";
 // So, why did I do it this way? Cause who the heck would like to be duplicating scripts and changing names when you can have a class that manages it, like come on!
 // i use c# so this feels hella familiar
 
-class DraggableWindow{
+class DraggableElement{
   initialX = 0;
   initialY = 0;
   currentX = 0;
@@ -21,6 +21,13 @@ class DraggableWindow{
     this.element = document.getElementById(id);
     this.header = document.getElementById(id + "_header");
 
+    //YES, EVENTS DO EXIST IN JS https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent || https://www.geeksforgeeks.org/javascript/javascript-custom-events/
+    this.onStartDragEvent = new CustomEvent("onStartDrag", {
+      detail: {
+        windowID: this.myId,
+      },
+    });
+    
     this.setup();
   }
   
@@ -35,7 +42,7 @@ class DraggableWindow{
     }
 
     this.header.onmousedown = this.startDragging;
-    this.moveWindowFunction();
+    this.moveElementFunction();
   }
 
   startDragging = (e) => {
@@ -55,6 +62,8 @@ class DraggableWindow{
     
     document.onmouseup = this.stopDragging;
     document.onmousemove = this.dragElement;
+
+    document.dispatchEvent(this.onStartDragEvent);
 
     this.dragging = true;
     this.hasInitialDrag = true;
@@ -77,8 +86,8 @@ class DraggableWindow{
     this.dragging = false;
   }
 
-  moveWindowFunction = () => {
-    requestAnimationFrame(this.moveWindowFunction);
+  moveElementFunction = () => {
+    requestAnimationFrame(this.moveElementFunction);
 
     if(!this.hasInitialDrag) return;
     
@@ -96,14 +105,14 @@ class DraggableWindow{
 }
 
 var allWindows = [];
-export function createDraggableWindow(id){
-  let myWindow = new DraggableWindow(id);
+export function createDraggableElement(id){
+  let myWindow = new DraggableElement(id);
   allWindows.push(myWindow);
 
   return myWindow;
 }
 
-export function getDraggableWindow(id){
+export function getDraggableElement(id){
   for(let i = 0; i < allWindows.length; i++){
     let dragWindow = allWindows[i];
     if(id == dragWindow.myId) return dragWindow;

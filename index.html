@@ -7,7 +7,7 @@
         <title>Seal OS</title>
         <link rel="icon" type="image/x-icon" href="./imgs/icon.png">
         
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" type="text/css" href="./css/style.css">
     </head>
     <body id="body">
         <!-- NAVIGATION BAR -->
@@ -20,13 +20,13 @@
             </div>
 
             <div class="navbar sub" style="width: 60%; justify-content: center;">
-                <p class="taskbar_element">bonjou</p>
-                <p class="taskbar_element">bonjou</p>
-                <div class="taskbar_element" id="welcome_taskbar", style="display: none">
-                    <img src="./imgs/AppIcons/PANKETO.png" class="taskbar_element_image">
+                <div class="taskbar_element" id="welcome_taskbar">
+                    <img src="./imgs/AppIcons/PANKETO.png">
+                    <div class="taskbar_ontop" id="welcome_ontop"></div>
                 </div>
-                <div class="taskbar_element" id="sealclicker_taskbar", style="display: none">
-                    <img src="./imgs/AppIcons/PANKETO.png" class="taskbar_element_image">
+                <div class="taskbar_element" id="sealclicker_taskbar", style="display: none;">
+                    <img src="./imgs/AppIcons/PANKETO.png">
+                    <div class="taskbar_ontop" id="sealclicker_ontop"></div>
                 </div>
             </div>
 
@@ -39,49 +39,49 @@
 
         <div id="desktopApps" style="padding-top: 64px; padding-left: 16px;">
             <div id="welcome_open" class="desktop_app_icon">
-                <img src="./imgs/AppIcons/PANKETO.png" class="desktop_app_icon_image">
-                <p class="desktop_app_icon_text">Welcome</p>
+                <img src="./imgs/AppIcons/PANKETO.png">
+                <p>Welcome</p>
             </div>
             <div id="sealclicker_open" class="desktop_app_icon">
-                <img src="./imgs/AppIcons/PANKETO.png" class="desktop_app_icon_image">
-                <p class="desktop_app_icon_text">Seal Clicker</p>
+                <img src="./imgs/AppIcons/PANKETO.png">
+                <p>Seal Clicker</p>
             </div>
         </div>
 
-        <!-- Appreciate the help w3schools, they're the goats https://www.w3schools.com/html/html5_audio.asp -->
-        <audio id="hoverAudio"> <source src="./sounds/beep.wav" type="audio/wav"> </audio>
-        <audio id="selectAudio"> <source src="./sounds/select.wav" type="audio/wav"> </audio>
-        <audio id="dragAudio"> <source src="./sounds/drag.wav" type="audio/wav"> </audio>
-
         <!-- DRAGGABLE WINDOW -->
-        <div id="welcome" class="windows">
+        <div id="welcome" class="windows" style="display: none;">
             <div class="windows_header" id="welcome_header">
                 <!-- Window/App Details -->
                 <div style="display: flex; justify-content: flex-start; align-items: center;">
-                    <img class="windows_image" src="./imgs/AppIcons/PANKETO.png">
+                    <img src="./imgs/AppIcons/PANKETO.png">
                     <p>Welcome</p>
                 </div>
 
                 <!-- Minimize/Close -->
                 <div style="display: flex; justify-content: flex-end; align-items: center;">
-                    <button class="windows_header_minimize-button" id="welcome_minimize">-</button>
-                    <button class="windows_header_close-button" id="welcome_close">X</button>
+                    <button class="minimize-button" id="welcome_minimize">-</button>
+                    <button class="close-button" id="welcome_close">X</button>
                 </div>
             </div>
 
+            <!-- Window Insides? -->
             <div class="windows_header body">
                 <p>Hello there!</p>
                 <p>Welcome to <b>Seal OS</b>!</p>
                 <p>Wanna try some fun stuff? Go to the Games App!! ALSO CHECKING SOMETHINGGGGGGG</p>
-                <div class="socials">
-                    <!-- Recently learned you can do this in Hack Club's summer camp :D -->
-                    <img class="socials" src="https://cdn-icons-png.flaticon.com/512/25/25231.png">
-                    <a href="https://github.com/IndieSeal">GitHub</a>
-                </div>
-                <div class="socials">
-                    <img class="socials" src="https://img.icons8.com/ios11/600/FA5252/itch-io.png">
-                    <a href="https://indie-seal.itch.io/">itch.io</a>
-                </div>
+                <a style="text-decoration: none;" href="https://github.com/IndieSeal">
+                    <div class="socials">
+                        <!-- Recently learned you can do this in Hack Club's summer camp :D -->
+                        <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png">
+                        <p>GitHub</p>
+                    </div>
+                </a>
+                <a style="text-decoration: none;" href="https://indie-seal.itch.io/">
+                    <div class="socials">
+                        <img src="https://img.icons8.com/ios11/600/FA5252/itch-io.png">
+                        <p>itch.io</p>
+                    </div>
+                </a>
             </div>
         </div>
 
@@ -90,13 +90,13 @@
                 <!-- Window/App Details -->
                 <div style="display: flex; justify-content: flex-start; align-items: center;">
                     <img class="windows_image" src="./imgs/AppIcons/PANKETO.png">
-                    <p>Welcome</p>
+                    <p>Seal Clicker</p>
                 </div>
 
                 <!-- Minimize/Close -->
                 <div style="display: flex; justify-content: flex-end; align-items: center;">
-                    <button class="windows_header_minimize-button" id="sealclicker_minimize">-</button>
-                    <button class="windows_header_close-button" id="sealclicker_close">X</button>
+                    <button class="minimize-button" id="sealclicker_minimize">-</button>
+                    <button class="close-button" id="sealclicker_close">X</button>
                 </div>
             </div>
 
@@ -105,7 +105,6 @@
             </div>
         </div>
 
-        <!-- Apply Scripts -->
         <div class="waves">
             <div class="wave" id="wave1"></div>
             <div class="wave" id="wave2"></div>
@@ -116,12 +115,31 @@
             </div>
         </div>
 
+        <!-- Appreciate the help w3schools, they're the goats https://www.w3schools.com/html/html5_audio.asp -->
+        <audio id="hoverAudio"> <source src="./sounds/beep.wav" type="audio/wav"> </audio>
+        <audio id="selectAudio"> <source src="./sounds/select.wav" type="audio/wav"> </audio>
+        <audio id="dragAudio"> <source src="./sounds/drag.wav" type="audio/wav"> </audio>
+        <audio id="seaBackground"> <source src="./sounds/SeaBackground.wav" type="audio/wav"> </audio>
 
         <!-- Apply Scripts -->
-        <script type="module" src="./scripts/time.js"></script>
-        <script type="module" src="./scripts/drag.js"></script>
-        <script type="module" src="./scripts/window_manager.js"></script>
         <script type="module" src="./scripts/audio.js"></script>
-    </body>
+        <script type="module" src="./scripts/drag.js"></script>
+        <script type="module" src="./scripts/mathf.js"></script>
+        <script type="module" src="./scripts/time.js"></script>
+        <script type="module" src="./scripts/window_global.js"></script>
+        <script type="module" src="./scripts/window_manager.js"></script>
 
+        <!-- RANDOM IDEAS
+            + An app that lets you choose between different type of things you usually place at the beach like sand castles, so you can decorate your OS :D
+            + Already doing this, but a reminder, a seal clicker, cookie clicker, but with tons of cute seals >;]
+            + A tamagotchi app where you have to take care off a seal and you have to drag the fish to them to feed them and pet them muejeje
+            + SealTok, you can scroll videos, cause why not, I'll recreate popular videos but with seals rotoscoping the actual people lmao, 
+                if not enough content (if you are a doomscroller) I can try using Giphy's API and place random gifs.
+            + Sealirus.exe, you can install it, and if you do a bunch of annoying pop-ups will appear of seals trying to get your attention
+
+            + come on alex, you can think of more ideas, you got this ( yes i talk to myself, also, what are you doing here reading MY ideas, huh? >:[ )
+            + if you're actually reading this, should this be considered an easter egg? Congrats I guess, OOOH, WHAT IF:
+            + Ok, if you're inspecting this code RN, what if I made an app where you need to enter a secret code, and I hid it in the commits, that sounds fun
+        -->
+    </body>
 </html>

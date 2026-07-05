@@ -37,7 +37,12 @@ function stopAudio(audio){
 }
 
 //https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Using_Web_Audio_API
-//For some reason there's a gap when looping when using the Audio class
+//For some reason there's a gap when looping when using the Audio class, this significantly improves it, but it is not a fix
+
+var seaBackground = document.getElementById("seaBackground");
+seaBackground.loop = true;
+seaBackground.volume = 0.05;
+seaBackground.play();
 
 const audioContext = new AudioContext();
 
