@@ -1,0 +1,115 @@
+@import url("./style.css");
+
+.waves{
+    margin-left: 0px;
+    padding-left: 0px;
+
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 20vh;
+
+    background: #3586ff;
+}
+
+.wave{
+    position: absolute;
+    top: -100px;
+
+    width: 100%;
+    height: 100px;
+    background: url("../imgs/wave.png");
+    background-size: 1000px 100px;
+}
+
+#wave1{
+    z-index: 1;
+    opacity: 1;
+    animation: waveAnimation 5s linear infinite;
+}
+
+#wave2{
+    z-index: 1;
+    opacity: 0.2;
+    animation: waveAnimation 2.3s ease-in-out infinite;
+
+    bottom: 15px;
+}
+
+#wave3{
+    z-index: 2;
+    opacity: 0.8;
+    animation: reverseWaveAnimation 4s ease-in infinite;
+
+    bottom: 18px;
+}
+
+#wave4{
+    z-index: 0;
+    opacity: 0.4;
+    animation: reverseWaveAnimation 3s ease-out infinite;
+
+    bottom: 10px;
+}
+
+@keyframes waveAnimation {
+    from{
+        background-position: 1000px;
+        top: -100px;
+    }
+    to{
+        background-position: 0px;
+        top: -40px;
+    }
+
+    0%{
+        background-position: 1000px;
+        top: -100px;
+    }
+    50%{
+        top: -40px;
+    }
+    100%{
+        background-position: 0px;
+        top: -100px;
+    }
+}
+@keyframes reverseWaveAnimation {
+    0%{
+        background-position: 0px;
+        top: -40px;
+    }
+    50%{
+        top: -100px;
+    }
+    100%{
+        background-position: 1000px;
+        top: -40px;
+    }
+}
+
+.waves .fish{
+    position: relative;
+    width: 70px;
+    z-index: 5;
+
+    top: calc(50% - 90px);
+    left: calc(100%);
+
+    animation: fishMover 28s linear infinite;
+}
+
+@keyframes fishMover {
+    0%{
+        left: calc(100%);
+    }
+
+    25%{
+        left: calc(0% - 100px);
+    }
+
+    100%{
+        left: calc(0% - 100px);
+    }
+}

@@ -1,0 +1,125 @@
+@import url("./style.css");
+
+/* Navigation Bar */
+.navbar{
+    position: relative;
+    top: 50%;
+    left: 0%;
+
+    padding: 5px;
+    background-color: #0000002a;
+    backdrop-filter: blur(10px);
+    align-items: center;
+    display: flex;
+    border: solid;
+
+    justify-content: space-between;
+
+    border-radius: 16px;
+
+    z-index: 3000;
+}
+
+.sub{
+    background-color: transparent;
+    border: none;
+
+    backdrop-filter: none;
+}
+
+.navbar_companion-seal{
+    margin-left: 10px;
+
+    padding: 0px;
+
+    width: 64px;
+    height: 64px;
+
+    transform: rotate(0deg);
+    animation-name: smallTiltReverse;
+    animation-iteration-count: 1;
+    animation-duration: 0.25s;
+}
+
+.companion-seal:hover{
+    transform: rotate(10deg);
+    animation-name: smallTilt;
+    animation-iteration-count: 1;
+    animation-duration: 0.25s;
+}
+
+.clock-text{
+    text-align: right;
+    
+    margin-right: 10px;
+    color: black;
+    font-size: var(--font-size-m);
+    font-weight: var(--font-weight-semibold);
+
+    color: #c0f7f3;
+
+    background-color: #0000002a;
+    padding: 4px 12px;
+    border-radius: 16px;
+}
+
+@keyframes smallTilt {
+    from{
+        transform: rotate(0deg);
+    }
+
+    to{
+        transform: rotate(10deg);
+    }
+}
+
+@keyframes smallTiltReverse {
+    from{
+        transform: rotate(10deg);
+    }
+
+    to{
+        transform: rotate(0deg);
+    }
+}
+
+/* Taskbar */
+.taskbar_element{
+    border-radius: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    transform: scale(1);
+    transition: 0.25s;
+
+    display: none;
+    gap: 3px;
+    align-items: center;
+    flex-direction: column;
+}
+
+.taskbar_element:hover{
+    cursor: var(--point-cursor);
+
+    transform: scale(1.2);
+}
+
+.taskbar_element img{
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+}
+
+.taskbar_ontop{
+    width: 72px;
+    height: 3px;
+    
+    border-radius: 30px;
+
+    background-color: grey;
+    backdrop-filter: blur(10px);
+}
+
+.taskbar_ontop.selected{
+    background-color: cyan;
+}

@@ -123,7 +123,8 @@ header{
     text-align: center;
     padding: 16px;
     filter: drop-shadow(0 0 8px rgb(75, 101, 114));
-    width: fit-content;
+
+    gap: 5px;
 }
 
 .desktop_app_icon img{
@@ -131,6 +132,10 @@ header{
     height: 64px;
     border-radius: 16px;
     box-shadow: 0 2px 4px black;
+}
+
+.desktop_app_icon p{
+    width: 100%;
 }
 
 .desktop_app_icon:hover{
@@ -150,24 +155,6 @@ header{
 .desktop_app_icon p{
     margin: 0px;
     color: #000000;
-}
-
-.windows{
-    border: solid;
-    border-color: var(--window-header-color);
-
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-
-    transform: scale(1);
-
-    animation: scale 0.25s 1;
-}
-
-.windows.close{
-    transform: scale(0);
-    
-    animation: scale-down 0.25s 1;
 }
 
 @keyframes scale {
@@ -190,223 +177,6 @@ header{
     }
 }
 
-@keyframes smallTilt {
-    from{
-        transform: rotate(0deg);
-    }
-
-    to{
-        transform: rotate(10deg);
-    }
-}
-
-@keyframes smallTiltReverse {
-    from{
-        transform: rotate(10deg);
-    }
-
-    to{
-        transform: rotate(0deg);
-    }
-}
-
-.taskbar_element{
-    border-radius: 5px;
-    padding-left: 15px;
-    padding-right: 15px;
-
-    transform: scale(1);
-    transition: 0.25s;
-
-    display: none;
-    gap: 3px;
-    align-items: center;
-    flex-direction: column;
-}
-
-.taskbar_element:hover{
-    cursor: var(--point-cursor);
-
-    transform: scale(1.2);
-}
-
-.taskbar_element img{
-    width: 64px;
-    height: 64px;
-    border-radius: 16px;
-}
-
-.taskbar_ontop{
-    width: 72px;
-    height: 3px;
-    
-    border-radius: 30px;
-
-    background-color: grey;
-    backdrop-filter: blur(10px);
-}
-
-.taskbar_ontop.selected{
-    background-color: cyan;
-}
-
-.windows img{
-    width: 32px;
-    height: 32px;
-
-    border: none;
-}
-
-.windows_header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    border-color: var(--window-header-color);
-
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-
-    margin-top: -2px;
-    margin-bottom: -2px;
-
-    margin-left: -1px;
-    margin-right: -1px;
-
-    position: relative;
-
-    width: 400px;
-    height: 15px;
-}
-
-.windows_header.body{
-    display: flex;
-    height: 300px;
-    overflow: auto;
-
-    flex-direction: column;
-
-    justify-content: flex-start;
-    align-content: flex-start;
-    align-items: flex-start;
-
-    padding-left: 5px;
-    padding-top: 5px;
-    padding-right: 5px;
-    padding-bottom: 5px;
-}
-
-.windows_header.body *{
-    padding: 3;
-    margin: 0;
-}
-
-.minimize-button{
-  border-color: #00000000;
-  border-radius: var(--border-radius-s);
-
-  color: white;
-  background-color: var(--minimize-button-color);
-
-  width: var(--window-buttons-width);
-  height: var(--window-buttons-width);
-
-  text-align: center;
-
-  transform: scale(1);
-  transition: 0.25s;
-}
-
-.minimize-button:hover{
-  background-color: var(--minimize-button-hover-color);
-
-  transform: scale(1.2);
-}
-
-.close-button{
-  border-color: #00000000;
-  border-radius: var(--border-radius-s);
-
-  color: white;
-  background-color: var(--close-button-color);
-
-  width: var(--window-buttons-width);
-  height: var(--window-buttons-width);
-
-  text-align: center;
-
-  transform: scale(1);
-  transition: 0.25s;
-}
-
-.close-button:hover{
-    background-color:  var(--close-button-hover-color);
-
-    transform: scale(1.2);
-}
-
-.navbar{
-    position: relative;
-    top: 50%;
-    left: 0%;
-
-    padding: 5px;
-    background-color: #0000002a;
-    backdrop-filter: blur(10px);
-    align-items: center;
-    display: flex;
-    border: solid;
-
-    justify-content: space-between;
-
-    border-radius: 16px;
-
-    z-index: 3000;
-}
-
-.sub{
-    background-color: transparent;
-    border: none;
-
-    backdrop-filter: none;
-}
-
-.navbar_companion-seal{
-    margin-left: 10px;
-
-    padding: 0px;
-
-    width: 64px;
-    height: 64px;
-
-    transform: rotate(0deg);
-    animation-name: smallTiltReverse;
-    animation-iteration-count: 1;
-    animation-duration: 0.25s;
-}
-
-.companion-seal:hover{
-    transform: rotate(10deg);
-    animation-name: smallTilt;
-    animation-iteration-count: 1;
-    animation-duration: 0.25s;
-}
-
-.clock-text{
-    text-align: right;
-    
-    margin-right: 10px;
-    color: black;
-    font-size: var(--font-size-m);
-    font-weight: var(--font-weight-semibold);
-
-    color: #c0f7f3;
-
-    background-color: #0000002a;
-    padding: 4px 12px;
-    border-radius: 16px;
-}
-
 .socials{
     display: flex;
     
@@ -427,118 +197,4 @@ header{
 
 .socials img{
     width: 30px;
-}
-
-.waves{
-    margin-left: 0px;
-    padding-left: 0px;
-
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 20vh;
-
-    background: #3586ff;
-}
-
-.wave{
-    position: absolute;
-    top: -100px;
-
-    width: 100%;
-    height: 100px;
-    background: url("../imgs/wave.png");
-    background-size: 1000px 100px;
-}
-
-#wave1{
-    z-index: 1;
-    opacity: 1;
-    animation: waveAnimation 5s linear infinite;
-}
-
-#wave2{
-    z-index: 1;
-    opacity: 0.2;
-    animation: waveAnimation 2.3s ease-in-out infinite;
-
-    bottom: 15px;
-}
-
-#wave3{
-    z-index: 2;
-    opacity: 0.8;
-    animation: reverseWaveAnimation 4s ease-in infinite;
-
-    bottom: 18px;
-}
-
-#wave4{
-    z-index: 0;
-    opacity: 0.4;
-    animation: reverseWaveAnimation 3s ease-out infinite;
-
-    bottom: 10px;
-}
-
-@keyframes waveAnimation {
-    from{
-        background-position: 1000px;
-        top: -100px;
-    }
-    to{
-        background-position: 0px;
-        top: -40px;
-    }
-
-    0%{
-        background-position: 1000px;
-        top: -100px;
-    }
-    50%{
-        top: -40px;
-    }
-    100%{
-        background-position: 0px;
-        top: -100px;
-    }
-}
-@keyframes reverseWaveAnimation {
-    0%{
-        background-position: 0px;
-        top: -40px;
-    }
-    50%{
-        top: -100px;
-    }
-    100%{
-        background-position: 1000px;
-        top: -40px;
-    }
-}
-
-.waves .fish{
-    position: relative;
-    width: 70px;
-    z-index: 5;
-
-    top: calc(50% - 90px);
-    left: calc(100%);
-
-    animation: fishMover 28s linear infinite;
-}
-
-@keyframes fishMover {
-    0%{
-        left: calc(100%);
-    }
-
-    25%{
-        left: calc(0% - 100px);
-    }
-
-    100%{
-        left: calc(0% - 100px);
-    }
 }
