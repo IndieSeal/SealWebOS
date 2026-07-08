@@ -63,6 +63,7 @@ export function setDragAudioVolume(value){
   currentValue = clamp(0, MAX_VOLUME, (lerp(currentValue, value, 0.045))).toFixed(3);
 
   if(currentValue < 0.012) currentValue = 0;
+  
   dragAudio.volume = currentValue;
 }
 

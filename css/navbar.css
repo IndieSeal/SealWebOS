@@ -3,8 +3,6 @@
 /* Navigation Bar */
 .navbar{
     position: relative;
-    top: 50%;
-    left: 0%;
 
     padding: 5px;
     background-color: #0000002a;
@@ -16,18 +14,26 @@
     justify-content: space-between;
 
     border-radius: 16px;
+    padding: 5px;
 
-    z-index: 3000;
+    z-index: 9999;
 }
 
-.sub{
-    background-color: transparent;
-    border: none;
-
-    backdrop-filter: none;
+.navbar .element{
+    all: unset;
+    
+    display: flex;
 }
 
-.navbar_companion-seal{
+.navbar .taskbar{
+    all: unset;
+
+    display: flex;
+}
+
+.navbar .companion-seal{
+    all: unset;
+    
     margin-left: 10px;
 
     padding: 0px;
@@ -36,16 +42,7 @@
     height: 64px;
 
     transform: rotate(0deg);
-    animation-name: smallTiltReverse;
-    animation-iteration-count: 1;
-    animation-duration: 0.25s;
-}
-
-.companion-seal:hover{
-    transform: rotate(10deg);
-    animation-name: smallTilt;
-    animation-iteration-count: 1;
-    animation-duration: 0.25s;
+    transition: transform 0.25s;
 }
 
 .clock-text{
@@ -63,28 +60,8 @@
     border-radius: 16px;
 }
 
-@keyframes smallTilt {
-    from{
-        transform: rotate(0deg);
-    }
-
-    to{
-        transform: rotate(10deg);
-    }
-}
-
-@keyframes smallTiltReverse {
-    from{
-        transform: rotate(10deg);
-    }
-
-    to{
-        transform: rotate(0deg);
-    }
-}
-
 /* Taskbar */
-.taskbar_element{
+.taskbar .element{
     border-radius: 5px;
     padding-left: 15px;
     padding-right: 15px;
@@ -98,13 +75,13 @@
     flex-direction: column;
 }
 
-.taskbar_element:hover{
+.taskbar .element:hover{
     cursor: var(--point-cursor);
 
     transform: scale(1.2);
 }
 
-.taskbar_element img{
+.taskbar .element img{
     width: 64px;
     height: 64px;
     border-radius: 16px;

@@ -1,5 +1,49 @@
 @import url("./style.css");
 
+#welcome {
+  position: absolute;
+  background-color: #f1f1f1;
+  border: 1px solid #d3d3d3;
+
+  top: calc(50% - 90px);
+  left: calc(50% - 180px);
+}
+
+#welcome_header {
+  cursor: var(--point-cursor);
+
+  padding: 10px;
+  background-color: var(--window-header-color);
+}
+
+#welcome_header:active {
+  cursor: var(--grab-cursor);
+
+  background-color: var(--window-selected-header-color);
+}
+
+#sealclicker {
+  position: absolute;
+  background-color: #93c3ea;
+  border: 1px solid #83aed2;
+
+  top: 0;
+  left: 0;
+}
+
+#sealclicker_header {
+  cursor: var(--point-cursor);
+
+  padding: 10px;
+  background-color: var(--window-header-color);
+}
+
+#sealclicker_header:active {
+  cursor: var(--grab-cursor);
+
+  background-color: var(--window-selected-header-color);
+}
+
 .windows{
     border: solid;
     border-color: var(--window-header-color);
@@ -47,8 +91,12 @@
     height: 15px;
 }
 
-.windows_header.body{
+.windows_header.window_body{
     display: flex;
+
+    width: 0;
+    min-width: 100%;
+    
     height: 300px;
     overflow: auto;
 
@@ -64,7 +112,25 @@
     padding-bottom: 5px;
 }
 
-.windows_header.body *{
+.windows_header.window_body .row{
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+    align-items: space-evenly;
+
+    gap: 0px;
+}
+
+.windows_header.window_body .column{
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-around;
+    align-items: center;
+}
+
+.windows_header.window_body *{
     padding: 3;
     margin: 0;
 }
@@ -111,4 +177,24 @@
     background-color:  var(--close-button-hover-color);
 
     transform: scale(1.2);
+}
+
+.windows .sealdisplay{
+    width: 256px;
+    height: 256px;
+
+    border: solid;
+    border-radius: 90px;
+
+    transform: scale(1);
+    transition: 0.05s ease;
+}
+
+.windows .sealdisplay.click{
+    transform: scale(0.9);
+    transition: 0.05s ease;
+}
+
+.sealclicker .buy-button{
+  background-color: purple;
 }

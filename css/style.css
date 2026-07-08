@@ -12,6 +12,7 @@
 :root{
     --primary-color: #c0f7f3;
     --window-header-color: #2196F3;
+    --window-selected-header-color: #2c5475;
     
     --font-size-m: 1.12rem;
     --border-radius-s: 8px;
@@ -59,56 +60,6 @@ img{
 header{
     background: var(--primary-color);
     background-repeat: no-repeat;
-}
-
- #welcome {
-  position: absolute;
-  background-color: #f1f1f1;
-  border: 1px solid #d3d3d3;
-
-  top: calc(50% - 90px);
-  left: calc(50% - 180px);
-}
-
-#welcome_header {
-  cursor: var(--point-cursor);
-
-  padding: 10px;
-  background-color: var(--window-header-color);
-  position: relative;
-}
-
-#welcome_header:active {
-  cursor: var(--grab-cursor);
-
-  padding: 10px;
-  position: relative;
-  background-color: #2c5475;
-}
-
- #sealclicker {
-  position: absolute;
-  background-color: #f1f1f1;
-  border: 1px solid #d3d3d3;
-
-  top: calc(50% - 90px);
-  left: calc(50% - 180px);
-}
-
-#sealclicker_header {
-  cursor: var(--point-cursor);
-
-  padding: 10px;
-  background-color: var(--window-header-color);
-  position: relative;
-}
-
-#sealclicker_header:active {
-  cursor: var(--grab-cursor);
-
-  padding: 10px;
-  position: relative;
-  background-color: #2c5475;
 }
 
 .desktop_app_icon{
@@ -197,4 +148,20 @@ header{
 
 .socials img{
     width: 30px;
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-around;
+    align-items: center;
+}
+
+.column{
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-around;
+    align-items: center;
 }

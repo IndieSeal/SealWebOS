@@ -5,7 +5,7 @@ import { TASKBAR_SUFFIX, OPEN_SUFFIX, MINIMIZE_SUFFIX, CLOSE_SUFFIX, TASKBAR_ONT
 var selectedIcon = undefined;
 var selectedWindow = undefined;
 
-const topBar = document.getElementById("top")
+const topBar = document.getElementById("top");
 var biggestIndex = 1;
 
 var allWindows = [];
@@ -33,7 +33,7 @@ class Window{
   draggableElement = undefined;
   latestZIndex = 0;
   
-  constructor(id, openByDefault){
+  constructor(id, openByDefault, movableWindow){
     this.myId = id;
 
     this.window = document.querySelector("#" + id);
@@ -44,7 +44,7 @@ class Window{
     this.windowMinimizer = document.getElementById(id + MINIMIZE_SUFFIX);
     this.windowCloser = document.getElementById(id + CLOSE_SUFFIX);
 
-    this.draggableElement = createDraggableElement(id);
+    this.draggableElement = createDraggableElement(id, movableWindow);
     document.addEventListener('onStartDrag', (e) => {
       let myWindow = getWindow(e.detail.windowID);
       changeSelectedWindow(myWindow);
@@ -72,6 +72,9 @@ class Window{
   }
 
   checkIfDragging = () => {
+    this.windowMinimizer.style.pointerEvents = "auto";
+    this.windowCloser.style.pointerEvents = "auto";
+    
     //Make buttons unavailable (close and minimize)
     this.windowMinimizer.inert = this.draggableElement.dragging;
     this.windowCloser.inert = this.draggableElement.dragging;
@@ -151,5 +154,5 @@ export function getWindow(id){
   return undefined;
 }
 
-var welcomeWindow = new Window("welcome", true);
-var welcomeWindow = new Window("sealclicker", false);
+var welcomeWindow = new Window("welcome", true, true);
+var welcomeWindow = new Window("sealclicker", false, false);

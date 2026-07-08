@@ -1,9 +1,10 @@
 import { setDragAudioVolume, stopDragAudio } from "./audio.js";
-import { abs, lerp } from "./mathf.js";
+import { abs, clamp, lerp } from "./mathf.js";
 import { MINIMIZE_SUFFIX, CLOSE_SUFFIX } from "./window_global.js";
 
 // So, why did I do it this way? Cause who the heck would like to be duplicating scripts and changing names when you can have a class that manages it, like come on!
 // i use c# so this feels hella familiar
+const topBar = document.getElementById("top")
 
 class DraggableElement{
   initialX = 0;
@@ -16,10 +17,17 @@ class DraggableElement{
   hasInitialDrag = false;
   dragging = false;
 
-  constructor(id){
+  constructor(id, movableWindow){
     this.myId = id;
+    this.isWindowMovable = movableWindow;
+    
     this.element = document.getElementById(id);
     this.header = document.getElementById(id + "_header");
+
+    if(!this.isWindowMovable){
+      this.unsetup();
+      return;
+    }
 
     //YES, EVENTS DO EXIST IN JS https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent || https://www.geeksforgeeks.org/javascript/javascript-custom-events/
     this.onStartDragEvent = new CustomEvent("onStartDrag", {
@@ -43,6 +51,10 @@ class DraggableElement{
 
     this.header.onmousedown = this.startDragging;
     this.moveElementFunction();
+  }
+
+  unsetup = () => {
+    this.header.style.pointerEvents = "none";
   }
 
   startDragging = (e) => {
@@ -75,6 +87,18 @@ class DraggableElement{
 
     this.cursorX = e.clientX - this.initialX;
     this.cursorY = e.clientY - this.initialY;
+
+    const rect = this.element.getBoundingClientRect();
+    const navbarRect = topBar.getBoundingClientRect();
+
+    let windowWidth = window.innerWidth;
+    let windowHeight = window.innerHeight;
+
+    let maxX = windowWidth - rect.width;
+    let maxY = windowHeight - rect.height;
+    
+    this.cursorX = Math.max(0, Math.min(this.cursorX, maxX));
+    this.cursorY = Math.max(navbarRect.bottom, Math.min(this.cursorY, maxY));
   }
 
   stopDragging = () => {
@@ -94,8 +118,8 @@ class DraggableElement{
     this.currentX = lerp(this.currentX, this.cursorX, .075);
     this.currentY = lerp(this.currentY, this.cursorY, .075);
 
-    var xVolume = abs(this.currentX/this.cursorX) / 2;
-    var yVolume = abs(this.currentY/this.cursorY) / 2;
+    var xVolume = abs(this.cursorX) > 0.1 ? abs(this.currentX/this.cursorX) * 0.5 : 0;
+    var yVolume = abs(this.cursorY) > 0.1 ? abs(this.currentY/this.cursorY) * 0.5 : 0;
 
     setDragAudioVolume(abs(lerp(1, 0, xVolume + yVolume)) * 5);
     
@@ -105,8 +129,8 @@ class DraggableElement{
 }
 
 var allWindows = [];
-export function createDraggableElement(id){
-  let myWindow = new DraggableElement(id);
+export function createDraggableElement(id, movableWindow){
+  let myWindow = new DraggableElement(id, movableWindow);
   allWindows.push(myWindow);
 
   return myWindow;

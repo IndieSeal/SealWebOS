@@ -15,25 +15,22 @@
     <body id="body">
         <!-- NAVIGATION BAR -->
         <div class="navbar" id="top">
-            <div class="navbar sub" style="width: 20%; justify-content: left;">
-                <img class="navbar_companion-seal" src="./imgs/NormalSeal/Closed_Idle.png" usemap="#appseal">
-                <map name="appseal">
-                    <area shape="rect" coords="0,0,4000,4000" href="https://indie-seal.itch.io/">
-                </map>
+            <div class="element" style="width: 20%; justify-content: left;">
+                <img class="companion-seal" src="./imgs/NormalSeal/Closed_Idle.png">
             </div>
 
-            <div class="navbar sub" style="width: 60%; justify-content: center;">
-                <div class="taskbar_element" id="welcome_taskbar">
+            <div class="taskbar" style="width: 60%; justify-content: center;">
+                <div class="element" id="welcome_taskbar">
                     <img src="./imgs/AppIcons/PANKETO.png">
                     <div class="taskbar_ontop" id="welcome_ontop"></div>
                 </div>
-                <div class="taskbar_element" id="sealclicker_taskbar", style="display: none;">
+                <div class="element" id="sealclicker_taskbar", style="display: none;">
                     <img src="./imgs/AppIcons/PANKETO.png">
                     <div class="taskbar_ontop" id="sealclicker_ontop"></div>
                 </div>
             </div>
 
-            <div class="navbar sub" style="width: 20%; justify-content: right;">
+            <div class="element" style="width: 20%; justify-content: right;">
                 <p id="timeElement" class="clock-text">
                     00/00/00, 00:00:00
                 </p>
@@ -67,8 +64,8 @@
                 </div>
             </div>
 
-            <!-- Window Insides? -->
-            <div class="windows_header body">
+            <!-- Window Insides -->
+            <div class="windows_header window_body">
                 <p>Hello there!</p>
                 <p>Welcome to <b>Seal OS</b>!</p>
                 <p>Wanna try some fun stuff? Go to the Seal Clicker App!</p>
@@ -89,7 +86,7 @@
         </div>
 
         <div id="sealclicker" class="windows" style="display: none;">
-            <div class="windows_header" id="sealclicker_header">
+            <div class="windows_header" style="width: 100vw;" id="sealclicker_header">
                 <!-- Window/App Details -->
                 <div style="display: flex; justify-content: flex-start; align-items: center;">
                     <img class="windows_image" src="./imgs/AppIcons/PANKETO.png">
@@ -103,9 +100,27 @@
                 </div>
             </div>
 
-            <div class="windows_header body">
-                <p>Hello there!</p>
-                <img src="./imgs/SealClicker/Seal1.jpg" style="width: 256px; height: 256px;" id="sealclicker-sealdisplay">
+            <div class="windows_header window_body" style="height: 100vh; margin-top: 30px;">
+                <div class="row">
+                    <div>
+                        <img class="sealdisplay" src="./imgs/SealClicker/Seal1.jpg" id="sealclicker-sealdisplay">
+                    </div>
+                    <div class="column" style="border: solid;">
+                        <h2 id="sealclicker-score">Points: --</h2>
+                        
+                        <div class="row" style="border: solid red;">
+                            <button id="autoclicker_buy" style="background-color: blueviolet;" class="row sealclicker buy-button">
+                                <img src="./imgs/SealClicker/Click.png">
+                                <p id="autoclicker_cost">Cost: --</p>
+                                <p id="autoclicker_amount">Level: --</p>
+                            </button>
+                            <div>
+                                <p id="autoclicker_production-per">Production per level: --</p>
+                                <p id="autoclicker_production">Current production: --</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
