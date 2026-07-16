@@ -132,6 +132,9 @@
                             <button class="general_upgrade" id="general_buy">
                                 <img src="./imgs/SealClicker/Seal1.jpg">
                             </button>
+                            <button class="general_upgrade" id="general2_buy">
+                                <img src="./imgs/SealClicker/Seal1.jpg">
+                            </button>
                         </div>
                         
                         <div class="horizontal_separator"> </div>
@@ -147,9 +150,24 @@
                             </div>
                             <p id="autoclicker_amount" class="quantity">--</p>
                         </button>
+                        <button class="autoclicker_upgrade" id="autoclicker2_buy">
+                            <img src="./imgs/SealClicker/Click.png">
+                            <div class="column">
+                                <b>My name</b>
+                                <div class="row">
+                                    <img src="./imgs/SealClicker/Seal1.jpg">
+                                    <p id="autoclicker2_cost">Cost: --</p>
+                                </div>
+                            </div>
+                            <p id="autoclicker2_amount" class="quantity">--</p>
+                        </button>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="tooltip" id="sealclicker-tooltip">
+            <p>my tooltip title</p>
         </div>
 
         <div class="waves">
@@ -171,7 +189,9 @@
         <!-- Apply Scripts -->
         <script type="module" src="./scripts/audio.js"></script>
         <script type="module" src="./scripts/drag.js"></script>
+        
         <script type="module" src="./scripts/mathf.js"></script>
+        
         <script type="module" src="./scripts/time.js"></script>
         <script type="module" src="./scripts/window_global.js"></script>
         <script type="module" src="./scripts/window_manager.js"></script>

@@ -4,6 +4,8 @@ import { pingpong } from "./mathf.js";
 
 //#region Interactable Seal
 
+const tooltipElement = document.getElementById("sealclicker-tooltip");
+
 const sealImageDisplay = document.getElementById("sealclicker-sealdisplay");
 const imagesInFolder = 10;
 var latestIndex = 0;
@@ -45,6 +47,7 @@ const MILLIS_PER_SECOND = 1000;
 const UPDATES_PER_SECOND = 10;
 
 var allAutoclickers = [];
+var allGeneralUpgrades = [];
 
 class Upgrade{
     amount = 0;
@@ -141,6 +144,8 @@ class MultiplierUpgrade extends Upgrade{
     constructor(upgradeID, basePrice, conditionFunction){
         super(upgradeID, basePrice, 1);
 
+        allGeneralUpgrades.push(this);
+        
         this.conditionFunction = conditionFunction;
     }
 
@@ -167,7 +172,7 @@ function onUpgradeBought()
         score += element.getProduction();
     });
 
-    totalScorePerSecond.innerHTML = `per second: ${score}`;
+    totalScorePerSecond.innerHTML = `per second: ${score.toFixed(1)}`;
 }
 
 const totalScorePerSecond = document.getElementById("sealclicker-score_persecond");
@@ -175,8 +180,46 @@ const totalScorePerSecond = document.getElementById("sealclicker-score_persecond
 var autoclickUpgrade = new AutoclickerUpgrade("autoclicker", 10, 1.2, 0.3);
 autoclickUpgrade.setup();
 
+var autoclickUpgrade2 = new AutoclickerUpgrade("autoclicker2", 100, 1.2, 3);
+autoclickUpgrade2.setup();
+
 var generalUpgrade = new MultiplierUpgrade("general", 100, () => {
     baseClickPoints *= 2;
     autoclickUpgrade.multipliers *= 2;
 });
 generalUpgrade.setup();
+
+var generalUpgrade2 = new MultiplierUpgrade("general2", 1000, () => {
+    autoclickUpgrade2.multipliers *= 2;
+});
+generalUpgrade2.setup();
+
+allAutoclickers.forEach(autoclicker => {
+        autoclicker.buyElement.addEventListener('mouseleave', () => {
+        tooltipElement.style.display = "none";
+    });
+    autoclicker.buyElement.addEventListener('mouseenter', () => {
+        tooltipElement.style.display = "flex";
+
+        let tooltipRect = tooltipElement.getBoundingClientRect();
+        let rect = autoclicker.buyElement.getBoundingClientRect();
+                
+        tooltipElement.style.left = `${rect.left + window.scrollX - tooltipRect.width}px`;
+        tooltipElement.style.top = `${rect.bottom + window.scrollY - (tooltipRect.height / 2) - (rect.height / 2)}px`;        
+    });
+});
+
+allGeneralUpgrades.forEach(upgrade => {
+    upgrade.buyElement.addEventListener('mouseleave', () => {
+        tooltipElement.style.display = "none";
+    });
+    upgrade.buyElement.addEventListener('mouseenter', () => {
+        tooltipElement.style.display = "flex";
+
+        let tooltipRect = tooltipElement.getBoundingClientRect();
+        let rect = document.getElementsByClassName("general_upgrades")[0].getBoundingClientRect();
+                
+        tooltipElement.style.left = `${rect.left + window.scrollX - tooltipRect.width}px`;
+        tooltipElement.style.top = `${rect.bottom + window.scrollY - (tooltipRect.height / 2) - (rect.height / 2)}px`;        
+    });
+});
