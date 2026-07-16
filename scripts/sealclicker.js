@@ -27,10 +27,11 @@ sealImageDisplay.addEventListener("click", onSealClicked)
 //#endregion
 
 // USEFUL: https://www.kongregate.com/en/pages/the-math-of-idle-games-part-i
+var baseClickPoints = 1;
 
 function onSealClicked(){
     setNewRandomImage();
-    sumPoints(1);
+    sumPoints(baseClickPoints);
 }
 
 const scoreText = document.getElementById("sealclicker-score");
@@ -42,6 +43,8 @@ const UPGRADE_AMOUNT_SUFFIX = "_amount";
 
 const MILLIS_PER_SECOND = 1000;
 const UPDATES_PER_SECOND = 10;
+
+var allAutoclickers = [];
 
 class Upgrade{
     amount = 0;
@@ -68,8 +71,8 @@ class Upgrade{
     }
 
     updateUI(){
-        this.costElement.innerHTML = `Price: ${this.getPrice()}`;
-        this.amountElement.innerHTML = `Level: ${this.amount}`;
+        if(this.costElement != undefined) this.costElement.innerHTML = `${this.getPrice()}`;
+        if(this.costElement != undefined) this.amountElement.innerHTML = `${this.amount}`;
     }
 
     getPrice = function(){
@@ -81,16 +84,17 @@ class Upgrade{
         return points >= this.getPrice();
     }
 
-    buyUpgrade = function(){
-        if(!this.canBuy()) return;
+    buyUpgrade(){
+        if(!this.canBuy()) return false;
 
         sumPoints(-this.getPrice());
         this.amount++;
+
+        onUpgradeBought();
+
+        return false;
     }
 }
-
-const UPGRADE_PRODUCTION_PERLEVEL_SUFFIX = "_production-per";
-const UPGRADE_PRODUCTION_SUFFIX = "_production";
 
 class AutoclickerUpgrade extends Upgrade{
     multipliers = 1;
@@ -100,8 +104,10 @@ class AutoclickerUpgrade extends Upgrade{
 
         this.pointsPerSecond = pointsPerSecond;
 
-        this.productionPerElement = document.getElementById(upgradeID + UPGRADE_PRODUCTION_PERLEVEL_SUFFIX);
-        this.productionElement = document.getElementById(upgradeID + UPGRADE_PRODUCTION_SUFFIX);
+        //this.productionPerElement = document.getElementById(upgradeID + UPGRADE_PRODUCTION_PERLEVEL_SUFFIX);
+        //this.productionElement = document.getElementById(upgradeID + UPGRADE_PRODUCTION_SUFFIX);
+
+        allAutoclickers.push(this);
 
         setTimeout(() => this.loop(), MILLIS_PER_SECOND);
     }
@@ -109,8 +115,8 @@ class AutoclickerUpgrade extends Upgrade{
     updateUI(){
         super.updateUI();
 
-        this.productionPerElement.innerHTML = `Production per level: ${this.pointsPerSecond.toFixed(2)}`;
-        this.productionElement.innerHTML = `Current production: ${this.getProduction().toFixed(2)}`;
+        //this.productionPerElement.innerHTML = `Production per level: ${this.pointsPerSecond.toFixed(2)}`;
+        //this.productionElement.innerHTML = `Current production: ${this.getProduction().toFixed(2)}`;
     }
 
     getProduction = function(){
@@ -132,24 +138,20 @@ class AutoclickerUpgrade extends Upgrade{
 class MultiplierUpgrade extends Upgrade{
     multipliers = 1;
     
-    constructor(upgradeID, basePrice, priceMultiplier, conditionFunction){
-        super(upgradeID, basePrice, priceMultiplier);
+    constructor(upgradeID, basePrice, conditionFunction){
+        super(upgradeID, basePrice, 1);
 
         this.conditionFunction = conditionFunction;
-
-        setTimeout(() => this.loop(), MILLIS_PER_SECOND);
     }
 
-    loop = function(){
-        setTimeout(() => this.loop(), MILLIS_PER_SECOND/UPDATES_PER_SECOND);
+    buyUpgrade(){
+        if(!this.canBuy()) return false;
 
-        this.onSecondPassed();
-    }
-    
-    onSecondPassed(){
-        if(!this.conditionFunction()) return;
+        this.buyElement.style.display = "none";
+        this.conditionFunction();
 
-        console.log("Condition has been completed");
+        super.buyUpgrade();
+        return true;
     }
 }
 
@@ -158,6 +160,23 @@ function sumPoints(newPoints){
     scoreText.innerHTML = `Points: ${Math.floor(points)}`;
 }
 
+function onUpgradeBought()
+{
+    let score = 0;
+    allAutoclickers.forEach(element => {
+        score += element.getProduction();
+    });
+
+    totalScorePerSecond.innerHTML = `per second: ${score}`;
+}
+
+const totalScorePerSecond = document.getElementById("sealclicker-score_persecond");
+
 var autoclickUpgrade = new AutoclickerUpgrade("autoclicker", 10, 1.2, 0.3);
 autoclickUpgrade.setup();
 
+var generalUpgrade = new MultiplierUpgrade("general", 100, () => {
+    baseClickPoints *= 2;
+    autoclickUpgrade.multipliers *= 2;
+});
+generalUpgrade.setup();

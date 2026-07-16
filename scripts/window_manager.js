@@ -21,11 +21,19 @@ function changeSelectedWindow(newWindow){
   selectedWindow.taskbar_ontop.classList.add("selected");
 }
 
-function minimizeWindow(window){
-  if(selectedWindow == window){
+function minimizeWindow(minWindow){
+  if(selectedWindow == minWindow){
     selectedWindow.taskbar_ontop.classList.remove("selected");
 
-    selectedWindow = undefined;
+    let higuestWindow = undefined;
+    allWindows.forEach(window => {
+      if(window == selectedWindow || !window.isWindowOpen()) return;
+      if(higuestWindow == undefined || higuestWindow.latestZIndex < window.latestZIndex){
+        higuestWindow = window;
+      }
+    });
+
+    if(higuestWindow != undefined) changeSelectedWindow(higuestWindow);
   }
 }
 
@@ -129,6 +137,10 @@ class Window{
     else this.selectIcon();
   }
 
+  isWindowOpen(){
+    return !this.window.classList.contains("close");
+  }
+
   handleWindowTap = () => {
     biggestIndex++;
 
@@ -140,7 +152,7 @@ class Window{
   }
 
   toggleWindow = () => {
-    if(this.latestZIndex == biggestIndex && !this.window.classList.contains("close")) this.minimizeWindowFunc();
+    if(this.latestZIndex == biggestIndex && this.isWindowOpen()) this.minimizeWindowFunc();
     else this.openWindowFunc();
   }
 }
@@ -155,4 +167,4 @@ export function getWindow(id){
 }
 
 var welcomeWindow = new Window("welcome", true, true);
-var welcomeWindow = new Window("sealclicker", false, false);
+var welcomeWindow = new Window("sealclicker", false, true);

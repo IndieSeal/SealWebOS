@@ -3,7 +3,6 @@
 * {
     font-family: "Noto Sans JP", sans-serif;
     font-optical-sizing: auto;
-    font-weight: weight;
     font-style: normal;
 
     color: black;
@@ -48,8 +47,16 @@ button{
     background: none;
 }
 
+button:active{
+    cursor: var(--grab-cursor);
+}
+
 area{
     cursor: var(--point-cursor);
+}
+
+area:active{
+    cursor: var(--grab-cursor);
 }
 
 img{

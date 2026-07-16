@@ -1,0 +1,99 @@
+.store{
+  font-size: 64px;
+  font-weight: bold;
+}
+
+.autoclicker_upgrade{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  width: 320px;
+  height: 64px;
+
+  border: solid;
+  background-color: brown;
+
+  transition: 0.25s;
+}
+
+.autoclicker_upgrade:hover{
+  background-color: rgb(126, 30, 30);
+}
+
+.scrollable_area{
+  all: unset;
+
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.windows.upgrade_row{
+  all: unset;
+  
+  width: 100%;
+  height: 200px;
+}
+
+.windows .sealdisplay{
+    width: 256px;
+    height: 256px;
+
+    border: solid;
+    border-radius: 90px;
+
+    transform: scale(1);
+    transition: 0.05s ease;
+}
+
+.windows .sealdisplay.click{
+    transform: scale(0.9);
+    transition: 0.05s ease;
+}
+
+.autoclicker_upgrade .quantity{
+    justify-self: flex-end;
+    font-size: 64px;
+    
+    margin-left: auto;
+    margin-right: 5px;
+}
+
+.general_upgrades{
+  display: flex;
+  flex-direction: row;
+
+  width: 100%;
+  min-height: 64px;
+
+  justify-content: flex-start;
+}
+
+.general_upgrade{
+  display: flex;
+
+  padding: 0px;
+  
+  width: 64px;
+  height: 64px;
+}
+
+.general_upgrade img{
+  all: unset;
+
+  width: 100%;
+}
+
+.horizontal_separator{
+  display: flex;
+  width: 100%;
+  height: 16px;
+  background-color: aqua;
+}
+
+.vertical_separator{
+  display: flex;
+  width: 16px;
+  height: 100%;
+  background-color: aqua;
+}
