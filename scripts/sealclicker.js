@@ -74,6 +74,12 @@ class Upgrade{
 
         this.basePrice = basePrice;
         this.priceMultiplier = priceMultiplier;
+
+        this.onUpgradeBought = new CustomEvent("onUpgradeBought", {
+            detail: {
+                upgrade: undefined,
+            },
+        });
     }
 
     setup = () =>{
@@ -109,9 +115,9 @@ class Upgrade{
         sumPoints(-this.getPrice());
         this.amount++;
 
-        onUpgradeBought();
+        onUpgradeBought(this);
 
-        return false;
+        return true;
     }
 }
 
@@ -126,6 +132,12 @@ class AutoclickerUpgrade extends Upgrade{
         allAutoclickers.push(this);
 
         setTimeout(() => this.loop(), MILLIS_PER_SECOND);
+
+        this.onUpgradeBought = new CustomEvent("onUpgradeBought", {
+            detail: {
+                upgrade: this,
+            },
+        });
     }
 
     getProduction = function(){
@@ -158,6 +170,12 @@ class MultiplierUpgrade extends Upgrade{
         this.isUnlocked = false;
 
         setTimeout(() => this.loop(), MILLIS_PER_SECOND);
+
+        this.onUpgradeBought = new CustomEvent("onUpgradeBought", {
+            detail: {
+                upgrade: this,
+            },
+        });
     }
 
     buyUpgrade(){
@@ -185,7 +203,7 @@ function sumPoints(newPoints){
     scoreText.innerHTML = `Points: ${Math.floor(points)}`;
 }
 
-function onUpgradeBought()
+function onUpgradeBought(upgrade)
 {
     let score = 0;
     allAutoclickers.forEach(element => {
@@ -193,6 +211,7 @@ function onUpgradeBought()
     });
 
     totalScorePerSecond.innerHTML = `per second: ${score.toFixed(1)}`;
+    document.dispatchEvent(upgrade.onUpgradeBought);
 }
 
 const totalScorePerSecond = document.getElementById("sealclicker-score_persecond");
@@ -227,10 +246,12 @@ allAutoclickers.forEach(autoclicker => {
     autoclicker.buyElement.addEventListener('mouseleave', () => {
         onTooltipExitItem(autoclicker);
     });
+    document.addEventListener('onUpgradeBought', (e) => {
+        onTooltipEnterAutoclicker(e.detail.upgrade);
+    });
     autoclicker.buyElement.addEventListener('mouseenter', () => {
         onTooltipEnterItem(autoclicker);
-
-        tooltipExtraDescElement.innerHTML = `Production per level: ${autoclicker.pointsPerSecond.toFixed(2)}<br>Current production: ${autoclicker.getProduction().toFixed(2)}`
+        onTooltipEnterAutoclicker(autoclicker);
         
         let tooltipRect = tooltipElement.getBoundingClientRect();
         let rect = autoclicker.buyElement.getBoundingClientRect();
@@ -254,6 +275,13 @@ allGeneralUpgrades.forEach(upgrade => {
         tooltipElement.style.top = `${rect.bottom + window.scrollY - (tooltipRect.height / 2) - (rect.height / 2)}px`;        
     });
 });
+
+function onTooltipEnterAutoclicker(autoclicker){
+    let isAutoclicker = autoclicker instanceof AutoclickerUpgrade;
+    if(!isAutoclicker) return;
+    
+    tooltipExtraDescElement.innerHTML = `Production per level: ${autoclicker.pointsPerSecond.toFixed(2)}<br>Current production: ${autoclicker.getProduction().toFixed(2)}`
+}
 
 function onTooltipEnterItem(upgrade){
     tooltipElement.style.display = "flex";
