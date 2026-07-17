@@ -37,6 +37,13 @@ function minimizeWindow(minWindow){
   }
 }
 
+function onIconClicked(myWindow){
+  allWindows.forEach(window => {
+    if(window == myWindow) return;
+    window.unselectIcon();
+  });
+}
+
 class Window{
   draggableElement = undefined;
   latestZIndex = 0;
@@ -116,6 +123,8 @@ class Window{
   selectIcon = () => {
     if(this.openIcon == undefined) return;
 
+    onIconClicked(this.window);
+    
     this.openIcon.classList.add("selected");
     selectedIcon = this.openIcon;
   } 

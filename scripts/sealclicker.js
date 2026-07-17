@@ -4,8 +4,6 @@ import { pingpong } from "./mathf.js";
 
 //#region Interactable Seal
 
-const tooltipElement = document.getElementById("sealclicker-tooltip");
-
 const sealImageDisplay = document.getElementById("sealclicker-sealdisplay");
 const imagesInFolder = 10;
 var latestIndex = 0;
@@ -39,6 +37,9 @@ function onSealClicked(){
 const scoreText = document.getElementById("sealclicker-score");
 var points = 0;
 
+const UPGRADE_NAME_SUFFIX = "_name";
+const UPGRADE_ICON_SUFFIX = "_icon";
+
 const UPGRADE_BUY_SUFFIX = "_buy";
 const UPGRADE_COST_SUFFIX = "_cost";
 const UPGRADE_AMOUNT_SUFFIX = "_amount";
@@ -49,11 +50,23 @@ const UPDATES_PER_SECOND = 10;
 var allAutoclickers = [];
 var allGeneralUpgrades = [];
 
+class UpgradeInformation{
+    constructor(name, description, icon){
+        this.name = name;
+        this.description = description;
+        this.icon = icon;
+    }
+}
+
 class Upgrade{
     amount = 0;
     
-    constructor(upgradeID, basePrice, priceMultiplier){
+    constructor(upgradeID, upgradeInformation, basePrice, priceMultiplier){
         this.upgradeID = upgradeID;
+        this.upgradeInfo = upgradeInformation;
+
+        this.upgradeNameElement = document.getElementById(upgradeID + UPGRADE_NAME_SUFFIX);
+        this.upgradeIconElement = document.getElementById(upgradeID + UPGRADE_ICON_SUFFIX);
 
         this.buyElement = document.getElementById(upgradeID + UPGRADE_BUY_SUFFIX);
         this.costElement = document.getElementById(upgradeID + UPGRADE_COST_SUFFIX);
@@ -75,7 +88,10 @@ class Upgrade{
 
     updateUI(){
         if(this.costElement != undefined) this.costElement.innerHTML = `${this.getPrice()}`;
-        if(this.costElement != undefined) this.amountElement.innerHTML = `${this.amount}`;
+        if(this.amountElement != undefined) this.amountElement.innerHTML = `${this.amount}`;
+
+        if(this.upgradeNameElement != undefined) this.upgradeNameElement.innerHTML = `${this.upgradeInfo.name}`;
+        if(this.upgradeIconElement != undefined) this.upgradeIconElement.src = `${this.upgradeInfo.icon}`;
     }
 
     getPrice = function(){
@@ -102,24 +118,14 @@ class Upgrade{
 class AutoclickerUpgrade extends Upgrade{
     multipliers = 1;
     
-    constructor(upgradeID, basePrice, priceMultiplier, pointsPerSecond){
-        super(upgradeID, basePrice, priceMultiplier);
+    constructor(upgradeID, upgradeInformation, basePrice, priceMultiplier, pointsPerSecond){
+        super(upgradeID, upgradeInformation, basePrice, priceMultiplier);
 
         this.pointsPerSecond = pointsPerSecond;
-
-        //this.productionPerElement = document.getElementById(upgradeID + UPGRADE_PRODUCTION_PERLEVEL_SUFFIX);
-        //this.productionElement = document.getElementById(upgradeID + UPGRADE_PRODUCTION_SUFFIX);
 
         allAutoclickers.push(this);
 
         setTimeout(() => this.loop(), MILLIS_PER_SECOND);
-    }
-
-    updateUI(){
-        super.updateUI();
-
-        //this.productionPerElement.innerHTML = `Production per level: ${this.pointsPerSecond.toFixed(2)}`;
-        //this.productionElement.innerHTML = `Current production: ${this.getProduction().toFixed(2)}`;
     }
 
     getProduction = function(){
@@ -141,22 +147,36 @@ class AutoclickerUpgrade extends Upgrade{
 class MultiplierUpgrade extends Upgrade{
     multipliers = 1;
     
-    constructor(upgradeID, basePrice, conditionFunction){
-        super(upgradeID, basePrice, 1);
+    constructor(upgradeID, upgradeInformation, basePrice, onBuyFunction, conditionFunction){
+        super(upgradeID, upgradeInformation, basePrice, 1);
 
         allGeneralUpgrades.push(this);
         
+        this.onBuyFunction = onBuyFunction;
         this.conditionFunction = conditionFunction;
+
+        this.isUnlocked = false;
+
+        setTimeout(() => this.loop(), MILLIS_PER_SECOND);
     }
 
     buyUpgrade(){
         if(!this.canBuy()) return false;
 
         this.buyElement.style.display = "none";
-        this.conditionFunction();
+        this.onBuyFunction();
 
         super.buyUpgrade();
         return true;
+    }
+
+    loop = function(){
+        setTimeout(() => this.loop(), MILLIS_PER_SECOND/UPDATES_PER_SECOND);
+
+        if(!this.isUnlocked && this.conditionFunction() == true){
+            this.buyElement.style.display = "flex";
+            this.isUnlocked = true;
+        }
     }
 }
 
@@ -177,30 +197,41 @@ function onUpgradeBought()
 
 const totalScorePerSecond = document.getElementById("sealclicker-score_persecond");
 
-var autoclickUpgrade = new AutoclickerUpgrade("autoclicker", 10, 1.2, 0.3);
+var autoclickerInfo = new UpgradeInformation("Harp Seal", "This little guy will help you collect fish from the North Atlantic!", './imgs/scorch_02.png');
+
+var autoclickUpgrade = new AutoclickerUpgrade("autoclicker", autoclickerInfo, 10, 1.2, 0.3);
 autoclickUpgrade.setup();
 
-var autoclickUpgrade2 = new AutoclickerUpgrade("autoclicker2", 100, 1.2, 3);
-autoclickUpgrade2.setup();
+var generalUpgradeInfo = new UpgradeInformation("Basic Autofeeder", "This machine will feed seals automatically, making them <b>twice as efficient</b>.", './imgs/scorch_02.png');
 
-var generalUpgrade = new MultiplierUpgrade("general", 100, () => {
-    baseClickPoints *= 2;
-    autoclickUpgrade.multipliers *= 2;
-});
+var generalUpgrade = new MultiplierUpgrade("general", generalUpgradeInfo, 100,
+    () => {
+        baseClickPoints *= 2;
+        autoclickUpgrade.multipliers *= 2;
+    }, () => points >= 10);
 generalUpgrade.setup();
 
-var generalUpgrade2 = new MultiplierUpgrade("general2", 1000, () => {
-    autoclickUpgrade2.multipliers *= 2;
-});
-generalUpgrade2.setup();
+//#region Tooltip Interactions
+
+const tooltipElement = document.getElementById("sealclicker-tooltip");
+
+const tooltipNameElement = document.getElementById("item-name");
+const tooltipDescriptionElement = document.getElementById("item-description");
+const tooltipCostElement = document.getElementById("item-cost");
+
+const tooltipIconElement = document.getElementById("item-icon");
+
+const tooltipExtraDescElement = document.getElementById("item-extra");
 
 allAutoclickers.forEach(autoclicker => {
-        autoclicker.buyElement.addEventListener('mouseleave', () => {
-        tooltipElement.style.display = "none";
+    autoclicker.buyElement.addEventListener('mouseleave', () => {
+        onTooltipExitItem(autoclicker);
     });
     autoclicker.buyElement.addEventListener('mouseenter', () => {
-        tooltipElement.style.display = "flex";
+        onTooltipEnterItem(autoclicker);
 
+        tooltipExtraDescElement.innerHTML = `Production per level: ${autoclicker.pointsPerSecond.toFixed(2)}<br>Current production: ${autoclicker.getProduction().toFixed(2)}`
+        
         let tooltipRect = tooltipElement.getBoundingClientRect();
         let rect = autoclicker.buyElement.getBoundingClientRect();
                 
@@ -211,11 +242,11 @@ allAutoclickers.forEach(autoclicker => {
 
 allGeneralUpgrades.forEach(upgrade => {
     upgrade.buyElement.addEventListener('mouseleave', () => {
-        tooltipElement.style.display = "none";
+        onTooltipExitItem(upgrade);
     });
     upgrade.buyElement.addEventListener('mouseenter', () => {
-        tooltipElement.style.display = "flex";
-
+        onTooltipEnterItem(upgrade);
+        
         let tooltipRect = tooltipElement.getBoundingClientRect();
         let rect = document.getElementsByClassName("general_upgrades")[0].getBoundingClientRect();
                 
@@ -223,3 +254,21 @@ allGeneralUpgrades.forEach(upgrade => {
         tooltipElement.style.top = `${rect.bottom + window.scrollY - (tooltipRect.height / 2) - (rect.height / 2)}px`;        
     });
 });
+
+function onTooltipEnterItem(upgrade){
+    tooltipElement.style.display = "flex";
+
+    let upgradeInfo = upgrade.upgradeInfo;
+    tooltipNameElement.innerHTML = upgradeInfo.name;
+    tooltipDescriptionElement.innerHTML = upgradeInfo.description;
+    tooltipCostElement.innerHTML = upgrade.getPrice();
+
+    tooltipIconElement.src = upgradeInfo.icon;
+}
+
+function onTooltipExitItem(upgrade){
+    tooltipElement.style.display = "none";
+    tooltipExtraDescElement.innerHTML = "";
+}
+
+//#endregion

@@ -161,6 +161,9 @@ header{
     display: flex;
     flex-direction: row;
 
+    padding: 0;
+    margin: 0;
+
     justify-content: space-around;
     align-items: center;
 }
