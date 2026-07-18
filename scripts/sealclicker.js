@@ -39,6 +39,7 @@ var points = 0;
 
 const UPGRADE_NAME_SUFFIX = "_name";
 const UPGRADE_ICON_SUFFIX = "_icon";
+const UPGRADE_ROW_SUFFIX = "_upgrade-row";
 
 const UPGRADE_BUY_SUFFIX = "_buy";
 const UPGRADE_COST_SUFFIX = "_cost";
@@ -51,10 +52,12 @@ var allAutoclickers = [];
 var allGeneralUpgrades = [];
 
 class UpgradeInformation{
-    constructor(name, description, icon){
+    constructor(name, description, icon, rowIcon){
         this.name = name;
         this.description = description;
         this.icon = icon;
+
+        this.rowIcon = rowIcon;
     }
 }
 
@@ -127,6 +130,7 @@ class AutoclickerUpgrade extends Upgrade{
     constructor(upgradeID, upgradeInformation, basePrice, priceMultiplier, pointsPerSecond){
         super(upgradeID, upgradeInformation, basePrice, priceMultiplier);
 
+        this.upgradeRowElement = document.getElementById(upgradeID + UPGRADE_ROW_SUFFIX);
         this.pointsPerSecond = pointsPerSecond;
 
         allAutoclickers.push(this);
@@ -138,6 +142,10 @@ class AutoclickerUpgrade extends Upgrade{
                 upgrade: this,
             },
         });
+
+        this.htmlRowPrefab = `
+            <img src='${upgradeInformation.rowIcon}' style="width: 64px; height: 64px;">
+        `;
     }
 
     getProduction = function(){
@@ -153,6 +161,14 @@ class AutoclickerUpgrade extends Upgrade{
     
     onSecondPassed(){
         sumPoints(this.getProduction()/UPDATES_PER_SECOND);
+    }
+
+    buyUpgrade(){
+        if(!super.buyUpgrade()) return;
+
+        this.upgradeRowElement.style.display = 'flex';
+        this.upgradeRowElement.insertAdjacentHTML('beforeend', this.htmlRowPrefab);
+        console.log("Spawn element");
     }
 }
 
@@ -216,12 +232,11 @@ function onUpgradeBought(upgrade)
 
 const totalScorePerSecond = document.getElementById("sealclicker-score_persecond");
 
-var autoclickerInfo = new UpgradeInformation("Harp Seal", "This little guy will help you collect fish from the North Atlantic!", './imgs/scorch_02.png');
-
+var autoclickerInfo = new UpgradeInformation("Harp Seal", "This little guy will help you collect fish from the North Atlantic!", './imgs/scorch_02.png', './imgs/AppIcons/AboutMe.png');
 var autoclickUpgrade = new AutoclickerUpgrade("autoclicker", autoclickerInfo, 10, 1.2, 0.3);
 autoclickUpgrade.setup();
 
-var generalUpgradeInfo = new UpgradeInformation("Basic Autofeeder", "This machine will feed seals automatically, making them <b>twice as efficient</b>.", './imgs/scorch_02.png');
+var generalUpgradeInfo = new UpgradeInformation("Basic Autofeeder", "This machine will feed seals automatically, making them <b>twice as efficient</b>.", './imgs/scorch_02.png', '');
 
 var generalUpgrade = new MultiplierUpgrade("general", generalUpgradeInfo, 100,
     () => {

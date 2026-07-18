@@ -35,11 +35,23 @@
   overflow-y: auto;
 }
 
-.windows.upgrade_row{
+.windows.upgrade-rows{
   all: unset;
   
   width: 100%;
   height: 200px;
+
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+
+  display: none;
+  flex-wrap: wrap;
+
+  overflow: hidden;
+  box-sizing: border-box;
+
+  padding: 2px;
+  gap: 32px;
 }
 
 .windows .sealdisplay{
@@ -102,6 +114,7 @@
 
 .vertical_separator{
   display: flex;
+  min-width: 16px;
   width: 16px;
   height: 100%;
   background-color: aqua;
