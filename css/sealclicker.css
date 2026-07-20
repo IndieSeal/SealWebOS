@@ -72,22 +72,28 @@
 
 .autoclicker_upgrade .quantity{
     justify-self: flex-end;
-    font-size: 64px;
+    font-size: 56px;
     
     margin-left: auto;
     margin-right: 5px;
+
+    margin-top: -10px;
 }
 
 .general_upgrades{
   display: flex;
   flex-direction: row;
 
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 
   width: 100%;
   min-height: 64px;
 
   justify-content: flex-start;
+}
+
+.general_upgrades:has(.general_upgrade:hover){
+  flex-wrap: wrap;
 }
 
 .general_upgrade{

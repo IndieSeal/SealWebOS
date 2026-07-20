@@ -66,12 +66,16 @@
 
 .icon{
   width: 32px;
-  height: 32px;
+  height: 100%;
+
+  object-fit: contain;
 }
 
 .small_icon{
   width: 16px;
-  height: 16px;
+  height: 100%;
+
+  object-fit: contain;
 }
 
 .windows_header{
