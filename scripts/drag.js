@@ -1,5 +1,6 @@
 import { setDragAudioVolume, stopDragAudio } from "./audio.js";
 import { abs, clamp, lerp } from "./mathf.js";
+import { deltaTime } from "./time.js";
 import { MINIMIZE_SUFFIX, CLOSE_SUFFIX } from "./window_global.js";
 
 // So, why did I do it this way? Cause who the heck would like to be duplicating scripts and changing names when you can have a class that manages it, like come on!
@@ -23,6 +24,8 @@ class DraggableElement{
     
     this.element = document.getElementById(id);
     this.header = document.getElementById(id + "_header");
+
+    this.dragVelocity = 10;
 
     if(!this.isWindowMovable){
       this.unsetup();
@@ -115,8 +118,8 @@ class DraggableElement{
 
     if(!this.hasInitialDrag) return;
     
-    this.currentX = lerp(this.currentX, this.cursorX, .075);
-    this.currentY = lerp(this.currentY, this.cursorY, .075);
+    this.currentX = lerp(this.currentX, this.cursorX, this.dragVelocity * deltaTime);
+    this.currentY = lerp(this.currentY, this.cursorY, this.dragVelocity * deltaTime);
 
     var xVolume = abs(this.cursorX) > 0.1 ? abs(this.currentX/this.cursorX) * 0.5 : 0;
     var yVolume = abs(this.cursorY) > 0.1 ? abs(this.currentY/this.cursorY) * 0.5 : 0;

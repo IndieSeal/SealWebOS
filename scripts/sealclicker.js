@@ -1,4 +1,5 @@
-import { pingpong } from "./mathf.js";
+import { lerp, pingpong } from "./mathf.js";
+import { deltaTime } from "./time.js";
 
 //omg regions exist in js, i'm blessed dude, i can re-use so many concepts from c# it's crazy haha
 
@@ -22,16 +23,101 @@ function setNewRandomImage(){
     setTimeout(() => sealImageDisplay.classList.remove("click"), 100);
 }
 
-sealImageDisplay.addEventListener("click", onSealClicked)
+sealImageDisplay.addEventListener('mousedown', onSealClicked)
 
 //#endregion
 
 // USEFUL: https://www.kongregate.com/en/pages/the-math-of-idle-games-part-i
 var baseClickPoints = 1;
 
-function onSealClicked(){
+function onSealClicked(event){
     setNewRandomImage();
     sumPoints(baseClickPoints);
+
+    createDissapearingPopup(createSealClickedPopupPrefab(event, baseClickPoints))
+}
+
+function createSealClickedPopupPrefab(e, points){
+    let x = e.clientX;
+    let y = e.clientY;
+
+    let isNegativeX = Math.random() < 0.5;
+    let randomValueX = (Math.random() * (isNegativeX ? -1 : 1)) * 10;
+    x += randomValueX - 15;
+
+    //let isNegativeY = Math.random() < 0.5;
+    //let randomValueY = (Math.random() * (isNegativeX ? -1 : 1)) * 5;
+    y -= 60;
+    
+    let sealClickedPopupPrefab = `
+        <div class="row" style="position: absolute; left: ${x}px; top: ${y}px; z-index: 99999; pointer-events: none;">
+            <img class="small_icon" src="./imgs/SealClicker/Food.png">
+            <p style="font-size: 32px; font-weight: bold;">${points}</p>
+        </div>
+    `;
+
+    return sealClickedPopupPrefab;
+}
+
+function createDissapearingPopup(htmlPrefab){
+    document.body.insertAdjacentHTML('beforeend', htmlPrefab);
+    var instance = document.body.lastElementChild;
+    let popup = new DissapearingPopup(instance, 0.1, 2.2, -150);
+}
+
+class DissapearingPopup{
+    constructor(element, initialDelay, dissapearingTime, velocityY){
+        this.element = element;
+
+        this.initialDelay = initialDelay * 1000;
+        this.dissapearingTime = dissapearingTime * 1000;
+        this.velocityY = velocityY;
+
+        this.currentY = parseInt(this.element.style.top, 10);
+
+        this.initialTime = performance.now();
+        this.startTime = this.initialTime + this.initialDelay; 
+
+        this.currentOpacity = 1;
+        
+        requestAnimationFrame(this.startMoving);
+        setTimeout(() => {
+            this.element.remove();
+            this.element = undefined;
+        }, this.initialDelay + this.dissapearingTime);
+    }
+
+    startMoving = (time) => {
+        if(this.element == undefined) return;
+        
+        if(time >= this.startTime){
+            requestAnimationFrame(this.movePopup);
+            setTimeout(() => requestAnimationFrame(this.fadePopup), 200);
+            return;
+        }
+
+        requestAnimationFrame(this.startMoving);
+    }
+
+    fadePopup = (time) => {
+        if(this.element == undefined) return;
+        
+        var value = (this.dissapearingTime / 1000) * deltaTime;
+        this.currentOpacity = lerp(this.currentOpacity, 0, value);
+        this.element.style.opacity = this.currentOpacity;
+        
+        console.log("aaa");
+        requestAnimationFrame(this.fadePopup);
+    }
+
+    movePopup = (time) => {
+        if(this.element == undefined) return;
+
+        this.currentY += this.velocityY * deltaTime;
+        this.element.style.top = `${this.currentY}px`;
+
+        requestAnimationFrame(this.movePopup);
+    }
 }
 
 const generalUpgradeParent = document.getElementById("general_upgrades");
@@ -151,7 +237,7 @@ class AutoclickerUpgrade extends Upgrade{
         `;
 
         this.htmlRowPrefab = `
-            <div class="windows upgrade-rows" id="${upgradeID}_upgrade-row" style="background-image: url('./imgs/SealClicker/Seal1.jpg');">
+            <div class="windows upgrade-rows" id="${upgradeID}_upgrade-row" style="padding-top: 90px; background-image: url('${upgradeInformation.rowImg}');">
                 <!-- Content added through 'sealclicker.js' -->
             </div>
         `;
@@ -159,7 +245,7 @@ class AutoclickerUpgrade extends Upgrade{
         autoclickerUpgradeRowParent.insertAdjacentHTML('beforeend', this.htmlRowPrefab);
 
         this.htmlRowItemPrefab = `
-            <img src='${upgradeInformation.rowIcon}' style="width: 64px; height: 64px;">
+            <img src='${upgradeInformation.rowIcon}' style="width: 32px; object-fit: contain;">
         `;
 
         autoclickerUpgradeParent.insertAdjacentHTML('beforeend', this.autoclickerPrefab);
@@ -269,11 +355,11 @@ function onUpgradeBought(upgrade)
 
 const totalScorePerSecond = document.getElementById("sealclicker-score_persecond");
 
-var normalSealInfo = new UpgradeInformation("Normal Seal", "This little guy will help you collect fish from the North Atlantic!", './imgs/SealClicker/NormalSeal.png', './imgs/SealClicker/Seal1.jpg', './imgs/AppIcons/AboutMe.png');
+var normalSealInfo = new UpgradeInformation("Normal Seal", "This little guy will help you collect fish from the North Atlantic!", './imgs/SealClicker/NormalSeal.png', './imgs/SealClicker/PolarBackground.png', './imgs/SealClicker/NormalSeal.png');
 var normalSealUpgrade = new AutoclickerUpgrade("normalseal", normalSealInfo, 10, 1.15, 0.3);
 normalSealUpgrade.setup();
 
-var ribbonSealInfo = new UpgradeInformation("Ribbon Seal", "It has some quite cool stripes", './imgs/SealClicker/RibbonSeal.png', './imgs/SealClicker/Seal1.jpg', './imgs/AppIcons/AboutMe.png');
+var ribbonSealInfo = new UpgradeInformation("Ribbon Seal", "It has some quite cool stripes", './imgs/SealClicker/RibbonSeal.png', './imgs/SealClicker/PolarBackground.png', './imgs/SealClicker/RibbonSeal.png');
 var ribbonSealUpgrade = new AutoclickerUpgrade("ribbonseal", ribbonSealInfo, 100, 1.15, 1);
 ribbonSealUpgrade.setup();
 
