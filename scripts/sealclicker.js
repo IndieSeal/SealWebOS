@@ -106,7 +106,6 @@ class DissapearingPopup{
         this.currentOpacity = lerp(this.currentOpacity, 0, value);
         this.element.style.opacity = this.currentOpacity;
         
-        console.log("aaa");
         requestAnimationFrame(this.fadePopup);
     }
 
@@ -237,7 +236,7 @@ class AutoclickerUpgrade extends Upgrade{
         `;
 
         this.htmlRowPrefab = `
-            <div class="windows upgrade-rows" id="${upgradeID}_upgrade-row" style="padding-top: 90px; background-image: url('${upgradeInformation.rowImg}');">
+            <div class="windows upgrade-rows" id="${upgradeID}_upgrade-row" style="padding-top: 70px; background-image: url('${upgradeInformation.rowImg}');">
                 <!-- Content added through 'sealclicker.js' -->
             </div>
         `;
@@ -245,7 +244,7 @@ class AutoclickerUpgrade extends Upgrade{
         autoclickerUpgradeRowParent.insertAdjacentHTML('beforeend', this.htmlRowPrefab);
 
         this.htmlRowItemPrefab = `
-            <img src='${upgradeInformation.rowIcon}' style="width: 32px; object-fit: contain;">
+            <img src='${upgradeInformation.rowIcon}' style="width: 48px; object-fit: contain;">
         `;
 
         autoclickerUpgradeParent.insertAdjacentHTML('beforeend', this.autoclickerPrefab);
@@ -355,7 +354,7 @@ function onUpgradeBought(upgrade)
 
 const totalScorePerSecond = document.getElementById("sealclicker-score_persecond");
 
-var normalSealInfo = new UpgradeInformation("Normal Seal", "This little guy will help you collect fish from the North Atlantic!", './imgs/SealClicker/NormalSeal.png', './imgs/SealClicker/PolarBackground.png', './imgs/SealClicker/NormalSeal.png');
+var normalSealInfo = new UpgradeInformation("Harbor Seal", "This little guy will help you collect fish from the North Atlantic!", './imgs/SealClicker/NormalSeal.png', './imgs/SealClicker/HarborBackground.png', './imgs/SealClicker/NormalSeal.png');
 var normalSealUpgrade = new AutoclickerUpgrade("normalseal", normalSealInfo, 10, 1.15, 0.3);
 normalSealUpgrade.setup();
 
@@ -363,19 +362,19 @@ var ribbonSealInfo = new UpgradeInformation("Ribbon Seal", "It has some quite co
 var ribbonSealUpgrade = new AutoclickerUpgrade("ribbonseal", ribbonSealInfo, 100, 1.15, 1);
 ribbonSealUpgrade.setup();
 
-var pocketSealInfo = new UpgradeInformation("Pocket Seal", "Straight out of a different universe", './imgs/SealClicker/PocketSeal.png', './imgs/SealClicker/Seal1.jpg', './imgs/AppIcons/AboutMe.png');
+var pocketSealInfo = new UpgradeInformation("Pocket Seal", "Straight out of a different universe", './imgs/SealClicker/PocketSeal.png', './imgs/SealClicker/PocketBackground.png', './imgs/SealClicker/PocketSeal.png');
 var pocketSealUpgrade = new AutoclickerUpgrade("pocketseal", pocketSealInfo, 1100, 1.15, 8);
 pocketSealUpgrade.setup();
 
-var realisticSealInfo = new UpgradeInformation("Realistic Seal", "A whole new dimension", './imgs/SealClicker/RealisticSeal.png', './imgs/SealClicker/Seal1.jpg', './imgs/AppIcons/AboutMe.png');
+var realisticSealInfo = new UpgradeInformation("Realistic Seal", "A whole new dimension", './imgs/SealClicker/RealisticSeal.png', './imgs/SealClicker/RealisticBackground.png', './imgs/SealClicker/RealisticSeal.png');
 var realisticSealUpgrade = new AutoclickerUpgrade("realisticseal", realisticSealInfo, 12000, 1.15, 47);
 realisticSealUpgrade.setup();
 
-var outOfWorldSealInfo = new UpgradeInformation("Out of World Seal", "A whole new dimension", './imgs/SealClicker/OutOfWorldSeal.png', './imgs/SealClicker/Seal1.jpg', './imgs/AppIcons/AboutMe.png');
+var outOfWorldSealInfo = new UpgradeInformation("Out of World Seal", "A whole new dimension", './imgs/SealClicker/OutOfWorldSeal.png', './imgs/SealClicker/DimensionalBackground.png', './imgs/SealClicker/OutOfWorldSeal.png');
 var outOfWorldSealUpgrade = new AutoclickerUpgrade("outofworldseal", outOfWorldSealInfo, 130000, 1.15, 260);
 outOfWorldSealUpgrade.setup();
 
-var mysticSealInfo = new UpgradeInformation("Mystic Seal", "The god of all seals", './imgs/SealClicker/MysticSeal.png', './imgs/SealClicker/Seal1.jpg', './imgs/AppIcons/AboutMe.png');
+var mysticSealInfo = new UpgradeInformation("Mystic Seal", "The god of all seals", './imgs/SealClicker/MysticSeal.png', './imgs/SealClicker/MysticBackground.png', './imgs/SealClicker/MysticSeal.png');
 var mysticSealUpgrade = new AutoclickerUpgrade("mysticseal", mysticSealInfo, 1400000, 1.15, 1400);
 mysticSealUpgrade.setup();
 

@@ -15,7 +15,7 @@
   justify-content: flex-start;
   align-items: center;
 
-  width: 320px;
+  width: 400px;
   height: 64px;
 
   border: solid;
@@ -33,6 +33,7 @@
 
   max-height: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .windows.upgrade-rows{
@@ -40,6 +41,7 @@
   
   width: 100%;
   height: 200px;
+  min-height: 200px;
 
   background-size: auto;
   background-repeat: repeat;
@@ -55,29 +57,29 @@
 }
 
 .windows .sealdisplay{
-    width: 256px;
-    height: 256px;
+  width: 256px;
+  height: 256px;
 
-    border: solid;
-    border-radius: 90px;
+  border: solid;
+  border-radius: 90px;
 
-    transform: scale(1);
-    transition: 0.05s ease;
+  transform: scale(1);
+  transition: 0.05s ease;
 }
 
 .windows .sealdisplay.click{
-    transform: scale(0.9);
-    transition: 0.05s ease;
+  transform: scale(0.9);
+  transition: 0.05s ease;
 }
 
 .autoclicker_upgrade .quantity{
-    justify-self: flex-end;
-    font-size: 56px;
-    
-    margin-left: auto;
-    margin-right: 5px;
+  justify-self: flex-end;
+  font-size: 56px;
 
-    margin-top: -10px;
+  margin-left: auto;
+  margin-right: 5px;
+
+  margin-top: -10px;
 }
 
 .general_upgrades{
