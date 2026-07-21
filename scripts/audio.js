@@ -21,14 +21,36 @@ export function setupAudioEvents(element){
 
 var hoverAudio = document.getElementById("hoverAudio"); 
 export function playHoverAudio(){
-  stopAudio(hoverAudio);
-  hoverAudio.play();
+  playAudio(hoverAudio);
 }
 
 var selectAudio = document.getElementById("selectAudio"); 
 export function playSelectAudio(){
-  stopAudio(selectAudio);
-  selectAudio.play();
+  playAudio(selectAudio);
+}
+
+var sealClicker_Click = document.getElementById("sealclicker-click"); 
+export function sealClicker_playClickAudio(){
+  playAudio(sealClicker_Click);
+}
+
+var sealClicker_Buy = document.getElementById("sealclicker-buy"); 
+export function sealClicker_playBuyAudio(){
+  playAudio(sealClicker_Buy, true);
+}
+
+var sealClicker_Squish = document.getElementById("sealclicker-squish"); 
+export function sealClicker_playSquishAudio(){
+  playAudio(sealClicker_Squish);
+}
+
+function playAudio(audio, interrupt = false, pause = true){
+  if(interrupt || (pause && audio.currentTime > 0.1)) stopAudio(audio);
+  
+  audio.preservesPitch = false;
+
+  audio.playbackRate = 0.9 + (Math.random() * 0.3);
+  audio.play();
 }
 
 function stopAudio(audio){

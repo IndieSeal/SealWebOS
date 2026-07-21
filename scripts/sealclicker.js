@@ -1,3 +1,4 @@
+import { sealClicker_playBuyAudio, sealClicker_playClickAudio, sealClicker_playSquishAudio } from "./audio.js";
 import { lerp, pingpong } from "./mathf.js";
 import { deltaTime } from "./time.js";
 
@@ -28,9 +29,11 @@ sealImageDisplay.addEventListener('mousedown', onSealClicked)
 //#endregion
 
 // USEFUL: https://www.kongregate.com/en/pages/the-math-of-idle-games-part-i
-var baseClickPoints = 1;
+var baseClickPoints = 1000000;
 
 function onSealClicked(event){
+    sealClicker_playClickAudio();
+    
     setNewRandomImage();
     sumPoints(baseClickPoints);
 
@@ -244,7 +247,7 @@ class AutoclickerUpgrade extends Upgrade{
         autoclickerUpgradeRowParent.insertAdjacentHTML('beforeend', this.htmlRowPrefab);
 
         this.htmlRowItemPrefab = `
-            <img src='${upgradeInformation.rowIcon}' style="width: 48px; object-fit: contain;">
+            <img class="rowItem" src='${upgradeInformation.rowIcon}' style="width: 48px; object-fit: contain;">
         `;
 
         autoclickerUpgradeParent.insertAdjacentHTML('beforeend', this.autoclickerPrefab);
@@ -283,6 +286,9 @@ class AutoclickerUpgrade extends Upgrade{
 
         this.upgradeRowElement.style.display = 'flex';
         this.upgradeRowElement.insertAdjacentHTML('beforeend', this.htmlRowItemPrefab);
+        let instance = this.upgradeRowElement.lastElementChild;
+
+        instance.onmousedown = sealClicker_playSquishAudio;
     }
 }
 
@@ -350,6 +356,8 @@ function onUpgradeBought(upgrade)
 
     totalScorePerSecond.innerHTML = `per second: ${score.toLocaleString('en-US')}`;
     document.dispatchEvent(upgrade.onUpgradeBought);
+
+    sealClicker_playBuyAudio();
 }
 
 const totalScorePerSecond = document.getElementById("sealclicker-score_persecond");

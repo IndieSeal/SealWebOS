@@ -4,6 +4,7 @@ https://www.youtube.com/watch?v=CQatPBnOCXE //May use it later??? unsure
 
 USED SOUNDS:
 https://freesound.org/s/203158/
+https://pixabay.com/sound-effects/film-special-effects-crunchy-bite-001-86703/
 
 IMAGES USED:
 https://pixabay.com/photos/gray-seal-seal-helgoland-dick-chen-2952260/
