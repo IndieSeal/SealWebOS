@@ -271,6 +271,10 @@ class AutoclickerUpgrade extends Upgrade{
         return production;
     }
 
+    getPointsPerSecond = function(){
+        return this.pointsPerSecond * this.multipliers;
+    }
+
     loop = function(){
         setTimeout(() => this.loop(), MILLIS_PER_SECOND/UPDATES_PER_SECOND);
 
@@ -362,38 +366,85 @@ function onUpgradeBought(upgrade)
 
 const totalScorePerSecond = document.getElementById("sealclicker-score_persecond");
 
+//#region Seals
+
 var normalSealInfo = new UpgradeInformation("Harbor Seal", "This little guy will help you collect fish from the North Atlantic!", './imgs/SealClicker/NormalSeal.png', './imgs/SealClicker/HarborBackground.png', './imgs/SealClicker/NormalSeal.png');
 var normalSealUpgrade = new AutoclickerUpgrade("normalseal", normalSealInfo, 10, 1.15, 0.3);
 normalSealUpgrade.setup();
 
 var ribbonSealInfo = new UpgradeInformation("Ribbon Seal", "It has some quite cool stripes", './imgs/SealClicker/RibbonSeal.png', './imgs/SealClicker/PolarBackground.png', './imgs/SealClicker/RibbonSeal.png');
-var ribbonSealUpgrade = new AutoclickerUpgrade("ribbonseal", ribbonSealInfo, 100, 1.15, 1);
+var ribbonSealUpgrade = new AutoclickerUpgrade("ribbonseal", ribbonSealInfo, 100, 1.15, 3);
 ribbonSealUpgrade.setup();
 
 var pocketSealInfo = new UpgradeInformation("Pocket Seal", "Straight out of a different universe", './imgs/SealClicker/PocketSeal.png', './imgs/SealClicker/PocketBackground.png', './imgs/SealClicker/PocketSeal.png');
-var pocketSealUpgrade = new AutoclickerUpgrade("pocketseal", pocketSealInfo, 1100, 1.15, 8);
+var pocketSealUpgrade = new AutoclickerUpgrade("pocketseal", pocketSealInfo, 1100, 1.15, 24);
 pocketSealUpgrade.setup();
 
 var realisticSealInfo = new UpgradeInformation("Realistic Seal", "A whole new dimension", './imgs/SealClicker/RealisticSeal.png', './imgs/SealClicker/RealisticBackground.png', './imgs/SealClicker/RealisticSeal.png');
-var realisticSealUpgrade = new AutoclickerUpgrade("realisticseal", realisticSealInfo, 12000, 1.15, 47);
+var realisticSealUpgrade = new AutoclickerUpgrade("realisticseal", realisticSealInfo, 12000, 1.15, 141);
 realisticSealUpgrade.setup();
 
 var outOfWorldSealInfo = new UpgradeInformation("Out of World Seal", "A whole new dimension", './imgs/SealClicker/OutOfWorldSeal.png', './imgs/SealClicker/DimensionalBackground.png', './imgs/SealClicker/OutOfWorldSeal.png');
-var outOfWorldSealUpgrade = new AutoclickerUpgrade("outofworldseal", outOfWorldSealInfo, 130000, 1.15, 260);
+var outOfWorldSealUpgrade = new AutoclickerUpgrade("outofworldseal", outOfWorldSealInfo, 130000, 1.15, 780);
 outOfWorldSealUpgrade.setup();
 
 var mysticSealInfo = new UpgradeInformation("Mystic Seal", "The god of all seals", './imgs/SealClicker/MysticSeal.png', './imgs/SealClicker/MysticBackground.png', './imgs/SealClicker/MysticSeal.png');
-var mysticSealUpgrade = new AutoclickerUpgrade("mysticseal", mysticSealInfo, 1400000, 1.15, 1400);
+var mysticSealUpgrade = new AutoclickerUpgrade("mysticseal", mysticSealInfo, 1400000, 1.15, 4200);
 mysticSealUpgrade.setup();
 
-var generalUpgradeInfo = new UpgradeInformation("Basic Autofeeder", "This machine will feed seals automatically, making them <b>twice as efficient</b>.", './imgs/SealClicker/Seal1.jpg', '');
-var generalUpgrade = new MultiplierUpgrade("general", generalUpgradeInfo, 100,
+//#endregion
+//#region Upgrades
+
+var basicNetUpgradeInfo = new UpgradeInformation("Basic Net", "This net will let you capture <b>twice</b> as many fish manually.", './imgs/SealClicker/Seal1.jpg', '');
+var basicNetUpgrade = new MultiplierUpgrade("basicnetUpgrade", basicNetUpgradeInfo, 35,
     () => {
         baseClickPoints *= 2;
-        normalSealUpgrade.multipliers *= 2;
-    }, () => points >= 10);
-generalUpgrade.setup();
+    }, () => points >= 0);
+basicNetUpgrade.setup();
 
+var crustaceansUpgradeInfo = new UpgradeInformation("Rock Crustaceans", "Your <b>Harbor Seals</b> will be searching on rocks for crustaceans, this will lead them to a bigger reward, <b>twice as many rewards</b> to be exact.", './imgs/SealClicker/Seal1.jpg', '');
+var crustaceansUpgrade = new MultiplierUpgrade("crustaceansUpgrade", crustaceansUpgradeInfo, 100,
+    () => {
+        normalSealUpgrade.multipliers *= 2;
+    }, () => normalSealUpgrade.amount >= 1);
+crustaceansUpgrade.setup();
+
+var squidsUpgradeInfo = new UpgradeInformation("Tiny Squids", "Your <b>Ribbon Seals</b> will be hunting tiny squids, which are small, but there's a lot of them, meaning <b>they will eat twice as much</b> squid.", './imgs/SealClicker/Seal1.jpg', '');
+var squidsUpgrade = new MultiplierUpgrade("squidsUpgrade", squidsUpgradeInfo, 1000,
+    () => {
+        ribbonSealUpgrade.multipliers *= 2;
+    }, () => ribbonSealUpgrade.amount >= 1);
+squidsUpgrade.setup();
+
+var pocketUpgradeInfo = new UpgradeInformation("Friend Groups", "Your <b>Pocket Seals</b> will be chasing groups of teenagers, they're begginners, but they will have <b>twice as many pocket monsters</b> to hunt.", './imgs/SealClicker/Seal1.jpg', '');
+var pocketUpgrade = new MultiplierUpgrade("pocketUpgrade", pocketUpgradeInfo, 10000,
+    () => {
+        pocketSealUpgrade.multipliers *= 2;
+    }, () => pocketSealUpgrade.amount >= 1);
+pocketUpgrade.setup();
+
+var realisticFishUpgradeInfo = new UpgradeInformation("Fish Family", "Your <b>Realistic Seals</b> will learn where fish families live and start hunting them down, <b>capturing twice as many fish</b>.", './imgs/SealClicker/Seal1.jpg', '');
+var realisticFishUpgrade = new MultiplierUpgrade("realisticUpgrade", realisticFishUpgradeInfo, 100000,
+    () => {
+        realisticSealUpgrade.multipliers *= 2;
+    }, () => realisticSealUpgrade.amount >= 1);
+realisticFishUpgrade.setup();
+
+var lowPolyUpgradeInfo = new UpgradeInformation("Low Poly Files", "Your <b>Out Of World Seals</b> will search for low poly files, <b>capturing twice as many bytes</b>.", './imgs/SealClicker/Seal1.jpg', '');
+var lowPolyUpgrade = new MultiplierUpgrade("lowPolyUpgrade", lowPolyUpgradeInfo, 1000000,
+    () => {
+        outOfWorldSealUpgrade.multipliers *= 2;
+    }, () => outOfWorldSealUpgrade.amount >= 1);
+lowPolyUpgrade.setup();
+
+var godUpgradeInfo = new UpgradeInformation("Star Eater", "Your <b>Mystic Seals</b> will start eating stars as a snack, <b>capturing twice as much star dust</b>.", './imgs/SealClicker/Seal1.jpg', '');
+var godUpgrade = new MultiplierUpgrade("godUpgrade", godUpgradeInfo, 10000000,
+    () => {
+        mysticSealUpgrade.multipliers *= 2;
+    }, () => mysticSealUpgrade.amount >= 1);
+godUpgrade.setup();
+
+//#endregion
 //#region Tooltip Interactions
 
 const tooltipElement = document.getElementById("sealclicker-tooltip");
@@ -444,7 +495,7 @@ function onTooltipEnterAutoclicker(autoclicker){
     let isAutoclicker = autoclicker instanceof AutoclickerUpgrade;
     if(!isAutoclicker) return;
     
-    tooltipExtraDescElement.innerHTML = `Production per level: ${autoclicker.pointsPerSecond.toLocaleString('en-US')}<br>Current production: ${autoclicker.getProduction().toLocaleString('en-US')}`
+    tooltipExtraDescElement.innerHTML = `Production per level: ${autoclicker.getPointsPerSecond().toLocaleString('en-US')}<br>Current production: ${autoclicker.getProduction().toLocaleString('en-US')}`
 }
 
 function onTooltipEnterItem(upgrade){

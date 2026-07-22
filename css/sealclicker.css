@@ -97,16 +97,17 @@
   display: flex;
   flex-direction: row;
 
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
 
   width: 100%;
   min-height: 64px;
+  max-height: 64px;
 
   justify-content: flex-start;
 }
 
 .general_upgrades:has(.general_upgrade:hover){
-  flex-wrap: wrap;
+  max-height: none;
 }
 
 .general_upgrade{
