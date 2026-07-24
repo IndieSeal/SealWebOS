@@ -251,6 +251,7 @@ class AutoclickerUpgrade extends Upgrade{
         `;
 
         autoclickerUpgradeParent.insertAdjacentHTML('beforeend', this.autoclickerPrefab);
+        this.autoclicker = autoclickerUpgradeParent.lastElementChild;
 
         this.upgradeRowElement = document.getElementById(upgradeID + UPGRADE_ROW_SUFFIX);
         this.pointsPerSecond = pointsPerSecond;
@@ -278,6 +279,12 @@ class AutoclickerUpgrade extends Upgrade{
     loop = function(){
         setTimeout(() => this.loop(), MILLIS_PER_SECOND/UPDATES_PER_SECOND);
 
+        if(this.canBuy()){
+            if(this.autoclicker.classList.contains("not-buyable")) this.autoclicker.classList.remove("not-buyable");
+        }
+        else{
+            if(!this.autoclicker.classList.contains("not-buyable")) this.autoclicker.classList.add("not-buyable");
+        }
         this.onSecondPassed();
     }
     
