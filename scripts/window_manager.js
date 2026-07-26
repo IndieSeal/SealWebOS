@@ -177,3 +177,4 @@ export function getWindow(id){
 
 var welcomeWindow = new Window("welcome", true, true);
 var welcomeWindow = new Window("sealclicker", false, false);
+var welcomeWindow = new Window("sealtok", false, true);

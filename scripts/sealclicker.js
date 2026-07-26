@@ -29,7 +29,7 @@ sealImageDisplay.addEventListener('mousedown', onSealClicked)
 //#endregion
 
 // USEFUL: https://www.kongregate.com/en/pages/the-math-of-idle-games-part-i
-var baseClickPoints = 1000000;
+var baseClickPoints = 1;
 
 function onSealClicked(event){
     sealClicker_playClickAudio();
@@ -409,12 +409,26 @@ var basicNetUpgrade = new MultiplierUpgrade("basicnetUpgrade", basicNetUpgradeIn
     }, () => points >= 0);
 basicNetUpgrade.setup();
 
+var bugNetUpgradeInfo = new UpgradeInformation("Bug Net", "This bigger net will let you capture <b>four times</b> as many fish manually.", './imgs/SealClicker/Seal1.jpg', '');
+var bugNetUpgrade = new MultiplierUpgrade("bugnetnetUpgrade", bugNetUpgradeInfo, 3500,
+    () => {
+        baseClickPoints *= 4;
+    }, () => points >= 1000);
+bugNetUpgrade.setup();
+
 var crustaceansUpgradeInfo = new UpgradeInformation("Rock Crustaceans", "Your <b>Harbor Seals</b> will be searching on rocks for crustaceans, this will lead them to a bigger reward, <b>twice as many rewards</b> to be exact.", './imgs/SealClicker/Seal1.jpg', '');
 var crustaceansUpgrade = new MultiplierUpgrade("crustaceansUpgrade", crustaceansUpgradeInfo, 100,
     () => {
         normalSealUpgrade.multipliers *= 2;
     }, () => normalSealUpgrade.amount >= 1);
 crustaceansUpgrade.setup();
+
+var groupCrustaceansUpgradeInfo = new UpgradeInformation("Colony", "Your <b>Harbor Seals</b> will be searching for groups of crustaceans, having a bigger group to eat, <b>triple as many rewards</b> to be exact.", './imgs/SealClicker/Seal1.jpg', '');
+var groupCrustaceansUpgrade = new MultiplierUpgrade("groupCrustaceansUpgrade", groupCrustaceansUpgradeInfo, 2000,
+    () => {
+        normalSealUpgrade.multipliers *= 3;
+    }, () => normalSealUpgrade.amount >= 10);
+groupCrustaceansUpgrade.setup();
 
 var squidsUpgradeInfo = new UpgradeInformation("Tiny Squids", "Your <b>Ribbon Seals</b> will be hunting tiny squids, which are small, but there's a lot of them, meaning <b>they will eat twice as much</b> squid.", './imgs/SealClicker/Seal1.jpg', '');
 var squidsUpgrade = new MultiplierUpgrade("squidsUpgrade", squidsUpgradeInfo, 1000,
@@ -423,12 +437,27 @@ var squidsUpgrade = new MultiplierUpgrade("squidsUpgrade", squidsUpgradeInfo, 10
     }, () => ribbonSealUpgrade.amount >= 1);
 squidsUpgrade.setup();
 
+
+var normalSquidsUpgradeInfo = new UpgradeInformation("Squids", "Your <b>Ribbon Seals</b> will be hunting normal squids, which there are less, but they have a bigger nutrimental value, meaning <b>they will give triple as much</b> value.", './imgs/SealClicker/Seal1.jpg', '');
+var normalSquidsUpgrade = new MultiplierUpgrade("normalsquidsUpgrade", normalSquidsUpgradeInfo, 8000,
+    () => {
+        ribbonSealUpgrade.multipliers *= 3;
+    }, () => ribbonSealUpgrade.amount >= 10);
+normalSquidsUpgrade.setup();
+
 var pocketUpgradeInfo = new UpgradeInformation("Friend Groups", "Your <b>Pocket Seals</b> will be chasing groups of teenagers, they're begginners, but they will have <b>twice as many pocket monsters</b> to hunt.", './imgs/SealClicker/Seal1.jpg', '');
 var pocketUpgrade = new MultiplierUpgrade("pocketUpgrade", pocketUpgradeInfo, 10000,
     () => {
         pocketSealUpgrade.multipliers *= 2;
     }, () => pocketSealUpgrade.amount >= 1);
 pocketUpgrade.setup();
+
+var evilPocketUpgradeInfo = new UpgradeInformation("Evil Groups", "Your <b>Pocket Seals</b> will be chasing groups of cats with blue blobs, called Team Astronaut, they can't even catch a yellow rat, making them an easy prey to steal from, <b>triple as many pocket monsters</b> to hunt.", './imgs/SealClicker/Seal1.jpg', '');
+var evilPocketUpgrade = new MultiplierUpgrade("evilpocketUpgrade", evilPocketUpgradeInfo, 75000,
+    () => {
+        pocketSealUpgrade.multipliers *= 3;
+    }, () => pocketSealUpgrade.amount >= 10);
+evilPocketUpgrade.setup();
 
 var realisticFishUpgradeInfo = new UpgradeInformation("Fish Family", "Your <b>Realistic Seals</b> will learn where fish families live and start hunting them down, <b>capturing twice as many fish</b>.", './imgs/SealClicker/Seal1.jpg', '');
 var realisticFishUpgrade = new MultiplierUpgrade("realisticUpgrade", realisticFishUpgradeInfo, 100000,
@@ -437,6 +466,13 @@ var realisticFishUpgrade = new MultiplierUpgrade("realisticUpgrade", realisticFi
     }, () => realisticSealUpgrade.amount >= 1);
 realisticFishUpgrade.setup();
 
+var penguinsRealisticFishUpgradeInfo = new UpgradeInformation("Penguins", "Your <b>Realistic Seals</b> will hunt bigger prey, the penguins, which give <b>triple as much value</b>.", './imgs/SealClicker/Seal1.jpg', '');
+var penguinRealisticFishUpgrade = new MultiplierUpgrade("penguin", penguinsRealisticFishUpgradeInfo, 500000,
+    () => {
+        realisticSealUpgrade.multipliers *= 3;
+    }, () => realisticSealUpgrade.amount >= 10);
+penguinRealisticFishUpgrade.setup();
+
 var lowPolyUpgradeInfo = new UpgradeInformation("Low Poly Files", "Your <b>Out Of World Seals</b> will search for low poly files, <b>capturing twice as many bytes</b>.", './imgs/SealClicker/Seal1.jpg', '');
 var lowPolyUpgrade = new MultiplierUpgrade("lowPolyUpgrade", lowPolyUpgradeInfo, 1000000,
     () => {
@@ -444,11 +480,32 @@ var lowPolyUpgrade = new MultiplierUpgrade("lowPolyUpgrade", lowPolyUpgradeInfo,
     }, () => outOfWorldSealUpgrade.amount >= 1);
 lowPolyUpgrade.setup();
 
+var donutUpgradeInfo = new UpgradeInformation("Donut Files", "Your <b>Out Of World Seals</b> will search for high-poly donuts with an overcomplicated guide?, effectively <b>capturing triple as many bytes</b>.", './imgs/SealClicker/Seal1.jpg', '');
+var donutUpgrade = new MultiplierUpgrade("donutUpgrade", donutUpgradeInfo, 6000000,
+    () => {
+        outOfWorldSealUpgrade.multipliers *= 3;
+    }, () => outOfWorldSealUpgrade.amount >= 10);
+donutUpgrade.setup();
+
+var animeUpgradeInfo = new UpgradeInformation("Anime Files", "Your <b>Out Of World Seals</b> will search for anime models, one file enough to crash your entire computer, effectively <b>capturing five times as many bytes</b>.", './imgs/SealClicker/Seal1.jpg', '');
+var animeUpgrade = new MultiplierUpgrade("animeUpgrade", animeUpgradeInfo, 12000000,
+    () => {
+        outOfWorldSealUpgrade.multipliers *= 5;
+    }, () => outOfWorldSealUpgrade.amount >= 25);
+animeUpgrade.setup();
+
 var godUpgradeInfo = new UpgradeInformation("Star Eater", "Your <b>Mystic Seals</b> will start eating stars as a snack, <b>capturing twice as much star dust</b>.", './imgs/SealClicker/Seal1.jpg', '');
 var godUpgrade = new MultiplierUpgrade("godUpgrade", godUpgradeInfo, 10000000,
     () => {
         mysticSealUpgrade.multipliers *= 2;
     }, () => mysticSealUpgrade.amount >= 1);
+godUpgrade.setup();
+
+var godUpgradeInfo = new UpgradeInformation("Planet Eater", "Your <b>Mystic Seals</b> will eat entire planets just by blinking, <b>capturing triple as much star dust</b>.", './imgs/SealClicker/Seal1.jpg', '');
+var godUpgrade = new MultiplierUpgrade("godPlanetUpgrade", godUpgradeInfo, 100000000,
+    () => {
+        mysticSealUpgrade.multipliers *= 3;
+    }, () => mysticSealUpgrade.amount >= 10);
 godUpgrade.setup();
 
 //#endregion

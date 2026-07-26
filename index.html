@@ -29,6 +29,10 @@
                     <img src="./imgs/AppIcons/PANKETO.png">
                     <div class="taskbar_ontop" id="sealclicker_ontop"></div>
                 </div>
+                <div class="element" id="sealtok_taskbar", style="display: none;">
+                    <img src="./imgs/AppIcons/PANKETO.png">
+                    <div class="taskbar_ontop" id="sealtok_ontop"></div>
+                </div>
             </div>
 
             <div class="element" style="width: 20%; justify-content: right;">
@@ -46,6 +50,10 @@
             <div id="sealclicker_open" class="desktop_app_icon">
                 <img src="./imgs/AppIcons/PANKETO.png">
                 <p>Seal Clicker</p>
+            </div>
+            <div id="sealtok_open" class="desktop_app_icon">
+                <img src="./imgs/AppIcons/PANKETO.png">
+                <p>Seal Tok</p>
             </div>
         </div>
 
@@ -66,7 +74,7 @@
             </div>
 
             <!-- Window Insides -->
-            <div class="windows_header window_body body_element">
+            <div class="windows_header window_body body_element" style="padding: 5px;">
                 <p>Hello there!</p>
                 <p>Welcome to <b>Seal OS</b>!</p>
                 <p>Wanna try some fun stuff? Go to the Seal Clicker App!</p>
@@ -83,6 +91,27 @@
                         <p>itch.io</p>
                     </div>
                 </a>
+            </div>
+        </div>
+
+        <div id="sealtok" class="windows" style="display: none;">
+            <div class="windows_header" id="sealtok_header">
+                <!-- Window/App Details -->
+                <div style="display: flex; justify-content: flex-start; align-items: center;">
+                    <img class="icon" src="./imgs/AppIcons/AboutMe.png">
+                    <p>Seal Tok</p>
+                </div>
+
+                <!-- Minimize/Close -->
+                <div style="display: flex; justify-content: flex-end; align-items: center;">
+                    <button class="minimize-button" id="sealtok_minimize">-</button>
+                    <button class="close-button" id="sealtok_close">X</button>
+                </div>
+            </div>
+
+            <!-- Window Insides -->
+            <div class="windows_header window_body body_element" style="height: 700px;">
+                <p>Work in progress...</p>
             </div>
         </div>
 

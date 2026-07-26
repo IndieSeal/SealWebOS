@@ -1,7 +1,6 @@
 @import url("./style.css");
 
 #welcome {
-  position: absolute;
   background-color: #f1f1f1;
   border: 1px solid #d3d3d3;
 
@@ -23,7 +22,6 @@
 }
 
 #sealclicker {
-  position: absolute;
   background-color: #93c3ea;
   border: 1px solid #83aed2;
 
@@ -46,7 +44,30 @@
   background-color: var(--window-selected-header-color);
 }
 
+#sealtok {
+  background-color: #f1f1f1;
+  border: 1px solid #d3d3d3;
+
+  top: calc(30% - 90px);
+  left: calc(30% - 180px);
+}
+
+#sealtok_header {
+  cursor: var(--point-cursor);
+
+  padding: 10px;
+  background-color: var(--window-header-color);
+}
+
+#sealtok_header:active {
+  cursor: var(--grab-cursor);
+
+  background-color: var(--window-selected-header-color);
+}
+
 .windows{
+  position: absolute;
+
   border: solid;
   border-color: var(--window-header-color);
 
