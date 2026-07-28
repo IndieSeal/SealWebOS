@@ -20,3 +20,5 @@ https://sketchfab.com/3d-models/polar-pursuit-07ce619780b84479b5e87d5a03014292
 
 USED VIDEOS FOR SEAL-TOK:
 https://pixabay.com/videos/seal-to-stand-teeter-comfortable-94465/
+https://pixabay.com/videos/seal-baby-seal-mammal-beach-sand-205259/
+https://pixabay.com/videos/seal-snout-hair-hunter-sweet-cute-94464/
