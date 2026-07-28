@@ -66,12 +66,7 @@ seaBackground.loop = true;
 seaBackground.volume = 0.05;
 seaBackground.play();
 
-const audioContext = new AudioContext();
-
 var dragAudio = document.getElementById("dragAudio"); 
-const track = audioContext.createMediaElementSource(dragAudio);
-track.connect(audioContext.destination);
-
 dragAudio.loop = true;
 dragAudio.volume = 0;
 dragAudio.playbackRate = 2;
@@ -84,11 +79,12 @@ const MAX_VOLUME = 0.6;
 export function setDragAudioVolume(value){
   currentValue = clamp(0, MAX_VOLUME, (lerp(currentValue, value, 0.045))).toFixed(3);
 
-  if(currentValue < 0.012) currentValue = 0;
+  if(currentValue < 0.012) stopDragAudio();
   
   dragAudio.volume = currentValue;
 }
 
 export function stopDragAudio(){
   currentValue = 0;
+  dragAudio.currentTime = 0;
 }

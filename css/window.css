@@ -55,6 +55,8 @@
 #sealtok_header {
   cursor: var(--point-cursor);
 
+  width: 394px;
+
   padding: 10px;
   background-color: var(--window-header-color);
 }
