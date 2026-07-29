@@ -126,8 +126,8 @@ class DraggableElement{
 
     setDragAudioVolume(abs(lerp(1, 0, xVolume + yVolume)) * 5);
     
-    this.element.style.left = (this.currentX) + "px";
-    this.element.style.top = (this.currentY) + "px";
+    this.element.style.left = `${this.currentX}px`;
+    this.element.style.top = `${this.currentY}px`;
   }
 }
 

@@ -55,7 +55,7 @@ function createSealClickedPopupPrefab(e, points){
     let sealClickedPopupPrefab = `
         <div class="row" style="position: absolute; left: ${x}px; top: ${y}px; z-index: 99999; pointer-events: none;">
             <img class="small_icon" src="./imgs/SealClicker/Food.png">
-            <p style="font-size: 32px; font-weight: bold;">${points}</p>
+            <p style="font-size: 32px; font-weight: bold;">${points.toLocaleString('en-US')}</p>
         </div>
     `;
 
