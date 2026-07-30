@@ -27,6 +27,8 @@ const videoElementExtra = document.getElementById('sealtok-videoExtra');
 videoContainerElement.onmousedown = startDragging;
 videoContainerElement.onclick = pauseVideo;
 
+videoContainerElement.onwheel = scrollVideo;
+
 var initialY = 0;
 var currentY = 0;
 var offsetY = 0;
@@ -54,8 +56,6 @@ function startDragging(e){
 
     document.onmouseup = stopDragging;
     document.onmousemove = dragElement;
-
-    reset = false;
 }
 
 function dragElement(e){
@@ -65,12 +65,19 @@ function dragElement(e){
     offsetY = e.clientY - initialY;
 }
 
+function scrollVideo(e){
+    if(e.deltaY > 0) scrollDown();
+    else scrollUp();
+}
+
 function stopDragging(){
+    reset = false;
+
     if(offsetY < -offsetForNew){
-        offsetY = -700;
+        scrollUp();
     }
     else if(offsetY > offsetForNew){
-        offsetY = 700;
+        scrollDown();
     }
     else{
         if(offsetY > 0){
@@ -88,6 +95,18 @@ function stopDragging(){
     document.onmousemove = null;
 }
 
+function scrollUp(){
+    reset = false;
+
+    offsetY = -700;
+}
+
+function scrollDown(){
+    reset = false;
+
+    offsetY = 700;
+}
+
 var dragVelocity = 6;
 
 moveElementFunction();
@@ -96,6 +115,17 @@ function moveElementFunction(){
 
     currentY = lerp(currentY, offsetY, dragVelocity * deltaTime);
     videoContainerElement.style.marginTop = `${currentY}px`;
+
+    if(abs(currentY) >= abs(offsetY) - 25){
+        console.log("finished");
+        currentY = offsetY;
+        offsetY = 0;
+
+        reset = false;
+        videosElement.append(videoContainerElementExtra);
+        videoContainerElement.style.marginTop = `0px`;
+        videoContainerElementExtra.style.marginTop = "0px";
+    }
 
     if(offsetY > 0 || (reset && resetDirection)){
         videosElement.prepend(videoContainerElementExtra);
