@@ -5,10 +5,12 @@ import { deltaTime } from "./time.js";
 var allVideos = [];
 
 class Video{
-    constructor(url, title, description){
+    constructor(url, title, description, leftOffset = '50%', topOffset = '50%'){
         this.videoURL = url;
         this.videoTitle = title;
         this.videoDescription = description;
+        this.leftOffset = leftOffset;
+        this.topOffset = topOffset;
 
         allVideos.push(this);
     }
@@ -16,7 +18,7 @@ class Video{
 
 var realSealVideo1 = new Video('https://cdn.pixabay.com/video/2024/03/22/205259-926528122_medium.mp4', "Cute seal hanging out in beach", "I found this cute seal on the beach the other day, look at this cutie patootie.");
 var realSealVideo2 = new Video('https://cdn.pixabay.com/video/2021/11/03/94465-643067851_tiny.mp4', "Aquarium seal", "Is it just me, or does it look like it's meditating? haha, it's so cuteee, SO CUTE, RAAH.");
-var realSealVideo3 = new Video('https://cdn.pixabay.com/video/2021/11/03/94464-643067850_tiny.mp4', "Resting seal", "Maybe it's dreaming about eating penguins and squids!");
+var realSealVideo3 = new Video('https://cdn.pixabay.com/video/2021/11/03/94464-643067850_tiny.mp4', "Resting seal", "Maybe it's dreaming about eating penguins and squids!", '70%');
 var realSealVideo4 = new Video('https://cdn.pixabay.com/video/2022/11/08/138259-769141554_tiny.mp4', 'Pool Lessons', "He's resting :D");
 allVideos = shuffle(allVideos);
 
@@ -57,6 +59,8 @@ function changeVideo(){
     videoElement.src = `${currentVideo.videoURL}`;
     videoElement.load();
     videoElement.play();
+
+    videoElement.style.objectPosition = `${currentVideo.leftOffset} ${currentVideo.topOffset}`;
     
     videoNameElement.innerHTML = `${currentVideo.videoTitle}`;
     videoDescriptionElement.innerHTML = `${currentVideo.videoDescription}`;
@@ -69,6 +73,9 @@ function changeExtraVideo(direction){
         videoElementExtra.src = `https://cdn.pixabay.com/video/2020/09/26/50913-462202515_medium.mp4`;
         videoElementExtra.load();
         videoElementExtra.pause();
+
+        videoElement.style.objectPosition = `50% 50%`;
+
         return;
     }
     if(currentVideo.videoURL == videoElementExtra.src) return;
@@ -76,6 +83,8 @@ function changeExtraVideo(direction){
     videoElementExtra.src = `${currentVideo.videoURL}`;
     videoElementExtra.load();
     videoElementExtra.pause();
+
+    videoElementExtra.style.objectPosition = `${currentVideo.leftOffset} ${currentVideo.topOffset}`;
 }
 
 function pauseVideo(){
