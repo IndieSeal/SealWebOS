@@ -113,12 +113,23 @@
 
             <!-- Window Insides -->
             <div class="windows_header window_body" style="height: 700px;">
+                <div style="pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; position: absolute; width: 100%; height: 100%;">
+                    <div style="width: 100%; height: 100px; display: flex; justify-content: center; align-content: flex-start;" class="fade-gradient-down">
+                        <p style="color: white;">ps: we also accept sea lions!!</p>
+                    </div>
+
+                    <div style="width: 100%; height: 200px; display: flex; flex-direction: column; justify-content: flex-end;" class="fade-gradient">
+                        <b style="color: white;" id="sealtok-videoName">Name</b>
+                        <p style="color: white;" id="sealtok-videoDescription">Description</p>
+                    </div>
+                </div>
+                
                 <div class="fit videos column" id="sealtok-videos">
                     <div class="fit" id="sealtok-videoContainer">
                         <video class="video" id="sealtok-video" src="https://cdn.pixabay.com/video/2021/11/03/94465-643067851_tiny.mp4" autoplay loop></video>
                     </div>
                     <div class="fit" id="sealtok-videoExtraContainer">
-                        <video class="video" id="sealtok-videoExtra" src="https://cdn.pixabay.com/video/2021/11/03/94464-643067850_tiny.mp4" loop></video>
+                        <video class="video" id="sealtok-videoExtra" src="https://cdn.pixabay.com/video/2020/09/26/50913-462202515_medium.mp4" loop></video>
                     </div>
                 </div>
             </div>
@@ -231,10 +242,16 @@
                 if not enough content (if you are a doomscroller) I can try using Giphy's API and place random gifs.
             + Sealirus.exe, you can install it, and if you do a bunch of annoying pop-ups will appear of seals trying to get your attention
             + Museal, an app where you can make music by adding seal sounds onto a grid and then play it! :]
+            + Shimeji, just grab and throw around seals, even more doable with what I learned about instantiation!!
 
             + come on alex, you can think of more ideas, you got this ( yes i talk to myself, also, what are you doing here reading MY ideas, huh? >:[ )
             + if you're actually reading this, should this be considered an easter egg? Congrats I guess, OOOH, WHAT IF:
             + Ok, if you're inspecting this code RN, what if I made an app where you need to enter a secret code, and I hid it in the commits, that sounds fun
+        -->
+
+        <!-- TO DO (yes, I'm writing them here, I don't want to use an external app, cause I'll probably forgt)
+            + Change HTML which uses static Z-Indexes to be modified by the higuest index (make it a global variable instead of
+                only for windows)
         -->
     </body>
 </html>

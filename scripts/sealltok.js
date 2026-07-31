@@ -1,16 +1,18 @@
 import { abs, clamp, lerp } from "./mathf.js";
 import { deltaTime } from "./time.js";
 
+//List that will contain the videos you've scrolled in order so you can go back to them! :D
+var allVideos = [];
+
 class Video{
     constructor(url, title, description){
         this.videoURL = url;
         this.videoTitle = title;
         this.videoDescription = description;
+
+        allVideos.push(this);
     }
 }
-
-//List that will contain the videos you've scrolled in order so you can go back to them! :D
-var scrolledVideos = [];
 
 var realSealVideo1 = new Video('https://cdn.pixabay.com/video/2024/03/22/205259-926528122_medium.mp4', "Cute seal hanging out in beach", "I found this cute seal on the beach the other day, look at this cutie patootie.");
 var realSealVideo2 = new Video('https://cdn.pixabay.com/video/2021/11/03/94465-643067851_tiny.mp4', "Aquarium seal", "Is it just me, or does it look like it's meditating? haha, it's so cuteee, SO CUTE, RAAH.");
@@ -24,10 +26,12 @@ const videoContainerElementExtra = document.getElementById('sealtok-videoExtraCo
 const videoElement = document.getElementById('sealtok-video');
 const videoElementExtra = document.getElementById('sealtok-videoExtra');
 
-videoContainerElement.onmousedown = startDragging;
-videoContainerElement.onclick = pauseVideo;
+const videoNameElement = document.getElementById('sealtok-videoName');
+const videoDescriptionElement = document.getElementById('sealtok-videoDescription');
 
+videoContainerElement.onmousedown = startDragging;
 videoContainerElement.onwheel = scrollVideo;
+videoContainerElement.onclick = pauseVideo;
 
 var initialY = 0;
 var currentY = 0;
@@ -36,6 +40,42 @@ const offsetForNew = 500;
 
 var reset = false;
 var resetDirection = false;
+var scrolling = false;
+
+var isDragging = false;
+var showFirstExtra = false;
+
+//let randomStartVideoIndex = Math.floor(Math.random() * allVideos.length);
+
+var scrolledVideosIndex = 0;
+changeVideo();
+
+function changeVideo(){    
+    let currentVideo = allVideos[scrolledVideosIndex];
+
+    videoElement.src = `${currentVideo.videoURL}`;
+    videoElement.load();
+    videoElement.play();
+    
+    videoNameElement.innerHTML = `${currentVideo.videoTitle}`;
+    videoDescriptionElement.innerHTML = `${currentVideo.videoDescription}`;
+}
+
+function changeExtraVideo(direction){
+    let currentVideo = allVideos[scrolledVideosIndex + (!direction ? 1 : -1)];
+    
+    if(currentVideo == undefined) {
+        videoElementExtra.src = `https://cdn.pixabay.com/video/2020/09/26/50913-462202515_medium.mp4`;
+        videoElementExtra.load();
+        videoElementExtra.pause();
+        return;
+    }
+    if(currentVideo.videoURL == videoElementExtra.src) return;
+    
+    videoElementExtra.src = `${currentVideo.videoURL}`;
+    videoElementExtra.load();
+    videoElementExtra.pause();
+}
 
 function pauseVideo(){
     if(currentY != 0) return;
@@ -44,10 +84,18 @@ function pauseVideo(){
     else videoElement.play();
 }
 
+function scrollVideo(e){
+    if(e.deltaY > 0) scrollDown();
+    else scrollUp();
+}
+
 function startDragging(e){
     e = e || window.event;
     e.preventDefault();
 
+    isDragging = true;
+    showFirstExtra = true;
+    
     const rect = videoContainerElement.getBoundingClientRect();
     initialY = e.clientY;
 
@@ -63,14 +111,22 @@ function dragElement(e){
     e.preventDefault();
 
     offsetY = e.clientY - initialY;
-}
+    if(offsetY > 0 && (showFirstExtra || !resetDirection)){
+        resetDirection = true;
+        changeExtraVideo(resetDirection);
 
-function scrollVideo(e){
-    if(e.deltaY > 0) scrollDown();
-    else scrollUp();
+        showFirstExtra = false;
+    }
+    else if(offsetY < 0 && (showFirstExtra || resetDirection)){
+        resetDirection = false;
+        changeExtraVideo(resetDirection);
+
+        showFirstExtra = false;
+    }
 }
 
 function stopDragging(){
+    isDragging = false;
     reset = false;
 
     if(offsetY < -offsetForNew){
@@ -80,13 +136,6 @@ function stopDragging(){
         scrollDown();
     }
     else{
-        if(offsetY > 0){
-            resetDirection = true;
-        }
-        else if(offsetY < 0){
-            resetDirection = false;
-        }
-
         offsetY = 0;
         reset = true;
     }
@@ -97,12 +146,22 @@ function stopDragging(){
 
 function scrollUp(){
     reset = false;
+    resetDirection = true;
+
+    changeExtraVideo(!resetDirection);
+
+    scrolling = true;
 
     offsetY = -700;
 }
 
 function scrollDown(){
     reset = false;
+    resetDirection = false;
+
+    changeExtraVideo(!resetDirection);
+    
+    scrolling = true;
 
     offsetY = 700;
 }
@@ -116,15 +175,20 @@ function moveElementFunction(){
     currentY = lerp(currentY, offsetY, dragVelocity * deltaTime);
     videoContainerElement.style.marginTop = `${currentY}px`;
 
-    if(abs(currentY) >= abs(offsetY) - 25){
-        console.log("finished");
-        currentY = offsetY;
+    if(!isDragging && scrolling && abs(currentY) >= abs(offsetY) - 15){
+        currentY = 0;
         offsetY = 0;
 
         reset = false;
+        scrolling = false;
+
+        scrolledVideosIndex = clamp(0, allVideos.length - 1, scrolledVideosIndex + (resetDirection ? 1 : -1));
+        
         videosElement.append(videoContainerElementExtra);
         videoContainerElement.style.marginTop = `0px`;
         videoContainerElementExtra.style.marginTop = "0px";
+
+        changeVideo();
     }
 
     if(offsetY > 0 || (reset && resetDirection)){
