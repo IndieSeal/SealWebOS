@@ -92,7 +92,7 @@ function pauseVideo(){
 }
 
 function scrollVideo(e){
-    if(e.deltaY > 0) scrollDown();
+    if(e.deltaY < 0) scrollDown();
     else scrollUp();
 }
 

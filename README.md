@@ -22,3 +22,5 @@ USED VIDEOS FOR SEAL-TOK:
 https://pixabay.com/videos/seal-to-stand-teeter-comfortable-94465/
 https://pixabay.com/videos/seal-baby-seal-mammal-beach-sand-205259/
 https://pixabay.com/videos/seal-snout-hair-hunter-sweet-cute-94464/
+https://pixabay.com/videos/seal-mammal-kid-water-138259/
+https://pixabay.com/videos/arrows-direction-sign-50913/
