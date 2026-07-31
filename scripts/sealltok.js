@@ -1,4 +1,4 @@
-import { abs, clamp, lerp } from "./mathf.js";
+import { abs, clamp, lerp, shuffle } from "./mathf.js";
 import { deltaTime } from "./time.js";
 
 //List that will contain the videos you've scrolled in order so you can go back to them! :D
@@ -18,6 +18,7 @@ var realSealVideo1 = new Video('https://cdn.pixabay.com/video/2024/03/22/205259-
 var realSealVideo2 = new Video('https://cdn.pixabay.com/video/2021/11/03/94465-643067851_tiny.mp4', "Aquarium seal", "Is it just me, or does it look like it's meditating? haha, it's so cuteee, SO CUTE, RAAH.");
 var realSealVideo3 = new Video('https://cdn.pixabay.com/video/2021/11/03/94464-643067850_tiny.mp4', "Resting seal", "Maybe it's dreaming about eating penguins and squids!");
 var realSealVideo4 = new Video('https://cdn.pixabay.com/video/2022/11/08/138259-769141554_tiny.mp4', 'Pool Lessons', "He's resting :D");
+allVideos = shuffle(allVideos);
 
 const videosElement = document.getElementById('sealtok-videos');
 
@@ -28,6 +29,8 @@ const videoElementExtra = document.getElementById('sealtok-videoExtra');
 
 const videoNameElement = document.getElementById('sealtok-videoName');
 const videoDescriptionElement = document.getElementById('sealtok-videoDescription');
+
+const videoPauseElement = document.getElementById('sealtok-pause');
 
 videoContainerElement.onmousedown = startDragging;
 videoContainerElement.onwheel = scrollVideo;
@@ -44,8 +47,6 @@ var scrolling = false;
 
 var isDragging = false;
 var showFirstExtra = false;
-
-//let randomStartVideoIndex = Math.floor(Math.random() * allVideos.length);
 
 var scrolledVideosIndex = 0;
 changeVideo();
@@ -80,8 +81,14 @@ function changeExtraVideo(direction){
 function pauseVideo(){
     if(currentY != 0) return;
     
-    if(!videoElement.paused) videoElement.pause();
-    else videoElement.play();
+    if(!videoElement.paused) {
+        videoPauseElement.classList.add('paused');
+        videoElement.pause();
+    }
+    else {
+        videoPauseElement.classList.remove('paused');
+        videoElement.play();
+    }
 }
 
 function scrollVideo(e){
@@ -148,6 +155,7 @@ function scrollUp(){
     reset = false;
     resetDirection = true;
 
+    videoPauseElement.classList.remove('paused');
     changeExtraVideo(!resetDirection);
 
     scrolling = true;
@@ -159,6 +167,7 @@ function scrollDown(){
     reset = false;
     resetDirection = false;
 
+    videoPauseElement.classList.remove('paused');
     changeExtraVideo(!resetDirection);
     
     scrolling = true;

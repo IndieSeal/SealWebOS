@@ -113,12 +113,17 @@
 
             <!-- Window Insides -->
             <div class="windows_header window_body" style="height: 700px;">
-                <div style="pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; position: absolute; width: 100%; height: 100%;">
+                <div style="overflow: hidden; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; position: absolute; width: 100%; height: 100%;">
                     <div style="width: 100%; height: 100px; display: flex; justify-content: center; align-content: flex-start;" class="fade-gradient-down">
                         <p style="color: white;">ps: we also accept sea lions!!</p>
                     </div>
 
-                    <div style="width: 100%; height: 200px; display: flex; flex-direction: column; justify-content: flex-end;" class="fade-gradient">
+                    <div id="sealtok-pause">
+                        <img class="fit" style="top: 20px; position: absolute; width: 100px;" src="./imgs/SealTok/Resume.svg">
+                        <div style="width: 150px; height: 150px; left: 0; top: 0; background-color: rgba(0, 0, 0, 0.4); border-radius: 500px;"></div>
+                    </div>
+
+                    <div style="padding: 15px 15px; width: 100%; height: 200px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: flex-end;" class="fade-gradient">
                         <b style="color: white;" id="sealtok-videoName">Name</b>
                         <p style="color: white;" id="sealtok-videoDescription">Description</p>
                     </div>
@@ -252,6 +257,7 @@
         <!-- TO DO (yes, I'm writing them here, I don't want to use an external app, cause I'll probably forgt)
             + Change HTML which uses static Z-Indexes to be modified by the higuest index (make it a global variable instead of
                 only for windows)
+            + When windows are left to the left side of the screen, the audio won't stop, probably because of mouse position isn't being clamped?
         -->
     </body>
 </html>
