@@ -60,13 +60,17 @@ function stopAudio(audio){
 }
 
 const onAutoplayEnabled = new CustomEvent("onAutoplayEnabled");
+var hasBeenEnabled = false;
 
 window.addEventListener('pointerdown', (e) => {
+  if(hasBeenEnabled) return;
+  
   //Since autoplay is blocked at the start
   seaBackground.play();
   dragAudio.play();
 
   document.dispatchEvent(onAutoplayEnabled);
+  hasBeenEnabled = true;
 });
 
 var seaBackground = document.getElementById("seaBackground");
