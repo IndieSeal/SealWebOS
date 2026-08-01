@@ -47,7 +47,7 @@
         <div id="desktopApps" style="padding-top: 64px; padding-left: 16px;">
             <div id="welcome_open" class="desktop_app_icon">
                 <img src="./imgs/AppIcons/AboutMe.png">
-                <p>Welcome</p>
+                <p>Introduction</p>
             </div>
             <div id="sealclicker_open" class="desktop_app_icon">
                 <img src="./imgs/AppIcons/SealClicker.png">
@@ -65,7 +65,7 @@
                 <!-- Window/App Details -->
                 <div style="display: flex; justify-content: flex-start; align-items: center;">
                     <img class="icon" src="./imgs/AppIcons/AboutMe.png">
-                    <p>Welcome</p>
+                    <p>Introduction</p>
                 </div>
 
                 <!-- Minimize/Close -->
@@ -76,18 +76,28 @@
             </div>
 
             <!-- Window Insides -->
-            <div class="windows_header window_body" style="padding: 5px;">
-                <p>Hello there!</p>
-                <p>Welcome to <b>Seal OS</b>!</p>
-                <p>Wanna try some fun stuff? Go to the Seal Clicker App!</p>
-                <a style="text-decoration: none;" href="https://github.com/IndieSeal">
+            <div class="windows_header window_body child_text" style="padding: 5px; box-sizing: border-box; height: 500px;">
+                <h1>Welcome to <b>Seal OS</b>!</h1>
+                <h3>About the OS</h3>
+                <p>As you can see, I really like Seals, so I decided to make an OS about them lol.</p>
+                <p>Wanna try some fun stuff? Go to the <b>Seal Clicker App!</b></p>
+                <p>Want to brainrot your brain with puffy cute stuff? Go to the <b>Seal Tok App!</b></p>
+
+                <br>
+
+                <h3>About Me</h3>
+                <p>My name is Indie Seal and I created this beauty of an OS!</p>
+                <p>I love making video games, you should check them out &lt;3</p>
+
+                <br>
+                <a style="text-decoration: none;" href="https://github.com/IndieSeal" target="_blank">
                     <div class="socials">
                         <!-- Recently learned you can do this in Hack Club's summer camp :D -->
                         <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png">
                         <p>GitHub</p>
                     </div>
                 </a>
-                <a style="text-decoration: none;" href="https://indie-seal.itch.io/">
+                <a style="text-decoration: none;" href="https://indie-seal.itch.io/" target="_blank">
                     <div class="socials">
                         <img src="https://img.icons8.com/ios11/600/FA5252/itch-io.png">
                         <p>itch.io</p>
@@ -158,7 +168,7 @@
             <div class="windows_header window_body" style="height: 83vh;">
                 <div class="row" style="width: 100%; height: 100%;">
                     <div style="display: flex; min-width: 30%; width: 30%; height: 100%; flex-direction: column;">
-                        <div style="width: 100%; margin-top: 10%; background-color: gray;">
+                        <div style="width: 100%; margin-top: 10%; background-color: rgb(58, 121, 231);">
                             <h1 style="text-align: center;"><b>FEED THE SEAL!!</b></h1>
                             <h1 id="sealclicker-score" style="text-align: center;">Points: 0</h1>
                             <h4 id="sealclicker-score_persecond" style="text-align: center;">per second: 0</h4>
@@ -242,10 +252,7 @@
 
         <!-- RANDOM IDEAS
             + An app that lets you choose between different type of things you usually place at the beach like sand castles, so you can decorate your OS :D
-            + Already doing this, but a reminder, a seal clicker, cookie clicker, but with tons of cute seals >;]
             + A tamagotchi app where you have to take care off a seal and you have to drag the fish to them to feed them and pet them muejeje
-            + SealTok, you can scroll videos, cause why not, I'll recreate popular videos but with seals rotoscoping the actual people lmao, 
-                if not enough content (if you are a doomscroller) I can try using Giphy's API and place random gifs.
             + Sealirus.exe, you can install it, and if you do a bunch of annoying pop-ups will appear of seals trying to get your attention
             + Museal, an app where you can make music by adding seal sounds onto a grid and then play it! :]
             + Shimeji, just grab and throw around seals, even more doable with what I learned about instantiation!!
@@ -258,7 +265,8 @@
         <!-- TO DO (yes, I'm writing them here, I don't want to use an external app, cause I'll probably forgt)
             + Change HTML which uses static Z-Indexes to be modified by the higuest index (make it a global variable instead of
                 only for windows)
-            + Some CSS classes are not being applied in build (like the window header)
+            + Change images of seals, as some seem to be AI :[ (WHY IS EVERY IMAGE ON GOOGLE AI NOWADAYS? I HATE IT HEREEEE)
+            + Add more videos for Sealtok, and upload at least one made by me.
         -->
     </body>
 </html>

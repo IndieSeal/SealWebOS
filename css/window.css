@@ -101,6 +101,13 @@
   object-fit: contain;
 }
 
+.child_text p{
+  padding: 0px;
+  padding-top: 5px;
+
+  margin-top: 0px;
+}
+
 .windows_header{
   display: flex;
   justify-content: space-between;

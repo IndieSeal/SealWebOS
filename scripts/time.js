@@ -1,7 +1,7 @@
 import { clamp } from "./mathf.js";
 
 function updateTime(){
-    var sealTime = new Date().toLocaleString('en-GB');
+    var sealTime = new Date().toLocaleString();
     var timeText = document.querySelector("#timeElement");
     timeText.innerHTML = sealTime;
 }
