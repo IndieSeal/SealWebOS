@@ -1,3 +1,5 @@
+import { clamp } from "./mathf.js";
+
 function updateTime(){
     var sealTime = new Date().toLocaleString('en-GB');
     var timeText = document.querySelector("#timeElement");
@@ -13,6 +15,6 @@ requestAnimationFrame(setDeltaTime);
 function setDeltaTime(time){
     requestAnimationFrame(setDeltaTime);
 
-    deltaTime = (time - lastTime) / 1000;
+    deltaTime = clamp(0, 0.1, (time - lastTime) / 1000);
     lastTime = time;
 }

@@ -84,13 +84,12 @@ dragAudio.playbackRate = 2;
 
 var currentValue = 0;
 
-const MAX_VOLUME = 0.6;
+const MAX_VOLUME = 0.25;
 
 var dragLerpSpeed = 12;
 export function setDragAudioVolume(value){
   if(value > MAX_VOLUME) value = MAX_VOLUME;
   currentValue = clamp(0, MAX_VOLUME, lerp(currentValue, value, dragLerpSpeed * deltaTime)).toFixed(3);
-  console.log(`Current: ${currentValue}, Target: ${value}`);
 
   if(currentValue < 0.05) stopDragAudio();
   

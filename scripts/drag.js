@@ -1,4 +1,4 @@
-import { setDragAudioVolume, stopDragAudio } from "./audio.js";
+import { setDragAudioVolume } from "./audio.js";
 import { abs, clamp, lerp } from "./mathf.js";
 import { deltaTime } from "./time.js";
 import { MINIMIZE_SUFFIX, CLOSE_SUFFIX } from "./window_global.js";
@@ -14,6 +14,8 @@ class DraggableElement{
   currentY = 0;
   cursorX = 0;
   cursorY = 0;
+  previousCursorX = 0;
+  previousCursorY = 0;
 
   hasInitialDrag = false;
   dragging = false;
@@ -88,27 +90,47 @@ class DraggableElement{
     e = e || window.event;
     e.preventDefault();
 
+    requestAnimationFrame(() => this.delayedDrag(this.cursorX, this.cursorY));
+
     this.cursorX = e.clientX - this.initialX;
     this.cursorY = e.clientY - this.initialY;
 
+    const navbarRect = topBar.getBoundingClientRect();
+
+    let maxX = this.getMaxX();
+    let maxY = this.getMaxY();
+    
+    this.cursorX = Math.max(0, Math.min(this.cursorX, maxX));
+    this.cursorY = Math.max(navbarRect.bottom, Math.min(this.cursorY, maxY));
+  }
+
+  delayedDrag = (x, y) => {
+    this.previousCursorX = x;
+    this.previousCursorY = y;
+  }
+
+  getMaxX = () => {
     const rect = this.element.getBoundingClientRect();
     const navbarRect = topBar.getBoundingClientRect();
 
     let windowWidth = window.innerWidth;
-    let windowHeight = window.innerHeight;
+    return windowWidth - rect.width;
+  }
 
-    let maxX = windowWidth - rect.width;
-    let maxY = windowHeight - rect.height;
-    
-    this.cursorX = Math.max(0, Math.min(this.cursorX, maxX));
-    this.cursorY = Math.max(navbarRect.bottom, Math.min(this.cursorY, maxY));
+  getMaxY = () => {
+    const rect = this.element.getBoundingClientRect();
+    const navbarRect = topBar.getBoundingClientRect();
+
+    let windowHeight = window.innerHeight;
+    return windowHeight - rect.height;
   }
 
   stopDragging = () => {
     document.onmouseup = null;
     document.onmousemove = null;
 
-    stopDragAudio();
+    this.previousCursorX = this.cursorX;
+    this.previousCursorY = this.cursorY;
 
     this.dragging = false;
   }
@@ -118,17 +140,29 @@ class DraggableElement{
 
     if(!this.hasInitialDrag) return;
     
-    this.currentX = lerp(this.currentX, this.cursorX, this.dragVelocity * deltaTime);
-    this.currentY = lerp(this.currentY, this.cursorY, this.dragVelocity * deltaTime);
-    console.log(`Current: ${this.currentX}, Cursor: ${this.cursorX}`);
+    if(abs(this.cursorX - this.currentX) > 1) this.currentX = lerp(this.currentX, this.cursorX, this.dragVelocity * deltaTime);
+    else if(!this.dragging) this.currentX = this.cursorX;
 
-    if((this.cursorX - this.currentX) > 0.1){
-      var xVolume = abs(this.cursorX) > 0.1 ? abs(this.currentX/this.cursorX) : 0;
-      var yVolume = abs(this.cursorY) > 0.1 ? abs(this.currentY/this.cursorY) : 0;
+    if(abs(this.cursorY - this.currentY) > 1) this.currentY = lerp(this.currentY, this.cursorY, this.dragVelocity * deltaTime);
+    else if(!this.dragging) this.currentY = this.cursorY;
 
-      setDragAudioVolume(abs(lerp(1, 0, xVolume + yVolume)));
+    var xVolume = 0;
+    var yVolume = 0;
+
+    if(this.cursorX != this.currentX && this.cursorX != 0 && this.cursorX != this.getMaxX()){
+      let xDifference = this.cursorX - this.previousCursorX;
+      xVolume = xDifference * xDifference;
     }
-    else setDragAudioVolume(0);
+
+    if(this.cursorY != this.currentY && this.cursorY != 0 && this.cursorY != this.getMaxY()){
+      let yDifference = this.cursorY - this.previousCursorY;
+      yVolume = yDifference * yDifference;
+    }
+
+    let volume = 0;
+    if(xVolume != 0 || yVolume != 0) volume = clamp(0, 1, Math.sqrt((xVolume + yVolume) * deltaTime));
+    
+    setDragAudioVolume(lerp(0, 1, volume));
     
     this.element.style.left = `${this.currentX}px`;
     this.element.style.top = `${this.currentY}px`;
