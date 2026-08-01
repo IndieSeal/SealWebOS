@@ -53,12 +53,15 @@ var showFirstExtra = false;
 var scrolledVideosIndex = 0;
 changeVideo();
 
+document.addEventListener('onAutoplayEnabled', (e) => {
+    videoElement.play();
+});
+
 function changeVideo(){    
     let currentVideo = allVideos[scrolledVideosIndex];
 
     videoElement.src = `${currentVideo.videoURL}`;
     videoElement.load();
-    videoElement.play();
 
     videoElement.style.objectPosition = `${currentVideo.leftOffset} ${currentVideo.topOffset}`;
     

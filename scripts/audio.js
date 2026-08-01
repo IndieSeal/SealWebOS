@@ -1,4 +1,5 @@
 import { clamp, lerp } from "./mathf.js";
+import { deltaTime } from "./time.js";
 
 var buttons = document.querySelectorAll('button');
 buttons.forEach(button => {
@@ -58,25 +59,36 @@ function stopAudio(audio){
   audio.currentTime = 0;
 }
 
+const onAutoplayEnabled = new CustomEvent("onAutoplayEnabled");
+
+window.addEventListener('pointerdown', (e) => {
+  //Since autoplay is blocked at the start
+  seaBackground.play();
+  dragAudio.play();
+
+  document.dispatchEvent(onAutoplayEnabled);
+});
+
 var seaBackground = document.getElementById("seaBackground");
 seaBackground.loop = true;
 seaBackground.volume = 0.05;
-seaBackground.play();
 
 var dragAudio = document.getElementById("dragAudio"); 
 dragAudio.loop = true;
 dragAudio.volume = 0;
 dragAudio.playbackRate = 2;
-dragAudio.play();
 
 var currentValue = 0;
 
 const MAX_VOLUME = 0.6;
 
+var dragLerpSpeed = 12;
 export function setDragAudioVolume(value){
-  currentValue = clamp(0, MAX_VOLUME, (lerp(currentValue, value, 0.045))).toFixed(3);
+  if(value > MAX_VOLUME) value = MAX_VOLUME;
+  currentValue = clamp(0, MAX_VOLUME, lerp(currentValue, value, dragLerpSpeed * deltaTime)).toFixed(3);
+  console.log(`Current: ${currentValue}, Target: ${value}`);
 
-  if(currentValue < 0.012) stopDragAudio();
+  if(currentValue < 0.05) stopDragAudio();
   
   dragAudio.volume = currentValue;
 }

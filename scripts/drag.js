@@ -120,11 +120,15 @@ class DraggableElement{
     
     this.currentX = lerp(this.currentX, this.cursorX, this.dragVelocity * deltaTime);
     this.currentY = lerp(this.currentY, this.cursorY, this.dragVelocity * deltaTime);
+    console.log(`Current: ${this.currentX}, Cursor: ${this.cursorX}`);
 
-    var xVolume = abs(this.cursorX) > 0.1 ? abs(this.currentX/this.cursorX) * 0.5 : 0;
-    var yVolume = abs(this.cursorY) > 0.1 ? abs(this.currentY/this.cursorY) * 0.5 : 0;
+    if((this.cursorX - this.currentX) > 0.1){
+      var xVolume = abs(this.cursorX) > 0.1 ? abs(this.currentX/this.cursorX) : 0;
+      var yVolume = abs(this.cursorY) > 0.1 ? abs(this.currentY/this.cursorY) : 0;
 
-    setDragAudioVolume(abs(lerp(1, 0, xVolume + yVolume)) * 5);
+      setDragAudioVolume(abs(lerp(1, 0, xVolume + yVolume)));
+    }
+    else setDragAudioVolume(0);
     
     this.element.style.left = `${this.currentX}px`;
     this.element.style.top = `${this.currentY}px`;
