@@ -87,13 +87,21 @@ var currentValue = 0;
 const MAX_VOLUME = 0.25;
 
 var dragLerpSpeed = 12;
-export function setDragAudioVolume(value){
+var dragWindowMaster = undefined;
+
+export function setDragAudioVolume(window, value){
+  if(window != dragWindowMaster) return;
+  
   if(value > MAX_VOLUME) value = MAX_VOLUME;
   currentValue = clamp(0, MAX_VOLUME, lerp(currentValue, value, dragLerpSpeed * deltaTime)).toFixed(3);
 
   if(currentValue < 0.05) stopDragAudio();
   
   dragAudio.volume = currentValue;
+}
+
+export function setDragMaster(window){
+  dragWindowMaster = window;
 }
 
 export function stopDragAudio(){

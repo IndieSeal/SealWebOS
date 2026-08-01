@@ -1,4 +1,4 @@
-import { setDragAudioVolume } from "./audio.js";
+import { setDragAudioVolume, setDragMaster } from "./audio.js";
 import { abs, clamp, lerp } from "./mathf.js";
 import { deltaTime } from "./time.js";
 import { MINIMIZE_SUFFIX, CLOSE_SUFFIX } from "./window_global.js";
@@ -76,6 +76,8 @@ class DraggableElement{
     this.currentY = rect.top;
     this.cursorX = this.currentX;
     this.cursorY = this.currentY;
+
+    setDragMaster(this);
     
     document.onmouseup = this.stopDragging;
     document.onmousemove = this.dragElement;
@@ -161,8 +163,8 @@ class DraggableElement{
 
     let volume = 0;
     if(xVolume != 0 || yVolume != 0) volume = clamp(0, 1, Math.sqrt((xVolume + yVolume) * deltaTime));
-    
-    setDragAudioVolume(lerp(0, 1, volume));
+        
+    setDragAudioVolume(this, lerp(0, 1, volume));
     
     this.element.style.left = `${this.currentX}px`;
     this.element.style.top = `${this.currentY}px`;
