@@ -14,7 +14,8 @@ https://www.uniguide.com/wp-content/uploads/2023/01/seal-meaning-symbolism.jpeg
 https://www.pickpik.com/earth-planet-space-cosmos-globe-astronomy-118162
 https://www.publicdomainpictures.net/en/view-image.php?image=413623&picture=stars-sky-space-background
 https://pngimg.com/image/49615
-https://www.svgrepo.com/svg/370876/tux
+https://pngimg.com/image/10537
+https://commons.wikimedia.org/wiki/File:Emperor_penguin_chicks_at_Sea_World_(foreground).png
 
 MODELS USED:
 https://opengameart.org/content/seal-low-poly
