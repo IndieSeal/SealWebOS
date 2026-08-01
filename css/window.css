@@ -15,7 +15,7 @@
   background-color: var(--window-header-color);
 }
 
-#welcome_header:active {
+#welcome_header.active {
   cursor: var(--grab-cursor);
 
   background-color: var(--window-selected-header-color);
@@ -38,7 +38,7 @@
   background-color: var(--window-header-color);
 }
 
-#sealclicker_header:active {
+#sealclicker_header.active {
   cursor: var(--grab-cursor);
 
   background-color: var(--window-selected-header-color);
@@ -61,7 +61,7 @@
   background-color: var(--window-header-color);
 }
 
-#sealtok_header:active {
+#sealtok_header.active {
   cursor: var(--grab-cursor);
 
   background-color: var(--window-selected-header-color);

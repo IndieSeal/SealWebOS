@@ -84,6 +84,8 @@ class DraggableElement{
 
     document.dispatchEvent(this.onStartDragEvent);
 
+    this.header.classList.add('active');
+
     this.dragging = true;
     this.hasInitialDrag = true;
   }
@@ -134,6 +136,8 @@ class DraggableElement{
     this.previousCursorX = this.cursorX;
     this.previousCursorY = this.cursorY;
 
+    this.header.classList.remove('active');
+    
     this.dragging = false;
   }
 
