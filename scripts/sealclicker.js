@@ -7,7 +7,7 @@ import { deltaTime } from "./time.js";
 //#region Interactable Seal
 
 const sealImageDisplay = document.getElementById("sealclicker-sealdisplay");
-const imagesInFolder = 10;
+const imagesInFolder = 11;
 var latestIndex = 0;
 
 setNewRandomImage();
@@ -16,7 +16,7 @@ function setNewRandomImage(){
     let randomIndex = Math.ceil(rand);
     if(randomIndex == latestIndex) randomIndex = pingpong(1, imagesInFolder, randomIndex + 1);
     
-    let image = `./imgs/SealClicker/Seal${randomIndex}.jpg`;
+    let image = `./imgs/SealClicker/Click/Seal${randomIndex}.png`;
     sealImageDisplay.src = image;
     latestIndex = randomIndex;
     

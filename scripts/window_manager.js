@@ -3,7 +3,7 @@ import { createDraggableElement, getDraggableElement } from "./drag.js"
 import { TASKBAR_SUFFIX, OPEN_SUFFIX, MINIMIZE_SUFFIX, CLOSE_SUFFIX, TASKBAR_ONTOP_SUFFIX } from "./window_global.js";
 
 var selectedIcon = undefined;
-var selectedWindow = undefined;
+export var selectedWindow = undefined;
 
 const topBar = document.getElementById("top");
 var biggestIndex = 1;
@@ -65,6 +65,18 @@ class Window{
       changeSelectedWindow(myWindow);
     });
 
+    this.onWindowOpen = new CustomEvent("onWindowOpen", {
+      detail: {
+        windowID: this.myId,
+      },
+    });
+
+    this.onWindowClose = new CustomEvent("onWindowClose", {
+      detail: {
+        windowID: this.myId,
+      },
+    });
+
     this.setup();
 
     if(openByDefault == true) this.openWindowFunc();
@@ -107,6 +119,7 @@ class Window{
     this.latestZIndex = biggestIndex;
 
     changeSelectedWindow(this);
+    document.dispatchEvent(this.onWindowOpen);
   }
 
   minimizeWindowFunc = () => {
@@ -118,6 +131,8 @@ class Window{
   closeWindowFunc = () => {
     this.window.classList.add("close");
     this.taskbar.style.display = "none";
+
+    document.dispatchEvent(this.onWindowClose);
   }
 
   selectIcon = () => {
@@ -176,5 +191,5 @@ export function getWindow(id){
 }
 
 var welcomeWindow = new Window("welcome", true, true);
-var welcomeWindow = new Window("sealclicker", false, false);
-var welcomeWindow = new Window("sealtok", false, true);
+var clickerWindow = new Window("sealclicker", false, false);
+var sealtokWindow = new Window("sealtok", false, true);
