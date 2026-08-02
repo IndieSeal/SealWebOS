@@ -19,7 +19,7 @@ class Video{
 var realSealVideo1 = new Video('https://cdn.pixabay.com/video/2024/03/22/205259-926528122_medium.mp4', "Cute seal hanging out in beach", "I found this cute seal on the beach the other day, look at this cutie patootie.");
 var realSealVideo2 = new Video('https://cdn.pixabay.com/video/2021/11/03/94465-643067851_tiny.mp4', "Aquarium seal", "Is it just me, or does it look like it's meditating? haha, it's so cuteee, SO CUTE, RAAH.");
 var realSealVideo3 = new Video('https://cdn.pixabay.com/video/2021/11/03/94464-643067850_tiny.mp4', "Resting seal", "Maybe it's dreaming about eating penguins and squids!", '70%');
-var realSealVideo4 = new Video('https://cdn.pixabay.com/video/2022/11/08/138259-769141554_tiny.mp4', 'Pool Lessons', "He's resting :D");
+var realSealVideo4 = new Video('https://cdn.pixabay.com/video/2022/11/08/138259-769141554_tiny.mp4', 'Pool Lessons', "They seem to be resting, must have had a pretty tiring swimming lesson D:");
 allVideos = shuffle(allVideos);
 
 const videosElement = document.getElementById('sealtok-videos');

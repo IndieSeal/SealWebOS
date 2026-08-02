@@ -79,8 +79,8 @@ class DraggableElement{
 
     setDragMaster(this);
     
-    document.onmouseup = this.stopDragging;
     document.onmousemove = this.dragElement;
+    document.onmouseup = this.stopDragging;
 
     document.dispatchEvent(this.onStartDragEvent);
 

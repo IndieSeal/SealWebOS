@@ -145,6 +145,8 @@ header{
 
     transition: 0.3s ease;
     background-color: #00000000;
+
+    -webkit-text-fill-color: rgb(7, 96, 206);
 }
 
 .socials:hover{

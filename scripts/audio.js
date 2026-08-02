@@ -60,6 +60,8 @@ function stopAudio(audio){
 }
 
 const onAutoplayEnabled = new CustomEvent("onAutoplayEnabled");
+const mutedPageText = document.getElementById("muted-page"); 
+
 var hasBeenEnabled = false;
 
 window.addEventListener('pointerdown', (e) => {
@@ -69,6 +71,8 @@ window.addEventListener('pointerdown', (e) => {
   seaBackground.play();
   dragAudio.play();
 
+  mutedPageText.style.display = 'none';
+  
   document.dispatchEvent(onAutoplayEnabled);
   hasBeenEnabled = true;
 });
