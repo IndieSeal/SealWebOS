@@ -1,14 +1,18 @@
 import { clamp, lerp } from "./mathf.js";
 import { deltaTime } from "./time.js";
 
-var buttons = document.querySelectorAll('button');
-buttons.forEach(button => {
-  setupAudioEvents(button);
-});
-var areas = document.querySelectorAll('area');
-areas.forEach(area => {
-  setupAudioEvents(area);
-});
+//We wait one frame so the other scripts have time to create components
+requestAnimationFrame(loadGeneralAudioEvents);
+function loadGeneralAudioEvents(e){
+  var buttons = document.querySelectorAll('button');
+  buttons.forEach(button => {
+    setupAudioEvents(button);
+  });
+  var areas = document.querySelectorAll('area');
+  areas.forEach(area => {
+    setupAudioEvents(area);
+  });
+}
 
 export function setupAudioEvents(element){
   element.addEventListener("mouseenter", () => {

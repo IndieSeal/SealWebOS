@@ -48,10 +48,32 @@ class Window{
   draggableElement = undefined;
   latestZIndex = 0;
   
-  constructor(id, openByDefault, movableWindow){
+  constructor(id, openByDefault, movableWindow, appName, iconPath){
     this.myId = id;
 
     this.window = document.querySelector("#" + id);
+
+    this.appName = appName;
+    this.iconPath = iconPath;
+
+    this.windowHeaderPrefab = `
+      <div class="windows_header" id="${this.myId}_header">
+          <!-- Window/App Details -->
+          <div style="display: flex; justify-content: flex-start; align-items: center;">
+              <img class="icon" src="${this.iconPath}">
+              <p>${this.appName}</p>
+          </div>
+
+          <!-- Minimize/Close -->
+          <div style="display: flex; justify-content: flex-end; align-items: center;">
+              <button class="minimize-button" id="${this.myId}_minimize">-</button>
+              <button class="close-button" id="${this.myId}_close">X</button>
+          </div>
+      </div>
+    `
+
+    this.window.insertAdjacentHTML('afterbegin', this.windowHeaderPrefab);
+
     this.taskbar = document.getElementById(id + TASKBAR_SUFFIX);
     this.taskbar_ontop = document.getElementById(id + TASKBAR_ONTOP_SUFFIX);
 
@@ -190,6 +212,6 @@ export function getWindow(id){
   return undefined;
 }
 
-var welcomeWindow = new Window("welcome", true, true);
-var clickerWindow = new Window("sealclicker", false, false);
-var sealtokWindow = new Window("sealtok", false, true);
+var welcomeWindow = new Window("welcome", true, true, 'Introduction', './imgs/AppIcons/AboutMe.png');
+var sealtokWindow = new Window("sealtok", false, true, 'SealTok', './imgs/AppIcons/Sealtok.png');
+var sealClickerWindow = new Window("sealclicker", false, false, 'Seal Clicker', './imgs/AppIcons/SealClicker.png');
