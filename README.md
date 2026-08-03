@@ -20,3 +20,6 @@ https://github.com/user-attachments/assets/10f2fdb6-a371-4cef-9351-712dcc024740
 - Clone the repository: ```https://github.com/IndieSeal/SealWebOS.git```
 - Open `index.html`
 - Enjoy SealOS!
+
+## Credits / Resources:
+[Resource List](https://github.com/IndieSeal/SealWebOS/blob/main/RESOURCES.md)
