@@ -23,3 +23,6 @@ https://github.com/user-attachments/assets/10f2fdb6-a371-4cef-9351-712dcc024740
 
 ## Credits / Resources:
 [Resource List](https://github.com/IndieSeal/SealWebOS/blob/main/RESOURCES.md)
+
+<br><br>
+### NO AI WAS USED IN THE CREATION OF THIS PROJECT, WE HATE AI IN SEAL TOWN!
