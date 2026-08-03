@@ -21,6 +21,8 @@
   border: solid;
   background-color: rgb(75, 75, 255);
 
+  -webkit-text-fill-color: white;
+
   transition: 0.25s;
 }
 
@@ -31,6 +33,7 @@
 .autoclicker_upgrade.not-buyable{
   transition: 0.05s;
   background-color: rgb(22, 22, 68);
+  -webkit-text-fill-color: grey;
 }
 .autoclicker_upgrade.not-buyable:hover{
   background-color: rgb(13, 13, 42);
@@ -79,13 +82,17 @@
   transition: 0.05s ease;
 }
 
+.autoclicker_cost{
+  margin-left: 5px;
+}
+
 .autoclicker_upgrade .quantity{
   justify-self: flex-end;
   font-size: 56px;
 
+  margin: 0;
   margin-left: auto;
   margin-right: 5px;
-
   margin-top: -10px;
 }
 

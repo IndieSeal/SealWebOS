@@ -230,9 +230,9 @@ class AutoclickerUpgrade extends Upgrade{
         this.autoclickerPrefab = `
             <button class="autoclicker_upgrade" id="${upgradeID}_buy">
                 <img class="icon" id="${upgradeID}_icon" src="./imgs/SealClicker/Click.png">
-                <div class="column" style="margin-left: 15px;">
+                <div class="column" style="max-height: 100%; margin-left: 15px; margin-top: -10px;">
                     <b id="${upgradeID}_name" style="font-size: 1.5rem;">My name</b>
-                    <div class="row" style="justify-content: flex-start; width: 100%;">
+                    <div class="row" style="margin-top: -10px; justify-content: flex-start; width: 100%;">
                         <img class="small_icon" src="./imgs/SealClicker/Food.png">
                         <p class="autoclicker_cost" id="${upgradeID}_cost">0</p>
                     </div>

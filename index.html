@@ -68,7 +68,7 @@
         <div id="welcome" class="windows" style="display: none;">
             <div class="windows_header" id="welcome_header">
                 <!-- Window/App Details -->
-                <div style="display: flex; justify-content: flex-start; align-items: center;">
+                <div style="display: flex; justify-content: flex-start; align-items: center; height: 100%; margin: 0;">
                     <img class="icon" src="./imgs/AppIcons/AboutMe.png">
                     <p>Introduction</p>
                 </div>
@@ -81,8 +81,8 @@
             </div>
 
             <!-- Window Insides -->
-            <div class="windows_header window_body child_text" style="padding: 5px; box-sizing: border-box; height: 500px;">
-                <h1>Welcome to <b>Seal OS</b>!</h1>
+            <div class="window_body child_text" style="padding: 5px; padding-top: 0; box-sizing: border-box; height: 500px;">
+                <h1 style="height: 30px;">Welcome to <b>Seal OS</b>!</h1>
                 <h3><br>About the OS</h3>
                 <p>As you can see, I really like Seals, so I decided to make an OS about them lol.</p>
                 <p>Wanna try some fun stuff? Go to the <b>Seal Clicker App!</b></p>
@@ -125,8 +125,8 @@
             </div>
 
             <!-- Window Insides -->
-            <div class="windows_header window_body" style="height: 700px;">
-                <div style="overflow: hidden; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; position: absolute; width: 100%; height: 100%;">
+            <div class="window_body" style="height: 700px;">
+                <div style="overflow: hidden; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; position: absolute; width: 100%; height: 100%; max-height: 100%;">
                     <div style="width: 100%; height: 100px; display: flex; justify-content: center; align-content: flex-start;" class="fade-gradient-down">
                         <p style="color: white;">ps: we also accept sea lions!!</p>
                     </div>
@@ -168,7 +168,7 @@
                 </div>
             </div>
 
-            <div class="windows_header window_body" style="height: 83vh;">
+            <div class="window_body" style="height: 83vh;">
                 <div class="row" style="width: 100%; height: 100%;">
                     <div style="display: flex; min-width: 30%; width: 30%; height: 100%; flex-direction: column;">
                         <div style="width: 100%; margin-top: 10%; background-color: rgb(58, 121, 231);">
