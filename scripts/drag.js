@@ -1,12 +1,11 @@
 import { setDragAudioVolume, setDragMaster } from "./audio.js";
+import { getClampedX, getClampedY, getMaxX, getMaxY, navbarRect } from "./bounds.js";
 import { abs, clamp, lerp } from "./mathf.js";
 import { deltaTime } from "./time.js";
 import { MINIMIZE_SUFFIX, CLOSE_SUFFIX } from "./window_global.js";
 
 // So, why did I do it this way? Cause who the heck would like to be duplicating scripts and changing names when you can have a class that manages it, like come on!
 // i use c# so this feels hella familiar
-const navbar = document.getElementById("navbar")
-
 class DraggableElement{
   initialX = 0;
   initialY = 0;
@@ -99,34 +98,13 @@ class DraggableElement{
     this.cursorX = e.clientX - this.initialX;
     this.cursorY = e.clientY - this.initialY;
 
-    const navbarRect = navbar.getBoundingClientRect();
-
-    let maxX = this.getMaxX();
-    let maxY = this.getMaxY();
-    
-    this.cursorX = Math.max(0, Math.min(this.cursorX, maxX));
-    this.cursorY = Math.max(navbarRect.bottom, Math.min(this.cursorY, maxY));
+    this.cursorX = getClampedX(this.element, this.cursorX);
+    this.cursorY = getClampedY(this.element, this.cursorY);
   }
 
   delayedDrag = (x, y) => {
     this.previousCursorX = x;
     this.previousCursorY = y;
-  }
-
-  getMaxX = () => {
-    const rect = this.element.getBoundingClientRect();
-    const navbarRect = navbar.getBoundingClientRect();
-
-    let windowWidth = window.innerWidth;
-    return windowWidth - rect.width;
-  }
-
-  getMaxY = () => {
-    const rect = this.element.getBoundingClientRect();
-    const navbarRect = navbar.getBoundingClientRect();
-
-    let windowHeight = window.innerHeight;
-    return windowHeight - rect.height;
   }
 
   stopDragging = () => {
@@ -155,12 +133,12 @@ class DraggableElement{
     var xVolume = 0;
     var yVolume = 0;
 
-    if(this.cursorX != this.currentX && this.cursorX != 0 && this.cursorX != this.getMaxX()){
+    if(this.cursorX != this.currentX && this.cursorX != 0 && this.cursorX != getMaxX(this.element)){
       let xDifference = this.cursorX - this.previousCursorX;
       xVolume = xDifference * xDifference;
     }
 
-    if(this.cursorY != this.currentY && this.cursorY != 0 && this.cursorY != this.getMaxY()){
+    if(this.cursorY != this.currentY && this.cursorY != 0 && this.cursorY != getMaxY(this.element)){
       let yDifference = this.cursorY - this.previousCursorY;
       yVolume = yDifference * yDifference;
     }

@@ -2,6 +2,7 @@ export function lerp(currentPosition, targetPosition, value) {
   return (1 - value) * currentPosition + value * targetPosition;
 }
 
+// aparently some of this functions do exist natively in js, lol, they're just under Math.___();
 export function abs(value) {
     if(value < 0) return value * -1;
     else return value;
