@@ -5,7 +5,7 @@ import { MINIMIZE_SUFFIX, CLOSE_SUFFIX } from "./window_global.js";
 
 // So, why did I do it this way? Cause who the heck would like to be duplicating scripts and changing names when you can have a class that manages it, like come on!
 // i use c# so this feels hella familiar
-const topBar = document.getElementById("top")
+const navbar = document.getElementById("navbar")
 
 class DraggableElement{
   initialX = 0;
@@ -99,7 +99,7 @@ class DraggableElement{
     this.cursorX = e.clientX - this.initialX;
     this.cursorY = e.clientY - this.initialY;
 
-    const navbarRect = topBar.getBoundingClientRect();
+    const navbarRect = navbar.getBoundingClientRect();
 
     let maxX = this.getMaxX();
     let maxY = this.getMaxY();
@@ -115,7 +115,7 @@ class DraggableElement{
 
   getMaxX = () => {
     const rect = this.element.getBoundingClientRect();
-    const navbarRect = topBar.getBoundingClientRect();
+    const navbarRect = navbar.getBoundingClientRect();
 
     let windowWidth = window.innerWidth;
     return windowWidth - rect.width;
@@ -123,7 +123,7 @@ class DraggableElement{
 
   getMaxY = () => {
     const rect = this.element.getBoundingClientRect();
-    const navbarRect = topBar.getBoundingClientRect();
+    const navbarRect = navbar.getBoundingClientRect();
 
     let windowHeight = window.innerHeight;
     return windowHeight - rect.height;

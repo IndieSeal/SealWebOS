@@ -15,6 +15,8 @@ function loadGeneralAudioEvents(e){
 }
 
 export function setupAudioEvents(element){
+  console.log(`Subscribe: ${element.innerHTML}`);
+
   element.addEventListener("mouseenter", () => {
     playHoverAudio();
   });
@@ -26,6 +28,7 @@ export function setupAudioEvents(element){
 
 var hoverAudio = document.getElementById("hoverAudio"); 
 export function playHoverAudio(){
+  console.log(`Hovered: ${hoverAudio}`);
   playAudio(hoverAudio);
 }
 

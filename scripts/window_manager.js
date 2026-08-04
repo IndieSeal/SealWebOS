@@ -5,7 +5,9 @@ import { TASKBAR_SUFFIX, OPEN_SUFFIX, MINIMIZE_SUFFIX, CLOSE_SUFFIX, TASKBAR_ONT
 var selectedIcon = undefined;
 export var selectedWindow = undefined;
 
-const topBar = document.getElementById("top");
+const navbar = document.getElementById("navbar");
+const taskbar = document.getElementById("taskbar");
+const desktopApps = document.getElementById("desktopApps");
 var biggestIndex = 1;
 
 var allWindows = [];
@@ -70,9 +72,25 @@ class Window{
               <button class="close-button" id="${this.myId}_close">X</button>
           </div>
       </div>
-    `
+    `;
+
+    this.taskbarPrefab = `
+      <div class="element" id="${this.myId}_taskbar">
+        <img src="${this.iconPath}">
+        <div class="taskbar_ontop" id="${this.myId}_ontop"></div>
+      </div>
+    `;
+
+    this.desktopPrefab = `
+      <div id="${this.myId}_open" class="desktop_app_icon">
+        <img src="${this.iconPath}">
+        <p>${this.appName}</p>
+      </div>
+    `;
 
     this.window.insertAdjacentHTML('afterbegin', this.windowHeaderPrefab);
+    taskbar.insertAdjacentHTML('beforeend', this.taskbarPrefab);
+    desktopApps.insertAdjacentHTML('beforeend', this.desktopPrefab);
 
     this.taskbar = document.getElementById(id + TASKBAR_SUFFIX);
     this.taskbar_ontop = document.getElementById(id + TASKBAR_ONTOP_SUFFIX);
@@ -193,7 +211,7 @@ class Window{
     this.window.style.zIndex = biggestIndex;
     this.latestZIndex = biggestIndex;
 
-    topBar.style.zIndex = biggestIndex + 1;
+    navbar.style.zIndex = biggestIndex + 1;
     this.unselectIcon(selectedIcon);
   }
 

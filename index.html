@@ -17,24 +17,13 @@
     </head>
     <body id="body">
         <!-- NAVIGATION BAR -->
-        <div class="navbar" id="top">
+        <div class="navbar" id="navbar">
             <div class="element" style="width: 20%; justify-content: left;">
                 <img class="companion-seal" src="./imgs/NormalSeal/Closed_Idle.png">
             </div>
 
-            <div class="taskbar" style="width: 60%; justify-content: center;">
-                <div class="element" id="welcome_taskbar">
-                    <img src="./imgs/AppIcons/AboutMe.png">
-                    <div class="taskbar_ontop" id="welcome_ontop"></div>
-                </div>
-                <div class="element" id="sealclicker_taskbar", style="display: none;">
-                    <img src="./imgs/AppIcons/SealClicker.png">
-                    <div class="taskbar_ontop" id="sealclicker_ontop"></div>
-                </div>
-                <div class="element" id="sealtok_taskbar", style="display: none;">
-                    <img src="./imgs/AppIcons/Sealtok.png">
-                    <div class="taskbar_ontop" id="sealtok_ontop"></div>
-                </div>
+            <div class="taskbar" id="taskbar" style="width: 60%; justify-content: center;">
+                <!-- Content added through 'window_manager.js' -->
             </div>
 
             <div class="element" style="width: 20%; justify-content: right;">
@@ -50,18 +39,7 @@
         </div>
 
         <div id="desktopApps" style="position: fixed; padding-top: 64px; padding-left: 16px;">
-            <div id="welcome_open" class="desktop_app_icon">
-                <img src="./imgs/AppIcons/AboutMe.png">
-                <p>Introduction</p>
-            </div>
-            <div id="sealclicker_open" class="desktop_app_icon">
-                <img src="./imgs/AppIcons/SealClicker.png">
-                <p>Seal Clicker</p>
-            </div>
-            <div id="sealtok_open" class="desktop_app_icon">
-                <img src="./imgs/AppIcons/Sealtok.png">
-                <p>Seal Tok</p>
-            </div>
+            <!-- Content added through 'window_manager.js' -->
         </div>
 
         <!-- DRAGGABLE WINDOW -->
@@ -130,9 +108,9 @@
                 <div class="row" style="width: 100%; height: 100%;">
                     <div style="display: flex; min-width: 30%; width: 30%; height: 100%; flex-direction: column;">
                         <div style="width: 100%; margin-top: 10%; background-color: rgb(58, 121, 231);">
-                            <h1 style="text-align: center;"><b>FEED THE SEAL!!</b></h1>
-                            <h1 id="sealclicker-score" style="text-align: center;">Points: 0</h1>
-                            <h4 id="sealclicker-score_persecond" style="text-align: center;">per second: 0</h4>
+                            <h1 style="margin: 0; text-align: center;"><b>FEED THE SEAL!!</b></h1>
+                            <h1 id="sealclicker-score" style="margin: 0; text-align: center;">Points: 0</h1>
+                            <h4 id="sealclicker-score_persecond" style="margin: 0; text-align: center;">per second: 0</h4>
                         </div>
                         <img class="sealdisplay" src="./imgs/SealClicker/Seal1.jpg" id="sealclicker-sealdisplay" style="justify-self: center; align-self: center; margin: auto 0;">
                     </div>
@@ -227,6 +205,7 @@
             + Change HTML which uses static Z-Indexes to be modified by the higuest index (make it a global variable instead of
                 only for windows)
             + Make parodies of videos with traced seals for SealTok
+            + Fix hover sound not working
         -->
     </body>
 </html>

@@ -8,6 +8,8 @@
 .store{
   font-size: 64px;
   font-weight: bold;
+
+  margin: 0;
 }
 
 .autoclicker_upgrade{
