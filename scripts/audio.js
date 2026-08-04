@@ -56,6 +56,7 @@ export function sealClicker_playBuyAudio(){
 }
 
 var sealClicker_Squish = document.getElementById("sealclicker-squish"); 
+sealClicker_Squish.volume = 0.15;
 export function sealClicker_playSquishAudio(){
   playAudio(sealClicker_Squish);
 }

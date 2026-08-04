@@ -71,6 +71,32 @@ header{
     background-repeat: no-repeat;
 }
 
+.bebas-neue-regular {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+*,
+.dynapuff-regular {
+  font-family: "DynaPuff", system-ui;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+b{
+    font-weight: 600;
+}
+
+.rubik-spray-paint-regular {
+  font-family: "Rubik Spray Paint", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
 .desktop_app_icon{
     width: 80px;
 
@@ -95,7 +121,7 @@ header{
 }
 
 .desktop_app_icon p{
-    width: 100%;
+    width: calc(100% + 32px);
 }
 
 .desktop_app_icon:hover{
@@ -135,30 +161,6 @@ header{
     to{
         transform: scale(0);
     }
-}
-
-.socials{
-    display: flex;
-    
-    align-items: center;
-    justify-content: center;
-
-    transition: 0.3s ease;
-    background-color: #00000000;
-
-    -webkit-text-fill-color: rgb(7, 96, 206);
-}
-
-.socials:hover{
-    background-color: #ffffffab;
-}
-
-.socials *{
-    padding: 4px;
-}
-
-.socials img{
-    width: 30px;
 }
 
 .row{
