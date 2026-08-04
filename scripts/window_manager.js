@@ -99,6 +99,9 @@ class Window{
     this.windowMinimizer = document.getElementById(id + MINIMIZE_SUFFIX);
     this.windowCloser = document.getElementById(id + CLOSE_SUFFIX);
 
+    setupAudioEvents(this.windowMinimizer);
+    setupAudioEvents(this.windowCloser);
+
     this.draggableElement = createDraggableElement(id, movableWindow);
     document.addEventListener('onStartDrag', (e) => {
       let myWindow = getWindow(e.detail.windowID);

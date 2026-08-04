@@ -1,4 +1,4 @@
-import { sealClicker_playBuyAudio, sealClicker_playClickAudio, sealClicker_playSquishAudio } from "./audio.js";
+import { removeClickEvent, sealClicker_playBuyAudio, sealClicker_playClickAudio, sealClicker_playSquishAudio, setupAudioEvents } from "./audio.js";
 import { lerp, pingpong } from "./mathf.js";
 import { deltaTime } from "./time.js";
 
@@ -184,6 +184,8 @@ class Upgrade{
         this.amountElement = document.getElementById(this.upgradeID + UPGRADE_AMOUNT_SUFFIX);
         
         this.buyElement.addEventListener("click", this.onBuyElementClicked);
+        setupAudioEvents(this.buyElement);
+        removeClickEvent(this.buyElement);
         this.updateUI();
     }
 

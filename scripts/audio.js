@@ -1,25 +1,29 @@
 import { clamp, lerp } from "./mathf.js";
 import { deltaTime } from "./time.js";
 
-//We wait one frame so the other scripts have time to create components
-requestAnimationFrame(loadGeneralAudioEvents);
-function loadGeneralAudioEvents(e){
-  var buttons = document.querySelectorAll('button');
-  buttons.forEach(button => {
-    setupAudioEvents(button);
-  });
-  var areas = document.querySelectorAll('area');
-  areas.forEach(area => {
-    setupAudioEvents(area);
-  });
-}
+var buttons = document.querySelectorAll('button');
+buttons.forEach(button => {
+  setupAudioEvents(button);
+});
+var areas = document.querySelectorAll('area');
+areas.forEach(area => {
+  setupAudioEvents(area);
+});
 
 export function setupAudioEvents(element){
-  element.removeEventListener('mouseenter', onHover);
-  element.removeEventListener('click', onClick);
+  removeAudioEvents(element);
 
   element.addEventListener('mouseenter', onHover);
   element.addEventListener('click', onClick);
+}
+
+export function removeAudioEvents(element){
+  element.removeEventListener('mouseenter', onHover);
+  removeClickEvent(element);
+}
+
+export function removeClickEvent(element){
+  element.removeEventListener('click', onClick);
 }
 
 function onHover(){
@@ -31,6 +35,7 @@ function onClick(){
 }
 
 var hoverAudio = document.getElementById("hoverAudio"); 
+hoverAudio.volume = 0.6;
 export function playHoverAudio(){
   playAudio(hoverAudio, true);
 }
