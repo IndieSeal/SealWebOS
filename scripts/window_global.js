@@ -7,3 +7,15 @@ export const OPEN_SUFFIX = "_open";
 
 export const MINIMIZE_SUFFIX = "_minimize";
 export const CLOSE_SUFFIX = "_close";
+
+export var biggestZIndex = 1;
+export function IncreaseZIndex(){
+    biggestZIndex++;
+
+    zIndexSubscribers.forEach(sub => sub());
+}
+
+var zIndexSubscribers = [];
+export function SubscribeToZIndex(callback){
+    zIndexSubscribers.push(callback);
+}

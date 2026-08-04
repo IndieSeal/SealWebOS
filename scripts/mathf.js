@@ -26,6 +26,11 @@ export function pingpong(min, max, value){
     }
 }
 
+//thanks math class lol
+export function distance(firstX, firstY, secondX, secondY){
+    return Math.sqrt(Math.pow(secondX - firstX, 2) + Math.pow(secondY - firstY, 2));
+}
+
 //will make a new script for extras if there's enough of them later
 
 //we all say thanks to this tutorial: https://coureywong.medium.com/how-to-shuffle-an-array-of-items-in-javascript-39b9efe4b567
