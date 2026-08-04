@@ -6,6 +6,9 @@ Used Tutorials:
 
 ## General
 
+Used Images:
+- [Sand Background](https://jooinn.com/sand-texture-3.html)
+
 Used Sounds:
 - [Background Sound (Water)](https://freesound.org/s/203158/)
 

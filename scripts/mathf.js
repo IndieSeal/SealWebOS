@@ -26,6 +26,10 @@ export function pingpong(min, max, value){
     }
 }
 
+export function randomBool(){
+    return Math.random() < 0.5;
+}
+
 //thanks math class lol
 export function distance(firstX, firstY, secondX, secondY){
     return Math.sqrt(Math.pow(secondX - firstX, 2) + Math.pow(secondY - firstY, 2));

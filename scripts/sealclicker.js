@@ -1,5 +1,5 @@
 import { removeClickEvent, sealClicker_playBuyAudio, sealClicker_playClickAudio, sealClicker_playSquishAudio, setupAudioEvents } from "./audio.js";
-import { lerp, pingpong } from "./mathf.js";
+import { lerp, pingpong, randomBool } from "./mathf.js";
 import { deltaTime } from "./time.js";
 import { biggestZIndex } from "./window_global.js";
 
@@ -46,15 +46,11 @@ function onSealClicked(event){
 
 function createSealClickedPopupPrefab(e, points){
     let x = e.clientX;
-    let y = e.clientY;
+    let y = e.clientY - 60;
 
-    let isNegativeX = Math.random() < 0.5;
+    let isNegativeX = randomBool();
     let randomValueX = (Math.random() * (isNegativeX ? -1 : 1)) * 10;
     x += randomValueX - 15;
-
-    //let isNegativeY = Math.random() < 0.5;
-    //let randomValueY = (Math.random() * (isNegativeX ? -1 : 1)) * 5;
-    y -= 60;
     
     let sealClickedPopupPrefab = `
         <div class="row" style="position: absolute; left: ${x}px; top: ${y}px; z-index: ${biggestZIndex + 100}; pointer-events: none;">
