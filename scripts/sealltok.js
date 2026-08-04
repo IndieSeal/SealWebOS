@@ -131,7 +131,6 @@ function startDragging(e){
     isDragging = true;
     showFirstExtra = true;
     
-    const rect = videoContainerElement.getBoundingClientRect();
     initialY = e.clientY;
 
     offsetY = e.clientY - initialY;
@@ -164,12 +163,8 @@ function stopDragging(){
     isDragging = false;
     reset = false;
 
-    if(offsetY < -offsetForNew){
-        scrollUp();
-    }
-    else if(offsetY > offsetForNew){
-        scrollDown();
-    }
+    if(offsetY < -offsetForNew) scrollUp();
+    else if(offsetY > offsetForNew) scrollDown();
     else{
         offsetY = 0;
         reset = true;

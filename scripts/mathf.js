@@ -2,6 +2,7 @@ export function lerp(currentPosition, targetPosition, value) {
   return (1 - value) * currentPosition + value * targetPosition;
 }
 
+// aparently some of this functions do exist natively in js, lol, they're just under Math.___();
 export function abs(value) {
     if(value < 0) return value * -1;
     else return value;
@@ -23,6 +24,11 @@ export function pingpong(min, max, value){
         let excess = min - value;
         return max - excess;
     }
+}
+
+//thanks math class lol
+export function distance(firstX, firstY, secondX, secondY){
+    return Math.sqrt(Math.pow(secondX - firstX, 2) + Math.pow(secondY - firstY, 2));
 }
 
 //will make a new script for extras if there's enough of them later

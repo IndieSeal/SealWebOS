@@ -142,6 +142,10 @@
             </div>
         </div>
 
+        <div id="movingSeal" style="position: absolute; width: 32px; height: 32px;">
+            <img id="movingSeal-image" src="./imgs/fish.png">
+        </div>
+
         <div class="tooltip" id="sealclicker-tooltip">
             <div class="row" style="width: 100%; height: 75px; align-items: flex-start;">
                 <div class="column" style="width: 80%; height: 100%; align-items: flex-start;">
@@ -177,6 +181,7 @@
         <audio id="sealclicker-squish"> <source src="./sounds/sealclicker/squish.wav" type="audio/wav"> </audio>
 
         <!-- Apply Scripts -->
+        <script type="module" src="./scripts/bounds.js"></script>
         <script type="module" src="./scripts/audio.js"></script>
         <script type="module" src="./scripts/drag.js"></script>
         
@@ -188,6 +193,8 @@
 
         <script type="module" src="./scripts/sealclicker.js"></script>
         <script type="module" src="./scripts/sealltok.js"></script>
+
+        <script type="module" src="./scripts/moving_seal.js"></script>
 
         <!-- RANDOM IDEAS
             + An app that lets you choose between different type of things you usually place at the beach like sand castles, so you can decorate your OS :D
@@ -202,8 +209,6 @@
         -->
 
         <!-- TO DO (yes, I'm writing them here, I don't want to use an external app, cause I'll probably forgt)
-            + Change HTML which uses static Z-Indexes to be modified by the higuest index (make it a global variable instead of
-                only for windows)
             + Make parodies of videos with traced seals for SealTok
             + Fix hover sound not working
         -->

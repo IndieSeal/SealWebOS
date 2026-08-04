@@ -1,6 +1,7 @@
 import { removeClickEvent, sealClicker_playBuyAudio, sealClicker_playClickAudio, sealClicker_playSquishAudio, setupAudioEvents } from "./audio.js";
 import { lerp, pingpong } from "./mathf.js";
 import { deltaTime } from "./time.js";
+import { biggestZIndex } from "./window_global.js";
 
 //omg regions exist in js, i'm blessed dude, i can re-use so many concepts from c# it's crazy haha
 
@@ -56,7 +57,7 @@ function createSealClickedPopupPrefab(e, points){
     y -= 60;
     
     let sealClickedPopupPrefab = `
-        <div class="row" style="position: absolute; left: ${x}px; top: ${y}px; z-index: 99999; pointer-events: none;">
+        <div class="row" style="position: absolute; left: ${x}px; top: ${y}px; z-index: ${biggestZIndex + 100}; pointer-events: none;">
             <img class="small_icon" src="./imgs/SealClicker/Food.png">
             <p style="font-size: 32px; font-weight: bold;">${points.toLocaleString('en-US')}</p>
         </div>
@@ -568,6 +569,8 @@ function onTooltipEnterItem(upgrade){
     tooltipCostElement.innerHTML = upgrade.getPrice().toLocaleString('en-US');
 
     tooltipIconElement.src = upgradeInfo.icon;
+
+    tooltipElement.style.zIndex = biggestZIndex + 5;
 }
 
 function onTooltipExitItem(upgrade){
