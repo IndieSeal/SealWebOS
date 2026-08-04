@@ -1,14 +1,12 @@
 import { setupAudioEvents } from "./audio.js";
 import { createDraggableElement, getDraggableElement } from "./drag.js"
-import { TASKBAR_SUFFIX, OPEN_SUFFIX, MINIMIZE_SUFFIX, CLOSE_SUFFIX, TASKBAR_ONTOP_SUFFIX } from "./window_global.js";
+import { TASKBAR_SUFFIX, OPEN_SUFFIX, MINIMIZE_SUFFIX, CLOSE_SUFFIX, TASKBAR_ONTOP_SUFFIX, biggestZIndex, IncreaseZIndex } from "./window_global.js";
 
 var selectedIcon = undefined;
 export var selectedWindow = undefined;
 
-const navbar = document.getElementById("navbar");
 const taskbar = document.getElementById("taskbar");
 const desktopApps = document.getElementById("desktopApps");
-var biggestIndex = 1;
 
 var allWindows = [];
 
@@ -156,7 +154,7 @@ class Window{
     this.taskbar.style.display = "flex";
 
     this.handleWindowTap();
-    this.latestZIndex = biggestIndex;
+    this.latestZIndex = biggestZIndex;
 
     changeSelectedWindow(this);
     document.dispatchEvent(this.onWindowOpen);
@@ -206,17 +204,16 @@ class Window{
   }
 
   handleWindowTap = () => {
-    biggestIndex++;
+    IncreaseZIndex();
 
-    this.window.style.zIndex = biggestIndex;
-    this.latestZIndex = biggestIndex;
+    this.window.style.zIndex = biggestZIndex;
+    this.latestZIndex = biggestZIndex;
 
-    navbar.style.zIndex = biggestIndex + 1;
     this.unselectIcon(selectedIcon);
   }
 
   toggleWindow = () => {
-    if(this.latestZIndex == biggestIndex && this.isWindowOpen()) this.minimizeWindowFunc();
+    if(this.latestZIndex == biggestZIndex && this.isWindowOpen()) this.minimizeWindowFunc();
     else this.openWindowFunc();
   }
 }

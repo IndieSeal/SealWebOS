@@ -1,5 +1,13 @@
+import { SubscribeToZIndex } from "./window_global.js";
+
 const navbar = document.getElementById("navbar");
 export const navbarRect = navbar.getBoundingClientRect();
+
+SubscribeToZIndex(onZIndexIncreased);
+
+function onZIndexIncreased(index){
+    navbar.style.zIndex = index + 110;
+}
 
 export function getMaxX(element){
     const rect = element.getBoundingClientRect();
