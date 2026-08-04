@@ -15,21 +15,24 @@ function loadGeneralAudioEvents(e){
 }
 
 export function setupAudioEvents(element){
-  console.log(`Subscribe: ${element.innerHTML}`);
+  element.removeEventListener('mouseenter', onHover);
+  element.removeEventListener('click', onClick);
 
-  element.addEventListener("mouseenter", () => {
-    playHoverAudio();
-  });
+  element.addEventListener('mouseenter', onHover);
+  element.addEventListener('click', onClick);
+}
 
-  element.addEventListener("click", () => {
-    playSelectAudio();
-  });
+function onHover(){
+  playHoverAudio();
+}
+
+function onClick(){
+  playSelectAudio();
 }
 
 var hoverAudio = document.getElementById("hoverAudio"); 
 export function playHoverAudio(){
-  console.log(`Hovered: ${hoverAudio}`);
-  playAudio(hoverAudio);
+  playAudio(hoverAudio, true);
 }
 
 var selectAudio = document.getElementById("selectAudio"); 
@@ -53,6 +56,7 @@ export function sealClicker_playSquishAudio(){
 }
 
 function playAudio(audio, interrupt = false, pause = true){
+  if(!hasBeenEnabled) return;
   if(interrupt || (pause && audio.currentTime > 0.1)) stopAudio(audio);
   
   audio.preservesPitch = false;
