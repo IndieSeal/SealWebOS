@@ -1,3 +1,4 @@
+import { playBigBoomAudio, playSmallBoomAudio } from "./audio.js";
 import { getClampedX, getClampedY, getMaxX, getMaxY, navbarRect } from "./bounds.js";
 import { lerp, distance, randomBool, abs, clamp, destroyAfter, pingpong } from "./mathf.js";
 import { deltaTime } from "./time.js";
@@ -45,7 +46,7 @@ class MovingSeal{
         this.movingSealImageElement = document.getElementById(this.myImageId);
         this.explodeElement = undefined;
 
-        this.movingSealElement.onclick = this.destroy;
+        this.movingSealElement.onclick = this.tryDestroy;
 
         SubscribeToZIndex(this.onZIndexIncreased);
 
@@ -122,8 +123,12 @@ class MovingSeal{
         this.finishedY = false;
     }
 
-    destroy = () => {
-        if(!tryDeleteSeal(this)) return;
+    tryDestroy = () => {
+        this.destroy(false);
+    }
+
+    destroy = (force) => {
+        if(!tryDeleteSeal(this, force)) return;
 
         this.destroying = true;
         this.movingSealElement.onclick = null;
@@ -151,6 +156,10 @@ spawnSealButton.onclick = setPaintMode;
 const eraserSealButton = document.getElementById('movingSeal_eraser');
 eraserSealButton.style.pointerEvents = 'auto';
 eraserSealButton.onclick = setEraserMode;
+
+const nukeSealButton = document.getElementById('movingSeal_nuke');
+nukeSealButton.style.pointerEvents = 'auto';
+nukeSealButton.onclick = nukeSeals;
 
 const explosionPrefab = `
     <img src="https://i.giphy.com/pKWCBvHevLcMU.webp">
@@ -209,12 +218,21 @@ function spawnSeal(e){
 function tryDeleteSeal(movingSeal, force = false){
     if(currentBrushState != EBrushState.ERASER && !force) return false;
     
+    if(!force) playSmallBoomAudio();
+
     movingSeal.movingSealElement.insertAdjacentHTML('beforeend', explosionPrefab);
     movingSeal.explodeElement = movingSeal.movingSealElement.lastElementChild;
     
     sealList = sealList.filter(item => item.index != movingSeal.index);
 
     return true;
+}
+
+function nukeSeals(){
+    if(sealList.length == 0) return;
+
+    playBigBoomAudio();
+    sealList.forEach(seal => seal.destroy(true));
 }
 
 tryDisableInteraction();

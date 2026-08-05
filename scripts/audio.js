@@ -60,6 +60,17 @@ export function sealClicker_playSquishAudio(){
   playAudio(sealClicker_Squish);
 }
 
+var smallBoom = document.getElementById("smallBoom"); 
+export function playSmallBoomAudio(){
+  playAudio(smallBoom);
+}
+
+var bigBoom = document.getElementById("bigBoom"); 
+bigBoom.volume = 0.2;
+export function playBigBoomAudio(){
+  playAudio(bigBoom);
+}
+
 function playAudio(audio, interrupt = false, pause = true){
   if(!hasBeenEnabled) return;
   if(interrupt || (pause && audio.currentTime > 0.1)) stopAudio(audio);

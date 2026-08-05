@@ -36,6 +36,8 @@ body{
     overflow-x: hidden;
     overflow-y: hidden;
 
+    height: 100vh;
+
     background-image: url('https://jooinn.com/images/beach-sand-pattern-5.jpg');
     background-size: cover;
 }
@@ -61,11 +63,6 @@ area:active{
 img{
     width: 100%;
     object-fit: cover;
-}
-
-header{
-    background: var(--primary-color);
-    background-repeat: no-repeat;
 }
 
 .desktop_app_icon{

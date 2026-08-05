@@ -44,3 +44,8 @@ Used Videos:
 - https://pixabay.com/videos/seals-animals-mammals-wildlife-273311/
 - https://pixabay.com/videos/seal-sea-lion-nature-animal-ocean-261048/
 - https://commons.wikimedia.org/wiki/File:Harbor_seals_(Phoca_vitulina).webm
+
+## Moving Seals
+Used Sounds:
+- [Explosion](https://pixabay.com/sound-effects/film-special-effects-retro-explode-1-236678/)
+- [Big Explosion](https://pixabay.com/sound-effects/film-special-effects-hq-explosion-6288/)
