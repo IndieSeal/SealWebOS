@@ -59,9 +59,9 @@ class Window{
     this.windowHeaderPrefab = `
       <div class="windows_header" id="${this.myId}_header">
           <!-- Window/App Details -->
-          <div style="display: flex; justify-content: flex-start; align-items: center;">
+          <div style="display: flex; justify-content: flex-start; align-items: center; gap: 6px;">
               <img class="icon" src="${this.iconPath}">
-              <p>${this.appName}</p>
+              <b>${this.appName}</b>
           </div>
 
           <!-- Minimize/Close -->
@@ -82,7 +82,7 @@ class Window{
     this.desktopPrefab = `
       <div id="${this.myId}_open" class="desktop_app_icon">
         <img src="${this.iconPath}">
-        <p>${this.appName}</p>
+        <p style="margin-top: 5px;">${this.appName}</p>
       </div>
     `;
 

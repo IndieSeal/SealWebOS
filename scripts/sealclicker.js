@@ -31,7 +31,7 @@ sealDisplay.addEventListener('mousedown', onSealClicked)
 //#endregion
 
 // USEFUL: https://www.kongregate.com/en/pages/the-math-of-idle-games-part-i
-var baseClickPoints = 1;
+var baseClickPoints = 100000;
 
 function onSealClicked(event){
     sealClicker_playClickAudio();
@@ -230,7 +230,7 @@ class AutoclickerUpgrade extends Upgrade{
         this.autoclickerPrefab = `
             <button class="autoclicker_upgrade" id="${upgradeID}_buy">
                 <img class="icon" id="${upgradeID}_icon" src="./imgs/SealClicker/Click.png">
-                <div class="column" style="max-height: 100%; margin-left: 15px; margin-top: -10px;">
+                <div class="column" style="max-height: 100%; margin-left: 15px;">
                     <b id="${upgradeID}_name" style="font-size: 1.5rem;">My name</b>
                     <div class="row" style="margin-top: -10px; justify-content: flex-start; width: 100%;">
                         <img class="small_icon" src="./imgs/SealClicker/Food.png">

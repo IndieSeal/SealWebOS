@@ -6,6 +6,10 @@
         
         <title>Seal OS</title>
         <link rel="icon" type="image/x-icon" href="./imgs/icon.png">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DynaPuff:wght@400..700&family=Rubik+Spray+Paint&display=swap" rel="stylesheet">
         
         <link rel="stylesheet" type="text/css" href="./css/cursor.css">
         <link rel="stylesheet" type="text/css" href="./css/style.css">
@@ -13,6 +17,7 @@
         <link rel="stylesheet" type="text/css" href="./css/window.css">
         <link rel="stylesheet" type="text/css" href="./css/water.css">
 
+        <link rel="stylesheet" type="text/css" href="./css/introduction.css">
         <link rel="stylesheet" type="text/css" href="./css/sealclicker.css">
         <link rel="stylesheet" type="text/css" href="./css/sealtok.css">
     </head>
@@ -47,30 +52,36 @@
         <div id="welcome" class="windows" style="display: none;">
             <!-- Window Insides -->
             <div class="window_body child_text" style="padding: 5px; padding-top: 0; box-sizing: border-box; height: 500px;">
-                <h1 style="height: 30px;">Welcome to <b>Seal OS</b>!</h1>
-                <h3><br>About the OS</h3>
-                <p>As you can see, I really like Seals, so I decided to make an OS about them lol.</p>
-                <p>Wanna try some fun stuff? Go to the <b>Seal Clicker App!</b></p>
-                <p>Want to brainrot your brain with puffy cute stuff? Go to the <b>Seal Tok App!</b><br><br></p>
+                <h1 style="width: 100%; height: 30px; text-align: center; margin-top: 10px;">Welcome to <b>Seal OS</b>!<br></h1>
+                <div class="separate-box" style="margin-top: 25px;">
+                    <h3>About the OS</h3>
+                    <p>As you can see, I really like Seals, so I decided to make an OS about them lol.</p>
+                    <p>Wanna try some fun stuff? Go to the <b>Seal Clicker App!</b></p>
+                    <p>Want to brainrot your brain with puffy cute stuff? Go to the <b>Seal Tok App!</b><br><br></p>
+                </div>
 
-                <h3>About Me</h3>
-                <p>My name is Indie Seal and I created this beauty of an OS!</p>
-                <p>I love making video games, you should check them out &lt;3</p>
+                <div class="separate-box">
+                    <h3>About Me</h3>
+                    <p>My name is Indie Seal and I created this beauty of an OS!</p>
+                    <p>I love making video games, you should check them out &lt;3</p>
+                </div>
 
                 <br>
-                <a style="text-decoration: none;" href="https://github.com/IndieSeal" target="_blank">
-                    <div class="socials">
-                        <!-- Recently learned you can do this in Hack Club's summer camp :D -->
-                        <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png">
-                        <p>GitHub</p>
-                    </div>
-                </a>
-                <a style="text-decoration: none;" href="https://indie-seal.itch.io/" target="_blank">
-                    <div class="socials">
-                        <img src="https://img.icons8.com/ios11/600/FA5252/itch-io.png">
-                        <p>itch.io</p>
-                    </div>
-                </a>
+                <div class="row" style="width: 100%; justify-content: space-around; margin-top: 20px; margin-bottom: 20px;">
+                    <a style="text-decoration: none;" href="https://github.com/IndieSeal" target="_blank">
+                        <div class="socials">
+                            <!-- Recently learned you can do this in Hack Club's summer camp :D -->
+                            <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png">
+                            <p>GitHub</p>
+                        </div>
+                    </a>
+                    <a style="text-decoration: none;" href="https://indie-seal.itch.io/" target="_blank">
+                        <div class="socials">
+                            <img src="https://img.icons8.com/ios11/600/FA5252/itch-io.png">
+                            <p>itch.io</p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -107,9 +118,9 @@
         <div id="sealclicker" class="windows" style="display: none;">
             <div class="window_body" style="height: 89.5vh;">
                 <div class="row" style="width: 100%; height: 100%;">
-                    <div style="display: flex; min-width: 30%; width: 30%; height: 100%; flex-direction: column;">
-                        <div style="width: 100%; margin-top: 10%; background-color: rgb(58, 121, 231);">
-                            <h1 style="margin: 0; text-align: center;"><b>FEED THE SEAL!!</b></h1>
+                    <div style="display: flex; min-width: 30%; width: 30%; height: 100%; flex-direction: column; align-items: center;">
+                        <div style="border-radius: 12px; width: 85%; margin-top: 10%; background-color: var(--window-header-color)">
+                            <h1 class="bebas-neue-regular" style="margin: 0; text-align: center;"><b>FEED THE SEAL!!</b></h1>
                             <h1 id="sealclicker-score" style="margin: 0; text-align: center;">Points: 0</h1>
                             <h4 id="sealclicker-score_persecond" style="margin: 0; text-align: center;">per second: 0</h4>
                         </div>
@@ -120,14 +131,14 @@
                     
                     <div class="vertical_separator"> </div>
 
-                    <div class="scrollable_area" id="upgrade-visual-rows" style="flex-grow: 1; height: 100%; justify-content: flex-start; flex-direction: column; display: flex;">
+                    <div class="scrollable_area" id="upgrade-visual-rows" style="background-color: #01b5d4; flex-grow: 1; height: 100%; justify-content: flex-start; flex-direction: column; display: flex;">
                         <!-- Content added through 'sealclicker.js' -->
                     </div>
 
                     <div class="vertical_separator"> </div>
 
                     <div class="column scrollable_area" style="min-width: 400px; width: 400px; height: 100%; justify-content: flex-start; align-items: center;">   
-                        <p class="store">Store</p>
+                        <p class="store bebas-neue-regular separate-box" style="margin: 5px 50px; background-color: var(--window-header-color)">STORE</p>
 
                         <div class="horizontal_separator"> </div>
 
@@ -166,7 +177,7 @@
                 <img style="object-fit: contain; width: 20%; height: 100%;" id="item-icon">
             </div>
             <p style="margin: 0; text-align: left; flex-grow: 1;" id="item-description">my tooltip description</p>
-            <p style="margin-top: 5px; text-align: left; flex-grow: 1;" id="item-extra"></p>
+            <p style="margin-top: 15px; text-align: left; flex-grow: 1;" id="item-extra"></p>
         </div>
 
         <div class="waves">

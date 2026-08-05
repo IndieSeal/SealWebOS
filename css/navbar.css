@@ -5,7 +5,7 @@
     position: relative;
 
     padding: 5px;
-    background-color: #0000002a;
+    background-color: #403f3f6c;
     backdrop-filter: blur(10px);
     align-items: center;
     display: flex;
@@ -15,6 +15,7 @@
 
     height: 8vh;
     
+    border-color: #403f3f6c;
     border-radius: 16px;
     padding: 5px;
 }
