@@ -4,8 +4,14 @@
     --grab-cursor: url('../imgs/WiiHand/CursorGrab32.png') 16 16, auto;
 }
 
-body.brush{
-    --normal-cursor: url('../imgs/WiiHand/CursorNormal32.png') 16 16, auto;
-    --point-cursor: url('../imgs/WiiHand/CursorPoint32.png') 3 3, auto;
-    --grab-cursor: url('../imgs/WiiHand/CursorGrab32.png') 16 16, auto;
+html.brush{
+    --normal-cursor: url('../imgs/WiiHand/drawing_brush.svg') 16 16, auto;
+    --point-cursor: url('../imgs/WiiHand/drawing_brush.svg') 16 16, auto;
+    --grab-cursor: url('../imgs/WiiHand/drawing_brush.svg') 16 16, auto;
+}
+
+html.eraser{
+    --normal-cursor: url('../imgs/WiiHand/drawing_eraser.svg') 16 16, auto;
+    --point-cursor: url('../imgs/WiiHand/drawing_eraser.svg') 16 16, auto;
+    --grab-cursor: url('../imgs/WiiHand/drawing_eraser.svg') 16 16, auto;
 }

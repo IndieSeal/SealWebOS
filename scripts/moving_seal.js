@@ -145,9 +145,11 @@ const EBrushState = {
 var currentBrushState = EBrushState.NONE;
 
 const spawnSealButton = document.getElementById('movingSeal_spawn');
+spawnSealButton.style.pointerEvents = 'auto';
 spawnSealButton.onclick = setPaintMode;
 
 const eraserSealButton = document.getElementById('movingSeal_eraser');
+eraserSealButton.style.pointerEvents = 'auto';
 eraserSealButton.onclick = setEraserMode;
 
 const explosionPrefab = `
@@ -155,19 +157,35 @@ const explosionPrefab = `
 `;
 
 function setPaintMode(){
-    document.removeEventListener('mousedown', spawnSeal);
+    changeBrush();
 
     if(currentBrushState != EBrushState.PAINT){
         currentBrushState = EBrushState.PAINT;
+
         document.addEventListener('mousedown', spawnSeal);
+        document.documentElement.classList.add('brush');
     }
     else currentBrushState = EBrushState.NONE;
 }
 function setEraserMode(){
-    document.removeEventListener('mousedown', spawnSeal);
+    changeBrush();
 
-    if(currentBrushState != EBrushState.ERASER) currentBrushState = EBrushState.ERASER;
+    if(currentBrushState != EBrushState.ERASER){
+        currentBrushState = EBrushState.ERASER;
+        document.documentElement.classList.add('eraser');
+
+        sealList.forEach(seal => seal.movingSealElement.style.pointerEvents = 'auto');
+    }
     else currentBrushState = EBrushState.NONE;
+}
+
+function changeBrush(){
+    document.removeEventListener('mousedown', spawnSeal);
+    document.documentElement.classList.remove('brush');
+    document.documentElement.classList.remove('eraser');
+    document.body.style.pointerEvents = 'none';
+
+    if(sealList.length != 0) sealList.forEach(seal => seal.movingSealElement.style.pointerEvents = 'none');
 }
 
 //When the window closes, it should be set to none
@@ -188,8 +206,8 @@ function spawnSeal(e){
     sealList.push(new MovingSeal(index++, x, y));
 }
 
-function tryDeleteSeal(movingSeal){
-    if(currentBrushState != EBrushState.ERASER) return false;
+function tryDeleteSeal(movingSeal, force = false){
+    if(currentBrushState != EBrushState.ERASER && !force) return false;
     
     movingSeal.movingSealElement.insertAdjacentHTML('beforeend', explosionPrefab);
     movingSeal.explodeElement = movingSeal.movingSealElement.lastElementChild;
@@ -197,4 +215,12 @@ function tryDeleteSeal(movingSeal){
     sealList = sealList.filter(item => item.index != movingSeal.index);
 
     return true;
+}
+
+tryDisableInteraction();
+function tryDisableInteraction(){
+    requestAnimationFrame(tryDisableInteraction);
+    if(currentBrushState == EBrushState.NONE) return;
+
+    document.body.style.pointerEvents = 'none';
 }

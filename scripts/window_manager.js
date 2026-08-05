@@ -140,9 +140,6 @@ class Window{
   }
 
   checkIfDragging = () => {
-    this.windowMinimizer.style.pointerEvents = "auto";
-    this.windowCloser.style.pointerEvents = "auto";
-    
     //Make buttons unavailable (close and minimize)
     this.windowMinimizer.inert = this.draggableElement.dragging;
     this.windowCloser.inert = this.draggableElement.dragging;

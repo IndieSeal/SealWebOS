@@ -28,11 +28,6 @@ class DraggableElement{
 
     this.dragVelocity = 10;
 
-    if(!this.isWindowMovable){
-      this.unsetup();
-      return;
-    }
-
     //YES, EVENTS DO EXIST IN JS https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent || https://www.geeksforgeeks.org/javascript/javascript-custom-events/
     this.onStartDragEvent = new CustomEvent("onStartDrag", {
       detail: {
@@ -40,7 +35,8 @@ class DraggableElement{
       },
     });
     
-    this.setup();
+    if(!this.isWindowMovable) this.unsetup();
+    else this.setup();
   }
   
   setup = () => {
@@ -58,7 +54,7 @@ class DraggableElement{
   }
 
   unsetup = () => {
-    this.header.style.pointerEvents = "none";
+    //this.header.style.pointerEvents = "none";
   }
 
   startDragging = (e) => {
