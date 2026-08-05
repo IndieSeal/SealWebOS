@@ -1,5 +1,5 @@
 import { getClampedX, getClampedY, getMaxX, getMaxY, navbarRect } from "./bounds.js";
-import { lerp, distance, randomBool, abs, clamp, destroyAfter } from "./mathf.js";
+import { lerp, distance, randomBool, abs, clamp, destroyAfter, pingpong } from "./mathf.js";
 import { deltaTime } from "./time.js";
 import { IncreaseZIndex, SubscribeToZIndex, UnsubscribeToZIndex } from "./window_global.js";
 
@@ -23,6 +23,9 @@ class MovingSeal{
     finishedY = false;
 
     destroying = false;
+
+    animationDelay = clamp(300, 700, Math.random() * 900);
+    animationFrame = 0;
 
     constructor(index){
         this.index = index;
@@ -51,6 +54,7 @@ class MovingSeal{
 
         this.randomizeNextPosition();
         this.moveSeal();
+        this.animateSeal();
     }
 
     moveSeal = () => {
@@ -64,7 +68,7 @@ class MovingSeal{
 
         if((this.startWithX || this.finishedY) && !this.finishedX){
             direction = (this.currentX - this.targetX) < 0;
-            this.movingSealImageElement.src = direction ? `./imgs/MovingSeal/Seal1_right.png` : `./imgs/MovingSeal/Seal1_left.png`;
+            this.movingSealImageElement.src = direction ? `./imgs/MovingSeal/Seal1_right${this.animationFrame}.png` : `./imgs/MovingSeal/Seal1_left${this.animationFrame}.png`;
 
             this.currentX = getClampedX(this.movingSealElement, this.currentX + (velocity * (direction ? 1 : -1)));
             if(abs(this.targetX - this.currentX) < 10) {
@@ -74,7 +78,7 @@ class MovingSeal{
         }
         else if((!this.startWithX || this.finishedX) && !this.finishedY){
             direction = (this.currentY - this.targetY) < 0;
-            this.movingSealImageElement.src = direction ? `./imgs/MovingSeal/Seal1_right.png` : `./imgs/MovingSeal/Seal1_left.png`;
+            this.movingSealImageElement.src = direction ? `./imgs/MovingSeal/Seal1_right${this.animationFrame}.png` : `./imgs/MovingSeal/Seal1_left${this.animationFrame}.png`;
             
             this.currentY = getClampedY(this.movingSealElement, this.currentY + (velocity * (direction ? 1 : -1)));
             if(abs(this.targetY - this.currentY) < 10){
@@ -95,6 +99,15 @@ class MovingSeal{
             pause = false;
             setTimeout(this.moveSeal, clamp(minPauseTimeout, maxPauseTimeout, Math.random() * maxPauseTimeout));
         }
+    }
+
+    animateSeal = () => {
+        if(this.destroying) return;
+        
+        this.animationFrame = pingpong(-1, 1, this.animationFrame + 1);
+        console.log(this.animationFrame);
+        
+        setTimeout(this.animateSeal, this.animationDelay);
     }
 
     onZIndexIncreased = (index) => {
