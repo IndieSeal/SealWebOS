@@ -26,10 +26,6 @@
 
     --close-button-color: red;
     --close-button-hover-color: #af0000;
-
-    --normal-cursor: url('../imgs/WiiHand/CursorNormal32.png') 16 16, auto;
-    --point-cursor: url('../imgs/WiiHand/CursorPoint32.png') 3 3, auto;
-    --grab-cursor: url('../imgs/WiiHand/CursorGrab32.png') 16 16, auto;
 }
 
 html {

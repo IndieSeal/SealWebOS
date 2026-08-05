@@ -27,7 +27,7 @@ class MovingSeal{
     animationDelay = clamp(300, 700, Math.random() * 900);
     animationFrame = 0;
 
-    constructor(index){
+    constructor(index, x = undefined, y = undefined){
         this.index = index;
         
         this.myId = `movingSeal${index}`;
@@ -49,8 +49,8 @@ class MovingSeal{
 
         SubscribeToZIndex(this.onZIndexIncreased);
 
-        this.currentX = getClampedX(this.movingSealElement, Math.random() * getMaxX(this.movingSealElement));
-        this.currentY = getClampedY(this.movingSealElement, Math.random() * getMaxX(this.movingSealElement));
+        this.currentX = getClampedX(this.movingSealElement, x == undefined ? (Math.random() * getMaxX(this.movingSealElement)) : x);
+        this.currentY = getClampedY(this.movingSealElement, y == undefined ? (Math.random() * getMaxX(this.movingSealElement)) : y);
 
         this.randomizeNextPosition();
         this.moveSeal();
@@ -105,7 +105,6 @@ class MovingSeal{
         if(this.destroying) return;
         
         this.animationFrame = pingpong(-1, 1, this.animationFrame + 1);
-        console.log(this.animationFrame);
         
         setTimeout(this.animateSeal, this.animationDelay);
     }
@@ -124,7 +123,7 @@ class MovingSeal{
     }
 
     destroy = () => {
-        tryDeleteSeal(this);
+        if(!tryDeleteSeal(this)) return;
 
         this.destroying = true;
         this.movingSealElement.onclick = null;
@@ -137,22 +136,65 @@ class MovingSeal{
     }
 }
 
+//why no actual enums tho D: https://www.geeksforgeeks.org/javascript/enums-in-javascript/
+const EBrushState = {
+    NONE: "none",
+    PAINT: "paint",
+    ERASER: "eraser"
+};
+var currentBrushState = EBrushState.NONE;
+
 const spawnSealButton = document.getElementById('movingSeal_spawn');
-spawnSealButton.onclick = spawnSeal;
+spawnSealButton.onclick = setPaintMode;
+
+const eraserSealButton = document.getElementById('movingSeal_eraser');
+eraserSealButton.onclick = setEraserMode;
 
 const explosionPrefab = `
     <img src="https://i.giphy.com/pKWCBvHevLcMU.webp">
 `;
 
+function setPaintMode(){
+    document.removeEventListener('mousedown', spawnSeal);
+
+    if(currentBrushState != EBrushState.PAINT){
+        currentBrushState = EBrushState.PAINT;
+        document.addEventListener('mousedown', spawnSeal);
+    }
+    else currentBrushState = EBrushState.NONE;
+}
+function setEraserMode(){
+    document.removeEventListener('mousedown', spawnSeal);
+
+    if(currentBrushState != EBrushState.ERASER) currentBrushState = EBrushState.ERASER;
+    else currentBrushState = EBrushState.NONE;
+}
+
+//When the window closes, it should be set to none
+const xSpawnOffset = -32;
+const ySpawnOffset = -32;
+
 var sealList = [];
 var index = 0;
-function spawnSeal(){
-    sealList.push(new MovingSeal(index++));
+function spawnSeal(e){
+    if(currentBrushState != EBrushState.PAINT || e.target.id == spawnSealButton.id || e.target.id == eraserSealButton.id) return;
+
+    e = e || window.event;
+    e.preventDefault();
+
+    let x = e.clientX + xSpawnOffset;
+    let y = e.clientY + ySpawnOffset;
+
+    sealList.push(new MovingSeal(index++, x, y));
 }
 
 function tryDeleteSeal(movingSeal){
+    if(currentBrushState != EBrushState.ERASER) return false;
+    
     movingSeal.movingSealElement.insertAdjacentHTML('beforeend', explosionPrefab);
     movingSeal.explodeElement = movingSeal.movingSealElement.lastElementChild;
     
     sealList = sealList.filter(item => item.index != movingSeal.index);
+
+    return true;
 }
