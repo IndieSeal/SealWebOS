@@ -6,6 +6,9 @@
     font-style: normal;
 
     color: black;
+
+    -webkit-user-drag: none;
+    user-select: none;
 }
 
 :root{
@@ -36,8 +39,6 @@ html {
 body{
     overflow-x: hidden;
     overflow-y: hidden;
-
-    user-select: none;
 
     background-image: url('https://jooinn.com/images/beach-sand-pattern-5.jpg');
     background-size: cover;

@@ -1,5 +1,5 @@
 import { getClampedX, getClampedY, getMaxX, getMaxY, navbarRect } from "./bounds.js";
-import { lerp, distance, randomBool, abs, clamp } from "./mathf.js";
+import { lerp, distance, randomBool, abs, clamp, destroyAfter } from "./mathf.js";
 import { deltaTime } from "./time.js";
 import { IncreaseZIndex, SubscribeToZIndex, UnsubscribeToZIndex } from "./window_global.js";
 
@@ -25,6 +25,8 @@ class MovingSeal{
     destroying = false;
 
     constructor(index){
+        this.index = index;
+        
         this.myId = `movingSeal${index}`;
         this.myImageId = `movingSeal${index}-image`;
 
@@ -35,11 +37,12 @@ class MovingSeal{
         `;
 
         document.body.insertAdjacentHTML('beforeend', movingSealPrefab);
-        this.instance = document.body.lastElementChild;
-        this.instance.onclick = this.destroy;
         
         this.movingSealElement = document.getElementById(this.myId);
         this.movingSealImageElement = document.getElementById(this.myImageId);
+        this.explodeElement = undefined;
+
+        this.movingSealElement.onclick = this.destroy;
 
         SubscribeToZIndex(this.onZIndexIncreased);
 
@@ -108,18 +111,25 @@ class MovingSeal{
     }
 
     destroy = () => {
+        tryDeleteSeal(this);
+
         this.destroying = true;
-        this.instance.onclick = null;
+        this.movingSealElement.onclick = null;
         
         UnsubscribeToZIndex(this.onZIndexIncreased);
         
-        this.instance.remove();
-        tryDeleteSeal(this);
+        this.movingSealImageElement.remove();
+        destroyAfter(this.movingSealElement, 500);
+        destroyAfter(this.explodeElement, 500);
     }
 }
 
 const spawnSealButton = document.getElementById('movingSeal_spawn');
 spawnSealButton.onclick = spawnSeal;
+
+const explosionPrefab = `
+    <img src="https://i.giphy.com/pKWCBvHevLcMU.webp">
+`;
 
 var sealList = [];
 var index = 0;
@@ -128,5 +138,8 @@ function spawnSeal(){
 }
 
 function tryDeleteSeal(movingSeal){
-    sealList = sealList.filter(item => item != movingSeal);
+    movingSeal.movingSealElement.insertAdjacentHTML('beforeend', explosionPrefab);
+    movingSeal.explodeElement = movingSeal.movingSealElement.lastElementChild;
+    
+    sealList = sealList.filter(item => item.index != movingSeal.index);
 }

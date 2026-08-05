@@ -49,3 +49,7 @@ export function shuffle(array){
 
     return array;
 }
+
+export function destroyAfter(element, millis){
+    setTimeout(() => element.remove(), millis);
+}

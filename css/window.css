@@ -170,7 +170,7 @@
 }
 
 .close-button:hover{
-    background-color:  var(--close-button-hover-color);
+  background-color:  var(--close-button-hover-color);
 
-    transform: scale(1.2);
+  transform: scale(1.2);
 }

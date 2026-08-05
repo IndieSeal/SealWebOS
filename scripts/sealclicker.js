@@ -65,7 +65,7 @@ function createSealClickedPopupPrefab(e, points){
 function createDissapearingPopup(htmlPrefab){
     document.body.insertAdjacentHTML('beforeend', htmlPrefab);
     var instance = document.body.lastElementChild;
-    let popup = new DissapearingPopup(instance, 0.1, 2.2, -150);
+    new DissapearingPopup(instance, 0.1, 2.2, -150);
 }
 
 class DissapearingPopup{
