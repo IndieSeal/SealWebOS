@@ -63,6 +63,8 @@ area:active{
 img{
     width: 100%;
     object-fit: cover;
+
+    pointer-events: none;
 }
 
 .desktop_app_icon{

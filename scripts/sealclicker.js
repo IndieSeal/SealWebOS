@@ -7,6 +7,7 @@ import { biggestZIndex } from "./window_global.js";
 
 //#region Interactable Seal
 
+const sealDisplay = document.getElementById('sealclicker-seal');
 const sealImageDisplay = document.getElementById("sealclicker-sealdisplay");
 const imagesInFolder = 11;
 var latestIndex = 0;
@@ -25,7 +26,7 @@ function setNewRandomImage(){
     setTimeout(() => sealImageDisplay.classList.remove("click"), 100);
 }
 
-sealImageDisplay.addEventListener('mousedown', onSealClicked)
+sealDisplay.addEventListener('mousedown', onSealClicked)
 
 //#endregion
 
@@ -249,7 +250,9 @@ class AutoclickerUpgrade extends Upgrade{
         autoclickerUpgradeRowParent.insertAdjacentHTML('beforeend', this.htmlRowPrefab);
 
         this.htmlRowItemPrefab = `
-            <img class="rowItem" src='${upgradeInformation.rowIcon}' style="width: 48px; object-fit: contain;">
+            <div class="rowItem" style="width: 48px; object-fit: contain;">
+                <img src='${upgradeInformation.rowIcon}'>
+            </div>
         `;
 
         autoclickerUpgradeParent.insertAdjacentHTML('beforeend', this.autoclickerPrefab);
