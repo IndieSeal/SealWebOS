@@ -183,7 +183,7 @@ function changeBrush(){
     document.removeEventListener('mousedown', spawnSeal);
     document.documentElement.classList.remove('brush');
     document.documentElement.classList.remove('eraser');
-    document.body.style.pointerEvents = 'none';
+    document.body.style.pointerEvents = 'auto';
 
     if(sealList.length != 0) sealList.forEach(seal => seal.movingSealElement.style.pointerEvents = 'none');
 }
