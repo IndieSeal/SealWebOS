@@ -12,8 +12,8 @@ document.addEventListener('mousemove', onMouseMove);
 var cursorX = 0;
 var cursorY = 0;
 
-var currentX = getClampedX(movingSealElement, 0);
-var currentY = getClampedY(movingSealElement, 0);
+var currentX = getClampedX(movingSealElement, Math.random() * getMaxX(movingSealElement));
+var currentY = getClampedY(movingSealElement, Math.random() * getMaxX(movingSealElement));
 
 var targetX = 0;
 var targetY = 0;
@@ -30,22 +30,45 @@ function onMouseMove(e){
     cursorY = e.clientY;
 }
 
-const baseSealVelocity = 1;
+const baseSealVelocity = 150;
 
-const minTimeout = 1000;
-const maxTimeout = 3000;
+const minArrivalTimeout = 1000;
+const maxArrivalTimeout = 3000;
+
+const minPauseTimeout = 200;
+const maxPauseTimeout = 800;
 
 moveSeal();
 function moveSeal(){
     let velocity = baseSealVelocity * deltaTime;
     
+    // false: negative axis, true: positive axis, got it?
+    let direction = false;
+    let pause = false;
+
     if((startWithX || finishedY) && !finishedX){
-        currentX = getClampedX(movingSealElement, lerp(currentX, targetX, velocity));
-        if(abs(targetX - currentX) < 10) finishedX = true;
+        direction = (currentX - targetX) < 0;
+        movingSealImageElement.src = direction ? `./imgs/MovingSeal/Seal1_right.png` : `./imgs/MovingSeal/Seal1_left.png`;
+
+        console.log(`Moving direction: ${direction ? "right" : "left"}`);
+        
+        currentX = getClampedX(movingSealElement, currentX + (velocity * (direction ? 1 : -1)));
+        if(abs(targetX - currentX) < 10) {
+            finishedX = true;
+            pause = true;
+        }
     }
     else if((!startWithX || finishedX) && !finishedY){
-        currentY = getClampedY(movingSealElement, lerp(currentY, targetY, velocity));
-        if(abs(targetY - currentY) < 10) finishedY = true;
+        direction = (currentY - targetY) < 0;
+        movingSealImageElement.src = direction ? `./imgs/MovingSeal/Seal1_right.png` : `./imgs/MovingSeal/Seal1_left.png`;
+        
+        console.log(`Moving direction: ${direction ? "down" : "up"}`);
+
+        currentY = getClampedY(movingSealElement, currentY + (velocity * (direction ? 1 : -1)));
+        if(abs(targetY - currentY) < 10){
+            finishedY = true;
+            pause = true;
+        }
     }
 
     movingSealElement.style.left = `${currentX}px`;
@@ -53,9 +76,13 @@ function moveSeal(){
 
     if(finishedX && finishedY) {
         randomizeNextPosition();
-        setTimeout(moveSeal, clamp(minTimeout, maxTimeout, Math.random() * maxTimeout));
+        setTimeout(moveSeal, clamp(minArrivalTimeout, maxArrivalTimeout, Math.random() * maxArrivalTimeout));
     }
-    else requestAnimationFrame(moveSeal);
+    else if(!pause) requestAnimationFrame(moveSeal);
+    else{
+        pause = false;
+        setTimeout(moveSeal, clamp(minPauseTimeout, maxPauseTimeout, Math.random() * maxPauseTimeout));
+    }
 }
 
 function onZIndexIncreased(index){
