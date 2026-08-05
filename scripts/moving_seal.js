@@ -28,8 +28,9 @@ class MovingSeal{
     animationDelay = clamp(300, 700, Math.random() * 900);
     animationFrame = 0;
 
-    constructor(index, x = undefined, y = undefined){
+    constructor(index, sealType = 1, x = undefined, y = undefined){
         this.index = index;
+        this.sealType = sealType;
         
         this.myId = `movingSeal${index}`;
         this.myImageId = `movingSeal${index}-image`;
@@ -69,7 +70,7 @@ class MovingSeal{
 
         if((this.startWithX || this.finishedY) && !this.finishedX){
             direction = (this.currentX - this.targetX) < 0;
-            this.movingSealImageElement.src = direction ? `./imgs/MovingSeal/Seal1_right${this.animationFrame}.png` : `./imgs/MovingSeal/Seal1_left${this.animationFrame}.png`;
+            this.movingSealImageElement.src = direction ? `./imgs/MovingSeal/Seal${this.sealType}_right${this.animationFrame}.png` : `./imgs/MovingSeal/Seal${this.sealType}_left${this.animationFrame}.png`;
 
             this.currentX = getClampedX(this.movingSealElement, this.currentX + (velocity * (direction ? 1 : -1)));
             if(abs(this.targetX - this.currentX) < 10) {
@@ -79,7 +80,7 @@ class MovingSeal{
         }
         else if((!this.startWithX || this.finishedX) && !this.finishedY){
             direction = (this.currentY - this.targetY) < 0;
-            this.movingSealImageElement.src = direction ? `./imgs/MovingSeal/Seal1_right${this.animationFrame}.png` : `./imgs/MovingSeal/Seal1_left${this.animationFrame}.png`;
+            this.movingSealImageElement.src = direction ? `./imgs/MovingSeal/Seal${this.sealType}_right${this.animationFrame}.png` : `./imgs/MovingSeal/Seal${this.sealType}_left${this.animationFrame}.png`;
             
             this.currentY = getClampedY(this.movingSealElement, this.currentY + (velocity * (direction ? 1 : -1)));
             if(abs(this.targetY - this.currentY) < 10){
@@ -212,7 +213,7 @@ function spawnSeal(e){
     let x = e.clientX + xSpawnOffset;
     let y = e.clientY + ySpawnOffset;
 
-    sealList.push(new MovingSeal(index++, x, y));
+    sealList.push(new MovingSeal(index++, randomBool() ? 1 : 2, x, y));
 }
 
 function tryDeleteSeal(movingSeal, force = false){
