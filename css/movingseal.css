@@ -1,0 +1,32 @@
+.brush-option_box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    background-color: rgb(255, 255, 255);
+}
+
+.brush-option_box .innerBox{
+    color: transparent;
+    width: 24px;
+    height: 24px;
+    border: solid white 2px;
+
+    pointer-events: none;
+}
+
+.brush-option_box.active .innerBox{
+    border: solid aqua 2px;
+}
+
+.brush-options{
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+    align-items: center;
+    
+    width: 100%;
+    gap: 15px;
+}

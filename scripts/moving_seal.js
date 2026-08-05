@@ -36,7 +36,7 @@ class MovingSeal{
         this.myImageId = `movingSeal${index}-image`;
 
         let movingSealPrefab = `
-            <div id="${this.myId}" style="position: absolute; width: 64px; height: 64px;">
+            <div id="${this.myId}" style="pointer-events: none; position: absolute; width: 64px; height: 64px;">
                 <img id="${this.myImageId}" style="image-rendering: pixelated;" src="./imgs/MovingSeal/Seal1_right.png">
             </div>
         `;
@@ -174,6 +174,8 @@ function setPaintMode(){
 
         document.addEventListener('mousedown', spawnSeal);
         document.documentElement.classList.add('brush');
+
+        spawnSealButton.classList.add('active');
     }
     else currentBrushState = EBrushState.NONE;
 }
@@ -183,6 +185,7 @@ function setEraserMode(){
     if(currentBrushState != EBrushState.ERASER){
         currentBrushState = EBrushState.ERASER;
         document.documentElement.classList.add('eraser');
+        eraserSealButton.classList.add('active');
 
         sealList.forEach(seal => seal.movingSealElement.style.pointerEvents = 'auto');
     }
@@ -195,6 +198,9 @@ function changeBrush(){
     document.documentElement.classList.remove('eraser');
     document.body.style.pointerEvents = 'auto';
 
+    spawnSealButton.classList.remove('active');
+    eraserSealButton.classList.remove('active');
+
     if(sealList.length != 0) sealList.forEach(seal => seal.movingSealElement.style.pointerEvents = 'none');
 }
 
@@ -205,10 +211,10 @@ const ySpawnOffset = -32;
 var sealList = [];
 var index = 0;
 function spawnSeal(e){
-    if(currentBrushState != EBrushState.PAINT || e.target.id == spawnSealButton.id || e.target.id == eraserSealButton.id) return;
-
     e = e || window.event;
     e.preventDefault();
+
+    if(currentBrushState != EBrushState.PAINT || e.target.id == spawnSealButton.id || e.target.id == eraserSealButton.id || e.target.id == nukeSealButton.id) return;
 
     let x = e.clientX + xSpawnOffset;
     let y = e.clientY + ySpawnOffset;

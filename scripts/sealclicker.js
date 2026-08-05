@@ -31,7 +31,7 @@ sealDisplay.addEventListener('mousedown', onSealClicked)
 //#endregion
 
 // USEFUL: https://www.kongregate.com/en/pages/the-math-of-idle-games-part-i
-var baseClickPoints = 100000;
+var baseClickPoints = 1;
 
 function onSealClicked(event){
     sealClicker_playClickAudio();
