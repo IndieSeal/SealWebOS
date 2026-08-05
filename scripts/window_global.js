@@ -20,3 +20,7 @@ export function SubscribeToZIndex(callback){
     callback(biggestZIndex);
     zIndexSubscribers.push(callback);
 }
+
+export function UnsubscribeToZIndex(callback){
+    zIndexSubscribers = zIndexSubscribers.filter(item => item != callback);
+}
