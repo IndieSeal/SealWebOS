@@ -30,3 +30,14 @@
     width: 100%;
     gap: 15px;
 }
+
+.placeable{
+    pointer-events: none;
+    position: absolute;
+
+    opacity: 1;
+}
+
+.placeable.ghost{
+    opacity: 0.3;
+}

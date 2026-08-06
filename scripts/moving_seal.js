@@ -1,4 +1,4 @@
-import { playBigBoomAudio, playSmallBoomAudio } from "./audio.js";
+import { playBigBoomAudio, playSmallBoomAudio, setupAudioEvents } from "./audio.js";
 import { getClampedX, getClampedY, getMaxX, getMaxY, navbarRect } from "./bounds.js";
 import { lerp, distance, randomBool, abs, clamp, destroyAfter, pingpong, instantiateBeforeEnd } from "./mathf.js";
 import { deltaTime } from "./time.js";
@@ -142,8 +142,10 @@ class MovingSeal{
     }
 }
 
+const paintOptions = document.getElementById('seal-options');
+
 class PaintOption{
-    constructor(id, src, sizeX = 64, sizeY = 64, offsetX = 0, offsetY = 0){
+    constructor(id, src, sizeX = 64, sizeY = 64, offsetX = 0, offsetY = 0){        
         this.myId = id;
         this.src = src;
 
@@ -153,18 +155,26 @@ class PaintOption{
         this.offsetY = offsetY;
 
         this.placeablePrefab = `
-            <div id="${this.myId}" style="pointer-events: none; position: absolute; width: ${sizeX}px; height: ${sizeY}px;">
+            <div class="placeable" style="width: ${sizeX}px; height: ${sizeY}px;">
                 <img style="image-rendering: pixelated;" src="${this.src}">
             </div>
         `;
         
         this.boxPrefab = `
-            <button id="movingSeal_spawn" class="brush-option_box">
+            <button id="${this.myId}" class="brush-option_box">
                 <div class="innerBox">
-                    <img src="./imgs/WiiHand/drawing_brush.svg">
+                    <img src="${this.src}">
                 </div>
             </button>
         `;
+        
+        this.boxElement = instantiateBeforeEnd(this.boxPrefab, paintOptions);
+        this.boxElement.style.pointerEvents = 'auto';
+
+        this.boxElement.onclick = () => setPaintOption(this);
+        setupAudioEvents(this.boxElement);
+
+        paintOptionList.push(this);
     }
 
     createGhost = () => {
@@ -181,8 +191,8 @@ class PaintOption{
 }
 
 class SealOption extends PaintOption{
-    constructor(uniqueSeal, name, src, sizeX = 64, sizeY = 64, offsetX = 0, offsetY = 0){
-        super(name, src, sizeX, sizeY, offsetX, offsetY);
+    constructor(uniqueSeal, id, src, sizeX = 64, sizeY = 64, offsetX = 0, offsetY = 0){
+        super(id, src, sizeX, sizeY, offsetX, offsetY);
 
         this.uniqueSeal = uniqueSeal;
     }
@@ -192,9 +202,15 @@ class SealOption extends PaintOption{
     }
 }
 
-var sealOption1 = new SealOption(1, "Grey Seal", '../imgs/MovingSeal/Seal1_right0.png');
-var sealOption2 = new SealOption(2, "Polar Seal", '../imgs/MovingSeal/Seal2_right0.png');
-var currentOption = sealOption2;
+var paintOptionList = [];
+var sealOption1 = new SealOption(1, "paint-greyseal", './imgs/MovingSeal/Seal1_right0.png');
+var sealOption2 = new SealOption(2, "paint-polarseal", './imgs/MovingSeal/Seal2_right0.png');
+var currentOption = undefined;
+
+setPaintOption(sealOption1);
+function setPaintOption(paintOption){
+    currentOption = paintOption;
+}
 
 //why no actual enums tho D: https://www.geeksforgeeks.org/javascript/enums-in-javascript/
 const EBrushState = {
@@ -268,13 +284,17 @@ function spawnSeal(e){
     e = e || window.event;
     e.preventDefault();
 
-    if(currentBrushState != EBrushState.PAINT || e.target.id == spawnSealButton.id || e.target.id == eraserSealButton.id || e.target.id == nukeSealButton.id) return;
+    let hittingValidElement = false;
+    paintOptionList.forEach(option => {
+        if(e.target.id == option.boxElement.id) hittingValidElement = true;
+    });
+
+    if(currentBrushState != EBrushState.PAINT || hittingValidElement || e.target.id == spawnSealButton.id || e.target.id == eraserSealButton.id || e.target.id == nukeSealButton.id) return;
 
     let x = e.clientX + xSpawnOffset;
     let y = e.clientY + ySpawnOffset;
 
     currentOption.tryPlace(x, y);
-    //sealList.push(new MovingSeal(index++, randomBool() ? 1 : 2, x, y));
 }
 
 function tryDeleteSeal(movingSeal, force = false){
