@@ -2,7 +2,7 @@ import { playBigBoomAudio, playSmallBoomAudio, setupAudioEvents } from "./audio.
 import { getClampedX, getClampedY, getMaxX, getMaxY, navbarRect } from "./bounds.js";
 import { lerp, distance, randomBool, abs, clamp, destroyAfter, pingpong, instantiateBeforeEnd } from "./mathf.js";
 import { deltaTime } from "./time.js";
-import { IncreaseZIndex, SubscribeToZIndex, UnsubscribeToZIndex } from "./window_global.js";
+import { biggestZIndex, IncreaseZIndex, SubscribeToZIndex, UnsubscribeToZIndex } from "./window_global.js";
 
 const baseSealVelocity = 150;
 
@@ -145,7 +145,9 @@ class MovingSeal{
 const paintOptions = document.getElementById('seal-options');
 
 class PaintOption{
-    constructor(id, src, sizeX = 64, sizeY = 64, offsetX = 0, offsetY = 0){        
+    index = 0;
+    
+    constructor(id, src, sizeX = 64, sizeY = 64, offsetX = -64, offsetY = -64){        
         this.myId = id;
         this.src = src;
 
@@ -156,7 +158,7 @@ class PaintOption{
 
         this.placeablePrefab = `
             <div class="placeable" style="width: ${sizeX}px; height: ${sizeY}px;">
-                <img style="image-rendering: pixelated;" src="${this.src}">
+                <img id="${this.myId}_placeableImage" style="image-rendering: pixelated;" src="${this.src}">
             </div>
         `;
         
@@ -167,6 +169,11 @@ class PaintOption{
                 </div>
             </button>
         `;
+
+        this.ghostInstance = instantiateBeforeEnd(this.placeablePrefab, document.body);
+        document.addEventListener('mousemove', this.updateGhost)
+        this.ghostInstance.classList.add('ghost');
+        this.destroyGhost();
         
         this.boxElement = instantiateBeforeEnd(this.boxPrefab, paintOptions);
         this.boxElement.style.pointerEvents = 'auto';
@@ -178,28 +185,67 @@ class PaintOption{
     }
 
     createGhost = () => {
+        this.ghostInstance.style.display = 'inline';
+    }
+    
+    destroyGhost = () => {
+        this.ghostInstance.style.display = 'none';
+    }
 
+    updateGhost = (e) => {
+        this.ghostInstance.style.left = `${e.clientX + this.offsetX}px`;
+        this.ghostInstance.style.top = `${e.clientY + this.offsetY}px`;
+
+        this.ghostInstance.style.zIndex = biggestZIndex + 200;
     }
 
     tryPlace = (x, y) => {
-        this.onPlace(x, y);
+        this.onPlace(x + this.offsetX, y + this.offsetY);
     }
 
     onPlace(x, y){
+        let instance = instantiateBeforeEnd(this.placeablePrefab, document.body);
+        instance.style.left = `${x}px`;
+        instance.style.top = `${y}px`;
 
+        let imageElement = document.getElementById(`${this.myId}_placeableImage`)
+        imageElement.id += `${index++}`;
+        console.log(imageElement.id);
+        
+        instance.addEventListener('mousedown', () => this.tryDestroy(instance, imageElement));
+    }
+
+    tryDestroy = (instance, instanceImage) => {
+        this.destroy(false, instance, instanceImage);
+    }
+
+    destroy = (force, element, imageElement) => {
+        if(!tryDeleteSeal(this, force)) return;
+
+        //I need a paint instance class.
+        //this.destroying = true;
+        element.onclick = null;
+        
+        //UnsubscribeToZIndex(this.onZIndexIncreased);
+
+        let explodeElement = instantiateBeforeEnd(explosionPrefab,  element);
+        
+        imageElement.remove();
+        destroyAfter(element, 500);
+        destroyAfter(explodeElement, 500);
     }
 }
 
 class SealOption extends PaintOption{
-    constructor(uniqueSeal, id, src, sizeX = 64, sizeY = 64, offsetX = 0, offsetY = 0){
+    constructor(uniqueSeal, id, src, sizeX = 64, sizeY = 64, offsetX = -32, offsetY = -32){
         super(id, src, sizeX, sizeY, offsetX, offsetY);
 
         this.uniqueSeal = uniqueSeal;
     }
     
-    onPlace(x, y){
+    /*onPlace(x, y){
         sealList.push(new MovingSeal(index++, this.uniqueSeal, x, y));
-    }
+    }*/
 }
 
 var paintOptionList = [];
@@ -207,12 +253,16 @@ var sealOption1 = new SealOption(1, "paint-greyseal", './imgs/MovingSeal/Seal1_r
 var sealOption2 = new SealOption(2, "paint-polarseal", './imgs/MovingSeal/Seal2_right0.png');
 var currentOption = undefined;
 
-setPaintOption(sealOption1);
-function setPaintOption(paintOption){
-    if(currentOption != undefined) currentOption.boxElement.classList.remove('active');
-
+setPaintOption(sealOption1, false);
+function setPaintOption(paintOption, showGhost = true){
+    if(currentOption != undefined) {
+        currentOption.boxElement.classList.remove('active');
+        currentOption.destroyGhost();
+    }
+    
     currentOption = paintOption;
     currentOption.boxElement.classList.add('active');
+    if(showGhost) currentOption.createGhost();
 }
 
 //why no actual enums tho D: https://www.geeksforgeeks.org/javascript/enums-in-javascript/
@@ -249,6 +299,8 @@ function setPaintMode(){
         document.documentElement.classList.add('brush');
 
         spawnSealButton.classList.add('active');
+
+        currentOption.createGhost();
     }
     else currentBrushState = EBrushState.NONE;
 }
@@ -271,15 +323,13 @@ function changeBrush(){
     document.documentElement.classList.remove('eraser');
     document.body.style.pointerEvents = 'auto';
 
+    currentOption.destroyGhost();
+    
     spawnSealButton.classList.remove('active');
     eraserSealButton.classList.remove('active');
 
     if(sealList.length != 0) sealList.forEach(seal => seal.movingSealElement.style.pointerEvents = 'none');
 }
-
-//When the window closes, it should be set to none
-const xSpawnOffset = -32;
-const ySpawnOffset = -32;
 
 var sealList = [];
 var index = 0;
@@ -294,12 +344,11 @@ function spawnSeal(e){
 
     if(currentBrushState != EBrushState.PAINT || hittingValidElement || e.target.id == spawnSealButton.id || e.target.id == eraserSealButton.id || e.target.id == nukeSealButton.id) return;
 
-    let x = e.clientX + xSpawnOffset;
-    let y = e.clientY + ySpawnOffset;
-
-    currentOption.tryPlace(x, y);
+    currentOption.tryPlace(e.clientX, e.clientY);
 }
 
+
+// instead this needs to be tryDeleteInstance, but class needs to be implemented
 function tryDeleteSeal(movingSeal, force = false){
     if(currentBrushState != EBrushState.ERASER && !force) return false;
     
