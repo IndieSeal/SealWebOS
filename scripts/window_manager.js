@@ -25,15 +25,25 @@ function minimizeWindow(minWindow){
   if(selectedWindow == minWindow){
     selectedWindow.taskbar_ontop.classList.remove("selected");
 
-    let higuestWindow = undefined;
-    allWindows.forEach(window => {
-      if(window == selectedWindow || !window.isWindowOpen()) return;
-      if(higuestWindow == undefined || higuestWindow.latestZIndex < window.latestZIndex){
-        higuestWindow = window;
-      }
-    });
+    selectHiguestWindow(minWindow);
+  }
+}
 
-    if(higuestWindow != undefined) changeSelectedWindow(higuestWindow);
+function closeWindow(closeWindow){
+  selectHiguestWindow(closeWindow);
+}
+
+function selectHiguestWindow(selectedWindow){
+  let higuestWindow = undefined;
+  allWindows.forEach(window => {
+    if(window == selectedWindow || !window.isWindowSwitchable()) return;
+    if(higuestWindow == undefined || window.latestZIndex > higuestWindow.latestZIndex){
+      higuestWindow = window;
+    }
+  });
+
+  if(higuestWindow != undefined) {
+    higuestWindow.openWindowFunc();
   }
 }
 
@@ -47,6 +57,7 @@ function onIconClicked(myWindow){
 class Window{
   draggableElement = undefined;
   latestZIndex = 0;
+  switchable = false;
   
   constructor(id, openByDefault, movableWindow, appName, iconPath){
     this.myId = id;
@@ -148,6 +159,8 @@ class Window{
   }
 
   openWindowFunc = () => {
+    this.switchable = true;
+    
     this.window.style.display = "inline";
     this.window.classList.remove("close");
 
@@ -161,16 +174,21 @@ class Window{
   }
 
   minimizeWindowFunc = () => {
+    this.switchable = false;
+
     this.window.classList.add("close");
 
     minimizeWindow(this);
   }
 
   closeWindowFunc = () => {
+    this.switchable = false;
+
     this.window.classList.add("close");
     this.taskbar.style.display = "none";
 
     document.dispatchEvent(this.onWindowClose);
+    closeWindow(this);
   }
 
   selectIcon = () => {
@@ -201,6 +219,10 @@ class Window{
 
   isWindowOpen(){
     return !this.window.classList.contains("close");
+  }
+
+  isWindowSwitchable(){
+    return this.switchable;
   }
 
   handleWindowTap = () => {

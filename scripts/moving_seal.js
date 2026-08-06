@@ -209,7 +209,10 @@ var currentOption = undefined;
 
 setPaintOption(sealOption1);
 function setPaintOption(paintOption){
+    if(currentOption != undefined) currentOption.boxElement.classList.remove('active');
+
     currentOption = paintOption;
+    currentOption.boxElement.classList.add('active');
 }
 
 //why no actual enums tho D: https://www.geeksforgeeks.org/javascript/enums-in-javascript/
