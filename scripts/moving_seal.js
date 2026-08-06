@@ -1,6 +1,6 @@
 import { playBigBoomAudio, playSmallBoomAudio } from "./audio.js";
 import { getClampedX, getClampedY, getMaxX, getMaxY, navbarRect } from "./bounds.js";
-import { lerp, distance, randomBool, abs, clamp, destroyAfter, pingpong } from "./mathf.js";
+import { lerp, distance, randomBool, abs, clamp, destroyAfter, pingpong, instantiateBeforeEnd } from "./mathf.js";
 import { deltaTime } from "./time.js";
 import { IncreaseZIndex, SubscribeToZIndex, UnsubscribeToZIndex } from "./window_global.js";
 
@@ -41,7 +41,7 @@ class MovingSeal{
             </div>
         `;
 
-        document.body.insertAdjacentHTML('beforeend', movingSealPrefab);
+        instantiateBeforeEnd(movingSealPrefab, document.body);
         
         this.movingSealElement = document.getElementById(this.myId);
         this.movingSealImageElement = document.getElementById(this.myImageId);
@@ -143,8 +143,8 @@ class MovingSeal{
 }
 
 class PaintOption{
-    constructor(name, src, sizeX = 64, sizeY = 64, offsetX = 0, offsetY = 0){
-        this.name = name;
+    constructor(id, src, sizeX = 64, sizeY = 64, offsetX = 0, offsetY = 0){
+        this.myId = id;
         this.src = src;
 
         this.sizeX = sizeX;
@@ -152,7 +152,13 @@ class PaintOption{
         this.offsetX = offsetX;
         this.offsetY = offsetY;
 
-        this.prefab = `
+        this.placeablePrefab = `
+            <div id="${this.myId}" style="pointer-events: none; position: absolute; width: ${sizeX}px; height: ${sizeY}px;">
+                <img style="image-rendering: pixelated;" src="${this.src}">
+            </div>
+        `;
+        
+        this.boxPrefab = `
             <button id="movingSeal_spawn" class="brush-option_box">
                 <div class="innerBox">
                     <img src="./imgs/WiiHand/drawing_brush.svg">
@@ -170,7 +176,7 @@ class PaintOption{
     }
 
     onPlace(x, y){
-        document.body.insertAdjacentHTML('beforeend', this.prefab);
+
     }
 }
 
@@ -276,9 +282,7 @@ function tryDeleteSeal(movingSeal, force = false){
     
     if(!force) playSmallBoomAudio();
 
-    movingSeal.movingSealElement.insertAdjacentHTML('beforeend', explosionPrefab);
-    movingSeal.explodeElement = movingSeal.movingSealElement.lastElementChild;
-    
+    movingSeal.explodeElement = instantiateBeforeEnd(explosionPrefab, movingSeal.movingSealElement);
     sealList = sealList.filter(item => item.index != movingSeal.index);
 
     return true;

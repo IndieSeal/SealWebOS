@@ -1,5 +1,5 @@
 import { removeClickEvent, sealClicker_playBuyAudio, sealClicker_playClickAudio, sealClicker_playSquishAudio, setupAudioEvents } from "./audio.js";
-import { lerp, pingpong, randomBool } from "./mathf.js";
+import { instantiateBeforeEnd, lerp, pingpong, randomBool } from "./mathf.js";
 import { deltaTime } from "./time.js";
 import { biggestZIndex } from "./window_global.js";
 
@@ -64,9 +64,7 @@ function createSealClickedPopupPrefab(e, points){
 }
 
 function createDissapearingPopup(htmlPrefab){
-    document.body.insertAdjacentHTML('beforeend', htmlPrefab);
-    var instance = document.body.lastElementChild;
-    new DissapearingPopup(instance, 0.1, 2.2, -150);
+    new DissapearingPopup(instantiateBeforeEnd(htmlPrefab, document.body), 0.1, 2.2, -150);
 }
 
 class DissapearingPopup{
@@ -255,8 +253,7 @@ class AutoclickerUpgrade extends Upgrade{
             </div>
         `;
 
-        autoclickerUpgradeParent.insertAdjacentHTML('beforeend', this.autoclickerPrefab);
-        this.autoclicker = autoclickerUpgradeParent.lastElementChild;
+        this.autoclicker = instantiateBeforeEnd(this.autoclickerPrefab, autoclickerUpgradeParent);
 
         this.upgradeRowElement = document.getElementById(upgradeID + UPGRADE_ROW_SUFFIX);
         this.pointsPerSecond = pointsPerSecond;
@@ -301,9 +298,8 @@ class AutoclickerUpgrade extends Upgrade{
         if(!super.buyUpgrade()) return;
 
         this.upgradeRowElement.style.display = 'flex';
-        this.upgradeRowElement.insertAdjacentHTML('beforeend', this.htmlRowItemPrefab);
-        let instance = this.upgradeRowElement.lastElementChild;
-
+        
+        let instance = instantiateBeforeEnd(this.htmlRowItemPrefab, this.upgradeRowElement);
         instance.onmousedown = sealClicker_playSquishAudio;
     }
 }

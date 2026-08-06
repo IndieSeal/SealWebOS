@@ -50,6 +50,11 @@ export function shuffle(array){
     return array;
 }
 
+export function instantiateBeforeEnd(prefab, parent){
+    parent.insertAdjacentHTML('beforeend', prefab);
+    return parent.lastElementChild;
+}
+
 export function destroyAfter(element, millis){
     setTimeout(() => element.remove(), millis);
 }
