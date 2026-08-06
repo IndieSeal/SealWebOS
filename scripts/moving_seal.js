@@ -142,6 +142,54 @@ class MovingSeal{
     }
 }
 
+class PaintOption{
+    constructor(name, src, sizeX = 64, sizeY = 64, offsetX = 0, offsetY = 0){
+        this.name = name;
+        this.src = src;
+
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+
+        this.prefab = `
+            <button id="movingSeal_spawn" class="brush-option_box">
+                <div class="innerBox">
+                    <img src="./imgs/WiiHand/drawing_brush.svg">
+                </div>
+            </button>
+        `;
+    }
+
+    createGhost = () => {
+
+    }
+
+    tryPlace = (x, y) => {
+        this.onPlace(x, y);
+    }
+
+    onPlace(x, y){
+        document.body.insertAdjacentHTML('beforeend', this.prefab);
+    }
+}
+
+class SealOption extends PaintOption{
+    constructor(uniqueSeal, name, src, sizeX = 64, sizeY = 64, offsetX = 0, offsetY = 0){
+        super(name, src, sizeX, sizeY, offsetX, offsetY);
+
+        this.uniqueSeal = uniqueSeal;
+    }
+    
+    onPlace(x, y){
+        sealList.push(new MovingSeal(index++, this.uniqueSeal, x, y));
+    }
+}
+
+var sealOption1 = new SealOption(1, "Grey Seal", '../imgs/MovingSeal/Seal1_right0.png');
+var sealOption2 = new SealOption(2, "Polar Seal", '../imgs/MovingSeal/Seal2_right0.png');
+var currentOption = sealOption2;
+
 //why no actual enums tho D: https://www.geeksforgeeks.org/javascript/enums-in-javascript/
 const EBrushState = {
     NONE: "none",
@@ -219,7 +267,8 @@ function spawnSeal(e){
     let x = e.clientX + xSpawnOffset;
     let y = e.clientY + ySpawnOffset;
 
-    sealList.push(new MovingSeal(index++, randomBool() ? 1 : 2, x, y));
+    currentOption.tryPlace(x, y);
+    //sealList.push(new MovingSeal(index++, randomBool() ? 1 : 2, x, y));
 }
 
 function tryDeleteSeal(movingSeal, force = false){
