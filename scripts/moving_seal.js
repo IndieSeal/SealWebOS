@@ -7,7 +7,8 @@ import { biggestZIndex, IncreaseZIndex, SubscribeToZIndex, UnsubscribeToZIndex }
 class PaintInstance{
     destroying = false;
 
-    constructor(index, element, imageElement){
+    constructor(buildWindow, index, element, imageElement){
+        this.buildWindow = buildWindow;
         this.index = index;
         
         this.element = element;
@@ -21,7 +22,7 @@ class PaintInstance{
     }
 
     destroy(force){
-        if(!tryDeleteInstance(this, force)) return false;
+        if(!this.buildWindow.tryDeleteInstance(this, force)) return false;
 
         this.destroying = true;
         this.element.onclick = null;
@@ -58,8 +59,8 @@ class MovingSeal extends PaintInstance{
     animationDelay = clamp(300, 700, Math.random() * 900);
     animationFrame = 0;
 
-    constructor(index, element, imageElement, sealType = 1, x = undefined, y = undefined){
-        super(index, element, imageElement);
+    constructor(buildWindow, index, element, imageElement, sealType = 1, x = undefined, y = undefined){
+        super(buildWindow, index, element, imageElement);
         
         this.sealType = sealType;
         SubscribeToZIndex(this.onZIndexIncreased);
@@ -155,7 +156,9 @@ const paintOptions = document.getElementById('seal-options');
 class PaintOption{
     instanceIndex = 0;
     
-    constructor(id, src, sizeX = 64, sizeY = 64, offsetX = -64, offsetY = -64){        
+    constructor(buildingWindow, id, src, sizeX = 64, sizeY = 64, offsetX = -64, offsetY = -64){        
+        this.buildWindow = buildingWindow;
+        
         this.myId = id;
         this.src = src;
 
@@ -186,10 +189,10 @@ class PaintOption{
         this.boxElement = instantiateBeforeEnd(this.boxPrefab, paintOptions);
         this.boxElement.style.pointerEvents = 'auto';
 
-        this.boxElement.onclick = () => setPaintOption(this);
+        this.boxElement.onclick = () => this.buildWindow.setPaintOption(this);
         setupAudioEvents(this.boxElement);
 
-        paintOptionList.push(this);
+        this.buildWindow.paintOptionList.push(this);
     }
 
     createGhost = () => {
@@ -227,142 +230,158 @@ class PaintOption{
 }
 
 class SealOption extends PaintOption{
-    constructor(uniqueSeal, id, src, sizeX = 64, sizeY = 64, offsetX = -32, offsetY = -32){
-        super(id, src, sizeX, sizeY, offsetX, offsetY);
+    constructor(uniqueSeal, buildingWindow, id, src, sizeX = 64, sizeY = 64, offsetX = -32, offsetY = -32){
+        super(buildingWindow, id, src, sizeX, sizeY, offsetX, offsetY);
 
         this.uniqueSeal = uniqueSeal;
     }
     
     onPlace(x, y){
         var [element, image] = super.onPlace(x, y, false);
-        paintInstanceList.push(new MovingSeal(index++, element, image, this.uniqueSeal, x, y));
+        this.buildWindow.paintInstanceList.push(new MovingSeal(this.buildWindow, this.buildWindow.index++, element, image, this.uniqueSeal, x, y));
     }
 }
 
 //#endregion
 
-var paintOptionList = [];
-var sealOption1 = new SealOption(1, "paint-greyseal", './imgs/MovingSeal/Seal1_right0.png');
-var sealOption2 = new SealOption(2, "paint-polarseal", './imgs/MovingSeal/Seal2_right0.png');
-var currentOption = undefined;
-
-setPaintOption(sealOption1, false);
-function setPaintOption(paintOption, showGhost = true){
-    if(currentOption != undefined) {
-        currentOption.boxElement.classList.remove('active');
-        currentOption.destroyGhost();
-    }
-    
-    currentOption = paintOption;
-    currentOption.boxElement.classList.add('active');
-    if(showGhost) currentOption.createGhost();
-}
-
-//why no actual enums tho D: https://www.geeksforgeeks.org/javascript/enums-in-javascript/
 const EBrushState = {
     NONE: "none",
     PAINT: "paint",
     ERASER: "eraser"
 };
-var currentBrushState = EBrushState.NONE;
-
-const spawnSealButton = document.getElementById('movingSeal_spawn');
-spawnSealButton.style.pointerEvents = 'auto';
-spawnSealButton.onclick = setPaintMode;
-
-const eraserSealButton = document.getElementById('movingSeal_eraser');
-eraserSealButton.style.pointerEvents = 'auto';
-eraserSealButton.onclick = setEraserMode;
-
-const nukeSealButton = document.getElementById('movingSeal_nuke');
-nukeSealButton.style.pointerEvents = 'auto';
-nukeSealButton.onclick = nukeInstances;
 
 const explosionPrefab = `
     <img style="pointer-events: none;" src="https://i.giphy.com/pKWCBvHevLcMU.webp">
 `;
 
-function setPaintMode(){
-    changeBrush();
+class BuildingWindow{
+    paintOptionList = [];
+    currentOption = undefined;
 
-    if(currentBrushState != EBrushState.PAINT){
-        currentBrushState = EBrushState.PAINT;
-
-        document.addEventListener('mousedown', spawnPaintOption);
-        document.documentElement.classList.add('brush');
-
-        spawnSealButton.classList.add('active');
-
-        currentOption.createGhost();
-    }
-    else currentBrushState = EBrushState.NONE;
-}
-function setEraserMode(){
-    changeBrush();
-
-    if(currentBrushState != EBrushState.ERASER){
-        currentBrushState = EBrushState.ERASER;
-        document.documentElement.classList.add('eraser');
-        eraserSealButton.classList.add('active');
-
-        paintInstanceList.forEach(instance => instance.element.style.pointerEvents = 'auto');
-    }
-    else currentBrushState = EBrushState.NONE;
-}
-
-function changeBrush(){
-    document.removeEventListener('mousedown', spawnPaintOption);
-    document.documentElement.classList.remove('brush');
-    document.documentElement.classList.remove('eraser');
-    document.body.style.pointerEvents = 'auto';
-
-    currentOption.destroyGhost();
+    currentBrushState = EBrushState.NONE;
     
-    spawnSealButton.classList.remove('active');
-    eraserSealButton.classList.remove('active');
-
-    if(paintInstanceList.length != 0) paintInstanceList.forEach(instance => instance.element.style.pointerEvents = 'none');
-}
-
-var paintInstanceList = [];
-var index = 0;
-function spawnPaintOption(e){
-    e = e || window.event;
-    e.preventDefault();
-
-    let hittingValidElement = false;
-    paintOptionList.forEach(option => {
-        if(e.target.id == option.boxElement.id) hittingValidElement = true;
-    });
-
-    if(currentBrushState != EBrushState.PAINT || hittingValidElement || e.target.id == spawnSealButton.id || e.target.id == eraserSealButton.id || e.target.id == nukeSealButton.id) return;
-
-    currentOption.tryPlace(e.clientX, e.clientY);
-}
-
-function tryDeleteInstance(paintInstance, force = false){
-    if(currentBrushState != EBrushState.ERASER && !force) return false;
+    paintInstanceList = [];
+    index = 0;
     
-    if(!force) playSmallBoomAudio();
+    constructor(id){
+        this.myId = id;
 
-    paintInstanceList = paintInstanceList.filter(instance => instance.index != paintInstance.index);
+        this.spawnSealButton = document.getElementById(`${this.myId}_spawn`);
+        this.spawnSealButton.style.pointerEvents = 'auto';
+        this.spawnSealButton.onclick = this.setPaintMode;
 
-    return true;
-}
+        this.eraserSealButton = document.getElementById(`${this.myId}_eraser`);
+        this.eraserSealButton.style.pointerEvents = 'auto';
+        this.eraserSealButton.onclick = this.setEraserMode;
 
-function nukeInstances(){
-    if(paintInstanceList.length == 0) return;
+        this.nukeSealButton = document.getElementById(`${this.myId}_nuke`);
+        this.nukeSealButton.style.pointerEvents = 'auto';
+        this.nukeSealButton.onclick = this.nukeInstances;
+    }
 
-    playBigBoomAudio();
-    paintInstanceList.forEach(instance => instance.destroy(true));
-}
+    setup = (paintOptions) => {
+        this.paintOptionList = paintOptions;
 
-tryDisableInteraction();
-function tryDisableInteraction(){
-    requestAnimationFrame(tryDisableInteraction);
-    if(currentBrushState == EBrushState.NONE) return;
+        this.setPaintOption(this.paintOptionList[0], false);
 
-    document.body.style.pointerEvents = 'none';
+        this.tryDisableInteraction();
+    }
+
+    setPaintOption = (paintOption, showGhost = true) => {
+        if(this.currentOption != undefined) {
+            this.currentOption.boxElement.classList.remove('active');
+            this.currentOption.destroyGhost();
+        }
+        
+        this.currentOption = paintOption;
+        this.currentOption.boxElement.classList.add('active');
+        if(this.currentBrushState == EBrushState.PAINT && showGhost) this.currentOption.createGhost();
+    }
+
+    setPaintMode = () => {
+        this.changeBrush();
+
+        if(this.currentBrushState != EBrushState.PAINT){
+            this.currentBrushState = EBrushState.PAINT;
+
+            document.addEventListener('mousedown', this.spawnPaintOption);
+            document.documentElement.classList.add('brush');
+
+            this.spawnSealButton.classList.add('active');
+
+            this.currentOption.createGhost();
+        }
+        else this.currentBrushState = EBrushState.NONE;
+    }
+    setEraserMode = () =>{
+        this.changeBrush();
+
+        if(this.currentBrushState != EBrushState.ERASER){
+            this.currentBrushState = EBrushState.ERASER;
+            document.documentElement.classList.add('eraser');
+            this.eraserSealButton.classList.add('active');
+
+            this.paintInstanceList.forEach(instance => instance.element.style.pointerEvents = 'auto');
+        }
+        else this.currentBrushState = EBrushState.NONE;
+    }
+
+    changeBrush = () => {
+        document.removeEventListener('mousedown', this.spawnPaintOption);
+        document.documentElement.classList.remove('brush');
+        document.documentElement.classList.remove('eraser');
+        document.body.style.pointerEvents = 'auto';
+
+        this.currentOption.destroyGhost();
+        
+        this.spawnSealButton.classList.remove('active');
+        this.eraserSealButton.classList.remove('active');
+
+        if(this.paintInstanceList.length != 0) this.paintInstanceList.forEach(instance => instance.element.style.pointerEvents = 'none');
+    }
+
+    nukeInstances = () => {
+        if(this.paintInstanceList.length == 0) return;
+
+        playBigBoomAudio();
+        this.paintInstanceList.forEach(instance => instance.destroy(true));
+    }
+
+    spawnPaintOption = (e) => {
+        e = e || window.event;
+        e.preventDefault();
+
+        let hittingValidElement = false;
+        this.paintOptionList.forEach(option => {
+            if(e.target.id == option.boxElement.id) hittingValidElement = true;
+        });
+
+        if(this.currentBrushState != EBrushState.PAINT || hittingValidElement || e.target.id == this.spawnSealButton.id || e.target.id == this.eraserSealButton.id || e.target.id == this.nukeSealButton.id) return;
+
+        this.currentOption.tryPlace(e.clientX, e.clientY);
+    }
+
+    tryDeleteInstance = (paintInstance, force = false) => {
+        if(this.currentBrushState != EBrushState.ERASER && !force) return false;
+        
+        if(!force) playSmallBoomAudio();
+
+        this.paintInstanceList = this.paintInstanceList.filter(instance => instance.index != paintInstance.index);
+
+        return true;
+    }
+
+    tryDisableInteraction = () => {
+        requestAnimationFrame(this.tryDisableInteraction);
+        if(this.currentBrushState == EBrushState.NONE) return;
+
+        document.body.style.pointerEvents = 'none';
+    }
 }
 
 //#endregion
+
+var sealBuildWindow = new BuildingWindow('movingSeal');
+var sealOption1 = new SealOption(1, sealBuildWindow, "paint-greyseal", './imgs/MovingSeal/Seal1_right0.png');
+var sealOption2 = new SealOption(2, sealBuildWindow, "paint-polarseal", './imgs/MovingSeal/Seal2_right0.png');
+sealBuildWindow.setup([sealOption1, sealOption2]);
