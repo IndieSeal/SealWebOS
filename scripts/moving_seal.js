@@ -4,6 +4,38 @@ import { lerp, distance, randomBool, abs, clamp, destroyAfter, pingpong, instant
 import { deltaTime } from "./time.js";
 import { biggestZIndex, IncreaseZIndex, SubscribeToZIndex, UnsubscribeToZIndex } from "./window_global.js";
 
+class PaintInstance{
+    destroying = false;
+
+    constructor(index, element, imageElement){
+        this.index = index;
+        
+        this.element = element;
+        this.imageElement = imageElement;
+
+        this.element.onclick = this.tryDestroy;
+    }
+    
+    tryDestroy = () => {
+        this.destroy(false);
+    }
+
+    destroy(force){
+        if(!tryDeleteInstance(this, force)) return false;
+
+        this.destroying = true;
+        this.element.onclick = null;
+        
+        this.imageElement.remove();
+        let explodeElement = instantiateBeforeEnd(explosionPrefab, this.element);
+        
+        destroyAfter(this.element, 500);
+        destroyAfter(explodeElement, 500);
+
+        return true;
+    }
+}
+
 const baseSealVelocity = 150;
 
 const minArrivalTimeout = 1000;
@@ -13,7 +45,7 @@ const minPauseTimeout = 200;
 const maxPauseTimeout = 800;
 
 // IF YOU'RE GONNA MAKE THEM DRAGGABLE, REMBEMBER THAT POINTER EVENTS IS SET TO NONE IN THE PREFAB, you should thank yourself future me, if this ever happens
-class MovingSeal{
+class MovingSeal extends PaintInstance{
     currentX = 0;
     currentY = 0;
     targetX = 0;
@@ -23,36 +55,17 @@ class MovingSeal{
     finishedX = false;
     finishedY = false;
 
-    destroying = false;
-
     animationDelay = clamp(300, 700, Math.random() * 900);
     animationFrame = 0;
 
-    constructor(index, sealType = 1, x = undefined, y = undefined){
-        this.index = index;
+    constructor(index, element, imageElement, sealType = 1, x = undefined, y = undefined){
+        super(index, element, imageElement);
+        
         this.sealType = sealType;
-        
-        this.myId = `movingSeal${index}`;
-        this.myImageId = `movingSeal${index}-image`;
-
-        let movingSealPrefab = `
-            <div id="${this.myId}" style="pointer-events: none; position: absolute; width: 64px; height: 64px;">
-                <img id="${this.myImageId}" style="image-rendering: pixelated;" src="./imgs/MovingSeal/Seal1_right.png">
-            </div>
-        `;
-
-        instantiateBeforeEnd(movingSealPrefab, document.body);
-        
-        this.movingSealElement = document.getElementById(this.myId);
-        this.movingSealImageElement = document.getElementById(this.myImageId);
-        this.explodeElement = undefined;
-
-        this.movingSealElement.onclick = this.tryDestroy;
-
         SubscribeToZIndex(this.onZIndexIncreased);
 
-        this.currentX = getClampedX(this.movingSealElement, x == undefined ? (Math.random() * getMaxX(this.movingSealElement)) : x);
-        this.currentY = getClampedY(this.movingSealElement, y == undefined ? (Math.random() * getMaxX(this.movingSealElement)) : y);
+        this.currentX = getClampedX(this.element, x == undefined ? (Math.random() * getMaxX(this.element)) : x);
+        this.currentY = getClampedY(this.element, y == undefined ? (Math.random() * getMaxX(this.element)) : y);
 
         this.randomizeNextPosition();
         this.moveSeal();
@@ -70,9 +83,9 @@ class MovingSeal{
 
         if((this.startWithX || this.finishedY) && !this.finishedX){
             direction = (this.currentX - this.targetX) < 0;
-            this.movingSealImageElement.src = direction ? `./imgs/MovingSeal/Seal${this.sealType}_right${this.animationFrame}.png` : `./imgs/MovingSeal/Seal${this.sealType}_left${this.animationFrame}.png`;
+            this.imageElement.src = direction ? `./imgs/MovingSeal/Seal${this.sealType}_right${this.animationFrame}.png` : `./imgs/MovingSeal/Seal${this.sealType}_left${this.animationFrame}.png`;
 
-            this.currentX = getClampedX(this.movingSealElement, this.currentX + (velocity * (direction ? 1 : -1)));
+            this.currentX = getClampedX(this.element, this.currentX + (velocity * (direction ? 1 : -1)));
             if(abs(this.targetX - this.currentX) < 10) {
                 this.finishedX = true;
                 pause = true;
@@ -80,17 +93,17 @@ class MovingSeal{
         }
         else if((!this.startWithX || this.finishedX) && !this.finishedY){
             direction = (this.currentY - this.targetY) < 0;
-            this.movingSealImageElement.src = direction ? `./imgs/MovingSeal/Seal${this.sealType}_right${this.animationFrame}.png` : `./imgs/MovingSeal/Seal${this.sealType}_left${this.animationFrame}.png`;
+            this.imageElement.src = direction ? `./imgs/MovingSeal/Seal${this.sealType}_right${this.animationFrame}.png` : `./imgs/MovingSeal/Seal${this.sealType}_left${this.animationFrame}.png`;
             
-            this.currentY = getClampedY(this.movingSealElement, this.currentY + (velocity * (direction ? 1 : -1)));
+            this.currentY = getClampedY(this.element, this.currentY + (velocity * (direction ? 1 : -1)));
             if(abs(this.targetY - this.currentY) < 10){
                 this.finishedY = true;
                 pause = true;
             }
         }
 
-        this.movingSealElement.style.left = `${this.currentX}px`;
-        this.movingSealElement.style.top = `${this.currentY}px`;
+        this.element.style.left = `${this.currentX}px`;
+        this.element.style.top = `${this.currentY}px`;
 
         if(this.finishedX && this.finishedY) {
             this.randomizeNextPosition();
@@ -112,67 +125,28 @@ class MovingSeal{
     }
 
     onZIndexIncreased = (index) => {
-        this.movingSealElement.style.zIndex = index + 5;
+        this.element.style.zIndex = index + 5;
     }
 
     randomizeNextPosition = () => {
-        this.targetX = getClampedX(this.movingSealElement, Math.random() * getMaxX(this.movingSealElement));
-        this.targetY = getClampedY(this.movingSealElement, Math.random() * getMaxY(this.movingSealElement));
+        this.targetX = getClampedX(this.element, Math.random() * getMaxX(this.element));
+        this.targetY = getClampedY(this.element, Math.random() * getMaxY(this.element));
 
         this.startWithX = randomBool();
         this.finishedX = false;
         this.finishedY = false;
     }
 
-    tryDestroy = () => {
-        this.destroy(false);
-    }
+    destroy(force){
+        if(!super.destroy(force)) return false;
 
-    destroy = (force) => {
-        if(!tryDeleteSeal(this, force)) return;
-
-        this.destroying = true;
-        this.movingSealElement.onclick = null;
-        
         UnsubscribeToZIndex(this.onZIndexIncreased);
         
-        this.movingSealImageElement.remove();
-        destroyAfter(this.movingSealElement, 500);
-        destroyAfter(this.explodeElement, 500);
+        return true;
     }
 }
 
 const paintOptions = document.getElementById('seal-options');
-
-class PaintInstance{
-    destroying = false;
-
-    constructor(index, element, imageElement){
-        this.index = index;
-        
-        this.element = element;
-        this.imageElement = imageElement;
-
-        this.element.onclick = this.tryDestroy;
-    }
-    
-    tryDestroy = () => {
-        this.destroy(false);
-    }
-
-    destroy = (force) => {
-        if(!tryDeleteInstance(this, force)) return;
-
-        this.destroying = true;
-        this.element.onclick = null;
-        
-        this.imageElement.remove();
-        let explodeElement = instantiateBeforeEnd(explosionPrefab, this.element);
-        
-        destroyAfter(this.element, 500);
-        destroyAfter(explodeElement, 500);
-    }
-}
 
 //#region Paint Options
 
@@ -237,16 +211,18 @@ class PaintOption{
         this.onPlace(x + this.offsetX, y + this.offsetY);
     }
 
-    onPlace(x, y){
+    onPlace(x, y, createDefault = true){
         this.instanceIndex++;
 
-        var instance = instantiateBeforeEnd(this.placeablePrefab, document.body);
+        let instance = instantiateBeforeEnd(this.placeablePrefab, document.body);
         instance.style.left = `${x}px`;
         instance.style.top = `${y}px`;
 
-        var imageElement = instance.querySelector('img');
+        let imageElement = instance.querySelector('img');
 
-        paintInstanceList.push(new PaintInstance(this.instanceIndex, instance, imageElement));
+        if(createDefault) paintInstanceList.push(new PaintInstance(this.instanceIndex, instance, imageElement));
+
+        return [instance, imageElement];
     }
 }
 
@@ -257,10 +233,10 @@ class SealOption extends PaintOption{
         this.uniqueSeal = uniqueSeal;
     }
     
-    /*onPlace(x, y){
-        super.onPlace(x, y);
-        paintInstanceList.push(new MovingSeal(index++, this.uniqueSeal, x, y));
-    }*/
+    onPlace(x, y){
+        var [element, image] = super.onPlace(x, y, false);
+        paintInstanceList.push(new MovingSeal(index++, element, image, this.uniqueSeal, x, y));
+    }
 }
 
 //#endregion
