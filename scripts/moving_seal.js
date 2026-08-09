@@ -144,6 +144,38 @@ class MovingSeal{
 
 const paintOptions = document.getElementById('seal-options');
 
+class PaintInstance{
+    destroying = false;
+
+    constructor(index, element, imageElement){
+        this.index = index;
+        
+        this.element = element;
+        this.imageElement = imageElement;
+
+        this.element.onclick = this.tryDestroy;
+    }
+    
+    tryDestroy = () => {
+        this.destroy(false);
+    }
+
+    destroy = (force) => {
+        if(!tryDeleteInstance(this, force)) return;
+
+        this.destroying = true;
+        this.element.onclick = null;
+        
+        //UnsubscribeToZIndex(this.onZIndexIncreased);
+        
+        this.imageElement.remove();
+        let explodeElement = instantiateBeforeEnd(explosionPrefab, this.element);
+        
+        destroyAfter(this.element, 500);
+        destroyAfter(explodeElement, 500);
+    }
+}
+
 class PaintOption{
     index = 0;
     
@@ -209,30 +241,10 @@ class PaintOption{
         instance.style.top = `${y}px`;
 
         let imageElement = document.getElementById(`${this.myId}_placeableImage`)
-        imageElement.id += `${index++}`;
-        console.log(imageElement.id);
+        imageElement.id += `${index}`;
         
-        instance.addEventListener('mousedown', () => this.tryDestroy(instance, imageElement));
-    }
-
-    tryDestroy = (instance, instanceImage) => {
-        this.destroy(false, instance, instanceImage);
-    }
-
-    destroy = (force, element, imageElement) => {
-        if(!tryDeleteSeal(this, force)) return;
-
-        //I need a paint instance class.
-        //this.destroying = true;
-        element.onclick = null;
-        
-        //UnsubscribeToZIndex(this.onZIndexIncreased);
-
-        let explodeElement = instantiateBeforeEnd(explosionPrefab,  element);
-        
-        imageElement.remove();
-        destroyAfter(element, 500);
-        destroyAfter(explodeElement, 500);
+        paintInstanceList.push(new PaintInstance(index, instance, imageElement));
+        index++;
     }
 }
 
@@ -243,9 +255,10 @@ class SealOption extends PaintOption{
         this.uniqueSeal = uniqueSeal;
     }
     
-    /*onPlace(x, y){
-        sealList.push(new MovingSeal(index++, this.uniqueSeal, x, y));
-    }*/
+    onPlace(x, y){
+        super.onPlace(x, y);
+        //paintInstanceList.push(new MovingSeal(index++, this.uniqueSeal, x, y));
+    }
 }
 
 var paintOptionList = [];
@@ -312,7 +325,7 @@ function setEraserMode(){
         document.documentElement.classList.add('eraser');
         eraserSealButton.classList.add('active');
 
-        sealList.forEach(seal => seal.movingSealElement.style.pointerEvents = 'auto');
+        paintInstanceList.forEach(instance => instance.element.style.pointerEvents = 'auto');
     }
     else currentBrushState = EBrushState.NONE;
 }
@@ -328,10 +341,10 @@ function changeBrush(){
     spawnSealButton.classList.remove('active');
     eraserSealButton.classList.remove('active');
 
-    if(sealList.length != 0) sealList.forEach(seal => seal.movingSealElement.style.pointerEvents = 'none');
+    if(paintInstanceList.length != 0) paintInstanceList.forEach(instance => instance.element.style.pointerEvents = 'none');
 }
 
-var sealList = [];
+var paintInstanceList = [];
 var index = 0;
 function spawnSeal(e){
     e = e || window.event;
@@ -349,22 +362,21 @@ function spawnSeal(e){
 
 
 // instead this needs to be tryDeleteInstance, but class needs to be implemented
-function tryDeleteSeal(movingSeal, force = false){
+function tryDeleteInstance(paintInstance, force = false){
     if(currentBrushState != EBrushState.ERASER && !force) return false;
     
     if(!force) playSmallBoomAudio();
 
-    movingSeal.explodeElement = instantiateBeforeEnd(explosionPrefab, movingSeal.movingSealElement);
-    sealList = sealList.filter(item => item.index != movingSeal.index);
+    paintInstanceList = paintInstanceList.filter(item => item.index != paintInstance.index);
 
     return true;
 }
 
 function nukeSeals(){
-    if(sealList.length == 0) return;
+    if(paintInstanceList.length == 0) return;
 
     playBigBoomAudio();
-    sealList.forEach(seal => seal.destroy(true));
+    paintInstanceList.forEach(seal => seal.destroy(true));
 }
 
 tryDisableInteraction();
