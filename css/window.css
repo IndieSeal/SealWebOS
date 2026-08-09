@@ -183,3 +183,17 @@
 
   transform: scale(1.2);
 }
+
+.desktopApps{
+  display: flex;
+  flex-direction: column;
+  
+  position: fixed;
+  padding-top: 64px;
+  padding-left: 16px;
+
+  flex-wrap: wrap;
+  max-height: 60vh;
+
+  gap: 16px;
+}
