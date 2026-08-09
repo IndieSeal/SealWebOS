@@ -264,6 +264,7 @@ export class BuildingWindow{
     constructor(id){
         this.myId = id;
         this.paintOptions = document.getElementById(`${this.myId}-options`);
+        this.disableText = document.getElementById(`${this.myId}-text`);
 
         this.spawnSealButton = document.getElementById(`${this.myId}_spawn`);
         this.spawnSealButton.style.pointerEvents = 'auto';
@@ -309,6 +310,8 @@ export class BuildingWindow{
             this.spawnSealButton.classList.add('active');
 
             this.currentOption.createGhost();
+
+            this.disableText.style.display = 'flex';
         }
         else this.currentBrushState = EBrushState.NONE;
     }
@@ -321,6 +324,8 @@ export class BuildingWindow{
             this.eraserSealButton.classList.add('active');
 
             this.paintInstanceList.forEach(instance => instance.element.style.pointerEvents = 'auto');
+
+            this.disableText.style.display = 'flex';
         }
         else this.currentBrushState = EBrushState.NONE;
     }
@@ -330,6 +335,8 @@ export class BuildingWindow{
         document.documentElement.classList.remove('brush');
         document.documentElement.classList.remove('eraser');
         document.body.style.pointerEvents = 'auto';
+
+        this.disableText.style.display = 'none';
 
         this.currentOption.destroyGhost();
         

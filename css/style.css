@@ -14,6 +14,7 @@
 :root{
     --primary-color: #c0f7f3;
     --window-header-color: #2196F3;
+    --window-bright-header-color: rgb(54, 104, 145);
     --window-selected-header-color: #2c5475;
     
     --font-size-m: 1.12rem;
