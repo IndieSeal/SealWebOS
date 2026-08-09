@@ -166,8 +166,6 @@ class PaintInstance{
         this.destroying = true;
         this.element.onclick = null;
         
-        //UnsubscribeToZIndex(this.onZIndexIncreased);
-        
         this.imageElement.remove();
         let explodeElement = instantiateBeforeEnd(explosionPrefab, this.element);
         
@@ -176,8 +174,12 @@ class PaintInstance{
     }
 }
 
+//#region Paint Options
+
+//#region Classes
+
 class PaintOption{
-    index = 0;
+    instanceIndex = 0;
     
     constructor(id, src, sizeX = 64, sizeY = 64, offsetX = -64, offsetY = -64){        
         this.myId = id;
@@ -190,7 +192,7 @@ class PaintOption{
 
         this.placeablePrefab = `
             <div class="placeable" style="width: ${sizeX}px; height: ${sizeY}px;">
-                <img id="${this.myId}_placeableImage" style="image-rendering: pixelated;" src="${this.src}">
+                <img style="image-rendering: pixelated;" src="${this.src}">
             </div>
         `;
         
@@ -236,15 +238,15 @@ class PaintOption{
     }
 
     onPlace(x, y){
-        let instance = instantiateBeforeEnd(this.placeablePrefab, document.body);
+        this.instanceIndex++;
+
+        var instance = instantiateBeforeEnd(this.placeablePrefab, document.body);
         instance.style.left = `${x}px`;
         instance.style.top = `${y}px`;
 
-        let imageElement = document.getElementById(`${this.myId}_placeableImage`)
-        imageElement.id += `${index}`;
-        
-        paintInstanceList.push(new PaintInstance(index, instance, imageElement));
-        index++;
+        var imageElement = instance.querySelector('img');
+
+        paintInstanceList.push(new PaintInstance(this.instanceIndex, instance, imageElement));
     }
 }
 
@@ -255,11 +257,13 @@ class SealOption extends PaintOption{
         this.uniqueSeal = uniqueSeal;
     }
     
-    onPlace(x, y){
+    /*onPlace(x, y){
         super.onPlace(x, y);
-        //paintInstanceList.push(new MovingSeal(index++, this.uniqueSeal, x, y));
-    }
+        paintInstanceList.push(new MovingSeal(index++, this.uniqueSeal, x, y));
+    }*/
 }
+
+//#endregion
 
 var paintOptionList = [];
 var sealOption1 = new SealOption(1, "paint-greyseal", './imgs/MovingSeal/Seal1_right0.png');
@@ -296,10 +300,10 @@ eraserSealButton.onclick = setEraserMode;
 
 const nukeSealButton = document.getElementById('movingSeal_nuke');
 nukeSealButton.style.pointerEvents = 'auto';
-nukeSealButton.onclick = nukeSeals;
+nukeSealButton.onclick = nukeInstances;
 
 const explosionPrefab = `
-    <img src="https://i.giphy.com/pKWCBvHevLcMU.webp">
+    <img style="pointer-events: none;" src="https://i.giphy.com/pKWCBvHevLcMU.webp">
 `;
 
 function setPaintMode(){
@@ -308,7 +312,7 @@ function setPaintMode(){
     if(currentBrushState != EBrushState.PAINT){
         currentBrushState = EBrushState.PAINT;
 
-        document.addEventListener('mousedown', spawnSeal);
+        document.addEventListener('mousedown', spawnPaintOption);
         document.documentElement.classList.add('brush');
 
         spawnSealButton.classList.add('active');
@@ -331,7 +335,7 @@ function setEraserMode(){
 }
 
 function changeBrush(){
-    document.removeEventListener('mousedown', spawnSeal);
+    document.removeEventListener('mousedown', spawnPaintOption);
     document.documentElement.classList.remove('brush');
     document.documentElement.classList.remove('eraser');
     document.body.style.pointerEvents = 'auto';
@@ -346,7 +350,7 @@ function changeBrush(){
 
 var paintInstanceList = [];
 var index = 0;
-function spawnSeal(e){
+function spawnPaintOption(e){
     e = e || window.event;
     e.preventDefault();
 
@@ -360,23 +364,21 @@ function spawnSeal(e){
     currentOption.tryPlace(e.clientX, e.clientY);
 }
 
-
-// instead this needs to be tryDeleteInstance, but class needs to be implemented
 function tryDeleteInstance(paintInstance, force = false){
     if(currentBrushState != EBrushState.ERASER && !force) return false;
     
     if(!force) playSmallBoomAudio();
 
-    paintInstanceList = paintInstanceList.filter(item => item.index != paintInstance.index);
+    paintInstanceList = paintInstanceList.filter(instance => instance.index != paintInstance.index);
 
     return true;
 }
 
-function nukeSeals(){
+function nukeInstances(){
     if(paintInstanceList.length == 0) return;
 
     playBigBoomAudio();
-    paintInstanceList.forEach(seal => seal.destroy(true));
+    paintInstanceList.forEach(instance => instance.destroy(true));
 }
 
 tryDisableInteraction();
@@ -386,3 +388,5 @@ function tryDisableInteraction(){
 
     document.body.style.pointerEvents = 'none';
 }
+
+//#endregion

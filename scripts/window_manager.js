@@ -226,6 +226,8 @@ class Window{
   }
 
   handleWindowTap = () => {
+    //I should make it so if you're already in that window, then don't increase the Z-Index, it's unnecesary
+    
     IncreaseZIndex();
 
     this.window.style.zIndex = biggestZIndex;
