@@ -147,13 +147,11 @@ class MovingSeal extends PaintInstance{
     }
 }
 
-const paintOptions = document.getElementById('seal-options');
-
 //#region Paint Options
 
 //#region Classes
 
-class PaintOption{
+export class PaintOption{
     instanceIndex = 0;
     
     constructor(buildingWindow, id, src, sizeX = 64, sizeY = 64, offsetX = -64, offsetY = -64){        
@@ -186,7 +184,7 @@ class PaintOption{
         this.ghostInstance.classList.add('ghost');
         this.destroyGhost();
         
-        this.boxElement = instantiateBeforeEnd(this.boxPrefab, paintOptions);
+        this.boxElement = instantiateBeforeEnd(this.boxPrefab, this.buildWindow.paintOptions);
         this.boxElement.style.pointerEvents = 'auto';
 
         this.boxElement.onclick = () => this.buildWindow.setPaintOption(this);
@@ -223,7 +221,7 @@ class PaintOption{
 
         let imageElement = instance.querySelector('img');
 
-        if(createDefault) paintInstanceList.push(new PaintInstance(this.instanceIndex, instance, imageElement));
+        if(createDefault) this.buildWindow.paintInstanceList.push(new PaintInstance(this.buildWindow, this.instanceIndex, instance, imageElement));
 
         return [instance, imageElement];
     }
@@ -254,7 +252,7 @@ const explosionPrefab = `
     <img style="pointer-events: none;" src="https://i.giphy.com/pKWCBvHevLcMU.webp">
 `;
 
-class BuildingWindow{
+export class BuildingWindow{
     paintOptionList = [];
     currentOption = undefined;
 
@@ -265,6 +263,7 @@ class BuildingWindow{
     
     constructor(id){
         this.myId = id;
+        this.paintOptions = document.getElementById(`${this.myId}-options`);
 
         this.spawnSealButton = document.getElementById(`${this.myId}_spawn`);
         this.spawnSealButton.style.pointerEvents = 'auto';

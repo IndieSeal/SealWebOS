@@ -255,3 +255,4 @@ var welcomeWindow = new Window("welcome", true, true, 'Introduction', './imgs/Ap
 var sealtokWindow = new Window("sealtok", false, true, 'SealTok', './imgs/AppIcons/Sealtok.png');
 var sealClickerWindow = new Window("sealclicker", false, false, 'Seal Clicker', './imgs/AppIcons/SealClicker.png');
 var movingSealWindow = new Window("movingsealwindow", false, true, 'Moving Seals', './imgs/AppIcons/SealClicker.png');
+var sandbuilderWindow = new Window("sandbuilderwindow", false, true, 'Sand Builder', './imgs/AppIcons/SealClicker.png')
