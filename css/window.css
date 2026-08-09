@@ -32,7 +32,7 @@
 
   width: 300px;
   
-  top: calc(30% - 90px);
+  top: calc(25% - 90px);
   left: calc(70% - 180px);
 }
 
@@ -41,8 +41,17 @@
 
   width: 300px;
   
-  top: calc(30% - 90px);
-  left: calc(30% - 180px);
+  top: calc(25% - 90px);
+  left: calc(20% - 180px);
+}
+
+#settingswindow{
+  background-color: #f1f1f1;
+
+  width: 400px;
+  
+  top: calc(60% - 90px);
+  left: calc(40% - 180px);
 }
 
 .windows{

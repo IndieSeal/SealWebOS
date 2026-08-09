@@ -53,3 +53,5 @@ Used Sounds:
 ## Sand Builder
 Used Images:
 - [Sand Castle](https://pngimg.com/image/70925)
+- [Starfish](https://freesvg.org/starfish)
+- [Sand Dollar](https://freesvg.org/sand-dollar)
