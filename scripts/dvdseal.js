@@ -76,8 +76,6 @@ function animate(){
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
-var isSelectingSeal = false;
-
 document.addEventListener("mousedown", (event) => {
     const rect = renderer.domElement.getBoundingClientRect();
 
@@ -110,11 +108,12 @@ var speed = 0;
 var directionX = 0;
 var directionY = 0;
 
+var isSelectingSeal = false;
 var firstSelect = false;
 
 function onMouseStartSelect(event){
-    firstSelect = true;
     isSelectingSeal = true;
+    firstSelect = true;
 
     document.addEventListener('mouseup', onMouseEndSelect);
     document.addEventListener('mousemove', onMouseMoved);

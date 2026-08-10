@@ -1,5 +1,6 @@
 import { clamp, lerp } from "./mathf.js";
 import { deltaTime } from "./time.js";
+import { addCategoryAudio, createAudioSetting } from "./settings.js";
 
 var buttons = document.querySelectorAll('button');
 buttons.forEach(button => {
@@ -51,6 +52,7 @@ export function sealClicker_playClickAudio(){
 }
 
 var sealClicker_Buy = document.getElementById("sealclicker-buy"); 
+addCategoryAudio('ui', sealClicker_Buy);
 export function sealClicker_playBuyAudio(){
   playAudio(sealClicker_Buy, true);
 }
@@ -67,12 +69,14 @@ export function playSmallBoomAudio(){
 }
 
 var bigBoom = document.getElementById("bigBoom"); 
+addCategoryAudio('sfx', bigBoom);
 bigBoom.volume = 0.2;
 export function playBigBoomAudio(){
   playAudio(bigBoom);
 }
 
 var breakGlass = document.getElementById("breakGlass"); 
+addCategoryAudio('sfx', breakGlass);
 breakGlass.volume = 0.4;
 export function playBreakGlassAudio(){
   playAudio(breakGlass);
@@ -120,6 +124,7 @@ window.addEventListener('pointerdown', (e) => {
 var seaBackground = document.getElementById("seaBackground");
 seaBackground.loop = true;
 seaBackground.volume = 0.05;
+createAudioSetting(seaBackground, 'Sea Ambient');
 
 var dragAudio = document.getElementById("dragAudio"); 
 dragAudio.loop = true;
