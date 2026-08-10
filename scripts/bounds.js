@@ -17,6 +17,11 @@ export function getMaxX(element){
     return windowWidth - rect.width;
 }
 
+export function getMinY(){
+    let windowHeight = navbarRect.bottom;
+    return windowHeight;
+}
+
 export function getMaxY(element){
     let windowHeight = window.innerHeight;
     if(element == undefined) return windowHeight;
@@ -30,5 +35,5 @@ export function getClampedX(element, currentX){
 }
 
 export function getClampedY(element, currentY){
-    return Math.max(navbarRect.bottom, Math.min(currentY, getMaxY(element)));
+    return Math.max(getMinY(), Math.min(currentY, getMaxY(element)));
 }

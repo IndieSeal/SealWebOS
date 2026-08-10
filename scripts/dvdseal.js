@@ -7,6 +7,10 @@ import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/l
 
 import { deltaTime } from './time.js';
 import { SubscribeToZIndex } from "./window_global.js";
+import { clamp, instantiateBeforeEnd, lerp } from "./mathf.js";
+import { getClampedX, getClampedY, getMaxX, getMaxY, getMinY } from "./bounds.js";
+
+//#region 3D Model
 
 const modelSize = 7; // Smaller is bigger
 const rotationSpeed = 4;
@@ -38,8 +42,14 @@ loader.load(
 const renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(window.innerWidth / modelSize, window.innerHeight / modelSize);
 
-document.getElementById('container3D').appendChild(renderer.domElement);
+renderer.domElement.style.left = `calc(90% - 100px)`;
+renderer.domElement.style.top = `calc(90% - 80px)`;
+
+const container = document.getElementById('container3D');
+container.appendChild(renderer.domElement);
 camera.position.z = 250;
+
+//instantiateBeforeEnd(`<div style="display: flex; width: 100px; height: 100px;">hola</div>`, renderer.domElement);
 
 const topLight = new THREE.DirectionalLight(0xffffff, 1);
 topLight.position.set(500, 500, 500);
@@ -52,14 +62,15 @@ scene.add(ambientLight);
 animate();
 function animate(){
     requestAnimationFrame(animate);
-
-    if(object) object.rotation.y += rotationSpeed * deltaTime;
+    if(object) object.rotation.y += (speed * rotationSpeed * deltaTime) * directionX;
     renderer.render(scene, camera);
 }
 
+//#endregion
+
 //#region Raycasting
 
-// Had to use AI :[
+// Had to use AI :[ (ONLY FOR THE RAYCASTING, LET ME MAKE THAT CLEAR)
 // I couldn't find any good sources for raycasting
 
 const raycaster = new THREE.Raycaster();
@@ -81,39 +92,71 @@ document.addEventListener("mousedown", (event) => {
     }
 });
 
+const loweringSpeed = 3;
+const forceMultiplier = 0.5;
+
+var cursorX = 0;
+var cursorY = 0;
 var previousCursorX = 0;
 var previousCursorY = 0;
+
+var currentX = 0;
+var currentY = 0;
 
 var grabXOffset = 0;
 var grabYOffset = 0;
 
+var speed = 0;
+var directionX = 0;
+var directionY = 0;
+
+var firstSelect = false;
+
 function onMouseStartSelect(event){
+    firstSelect = true;
     isSelectingSeal = true;
 
     document.addEventListener('mouseup', onMouseEndSelect);
     document.addEventListener('mousemove', onMouseMoved);
 
     const rect = renderer.domElement.getBoundingClientRect();
-    grabXOffset = event.clientX - rect.left;
-    grabYOffset = event.clientY - rect.top;
+
+    cursorX = event.clientX;
+    cursorY = event.clientY;
+
+    grabXOffset = cursorX - rect.left;
+    grabYOffset = cursorY - rect.top;
 
     delayedDrag(event.clientX, event.clientY);
+
+    speed = 0;
+    directionX = 0;
+    directionY = 0;
 }
 
 function onMouseMoved(event){
-    let cursorX = event.clientX;
-    let cursorY = event.clientY;
+    cursorX = event.clientX;
+    cursorY = event.clientY;
     
-    renderer.domElement.style.left = `${cursorX - grabXOffset}px`;
-    renderer.domElement.style.top = `${cursorY - grabYOffset}px`;
+    currentX = cursorX - grabXOffset;
+    currentY = cursorY - grabYOffset;
+    
+    renderer.domElement.style.left = `${currentX}px`;
+    renderer.domElement.style.top = `${currentY}px`;
 
     requestAnimationFrame(() => delayedDrag(cursorX, cursorY));
 
     let xDifference = cursorX - previousCursorX;
     let yDifference = cursorY - previousCursorY;
 
+    if(xDifference > 0) directionX = 1;
+    else if(xDifference < 0) directionX = -1;
+
+    if(yDifference > 0) directionY = 1;
+    else if(yDifference < 0) directionY = -1;
+
     let force = Math.sqrt((xDifference * xDifference) + (yDifference * yDifference));
-    console.log(force);
+    speed = force * forceMultiplier;
 }
 
 function delayedDrag(x, y){
@@ -124,6 +167,28 @@ function delayedDrag(x, y){
 function onMouseEndSelect(event){
     document.removeEventListener('mouseup', onMouseEndSelect);
     document.removeEventListener('mousemove', onMouseMoved);
+
+    isSelectingSeal = false;
+}
+
+//#endregion
+
+//#region Movement
+
+moveSeal();
+function moveSeal(){
+    requestAnimationFrame(moveSeal);
+
+    speed = lerp(speed, 0, loweringSpeed * deltaTime);
+    if(!firstSelect || isSelectingSeal) return;
+
+    currentX = getClampedX(renderer.domElement, currentX + (speed * directionX));
+    currentY = getClampedY(renderer.domElement, currentY + (speed * directionY));
+    if(currentX == 0 || currentX == getMaxX(renderer.domElement)) directionX *= -1;
+    if(currentY == getMinY() || currentY == getMaxY(renderer.domElement)) directionY *= -1;
+    
+    renderer.domElement.style.left = `${currentX}px`;
+    renderer.domElement.style.top = `${currentY}px`;
 }
 
 //#endregion
