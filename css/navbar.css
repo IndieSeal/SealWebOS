@@ -42,8 +42,12 @@
     width: 64px;
     height: 64px;
 
-    transform: rotate(0deg);
+    transform: rotate(0deg) scale(1);
     transition: transform 0.25s;
+}
+
+.navbar .companion-seal:hover{
+    transform: rotate(10deg) scale(1.1);
 }
 
 .clock-text{

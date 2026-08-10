@@ -72,6 +72,12 @@ export function playBigBoomAudio(){
   playAudio(bigBoom);
 }
 
+var breakGlass = document.getElementById("breakGlass"); 
+breakGlass.volume = 0.4;
+export function playBreakGlassAudio(){
+  playAudio(breakGlass);
+}
+
 function playAudio(audio, interrupt = false, pause = true){
   if(!hasBeenEnabled) return;
   if(interrupt || (pause && audio.currentTime > 0.1)) stopAudio(audio);

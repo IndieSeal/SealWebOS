@@ -391,6 +391,3 @@ var sealBuildWindow = new BuildingWindow('movingSeal');
 var sealOption1 = new SealOption(1, sealBuildWindow, "paint-greyseal", './imgs/MovingSeal/Seal1_right0.png');
 var sealOption2 = new SealOption(2, sealBuildWindow, "paint-polarseal", './imgs/MovingSeal/Seal2_right0.png');
 sealBuildWindow.setup([sealOption1, sealOption2]);
-
-//const brickScreenElement =  document.getElementById('brick-screen');
-//SubscribeToZIndex((index) => brickScreenElement.style.zIndex = index + 1000);

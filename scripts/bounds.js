@@ -10,16 +10,18 @@ function onZIndexIncreased(index){
 }
 
 export function getMaxX(element){
-    const rect = element.getBoundingClientRect();
-
     let windowWidth = window.innerWidth;
+    if(element == undefined) return windowWidth;
+
+    const rect = element.getBoundingClientRect();
     return windowWidth - rect.width;
 }
 
 export function getMaxY(element){
-    const rect = element.getBoundingClientRect();
-
     let windowHeight = window.innerHeight;
+    if(element == undefined) return windowHeight;
+    
+    const rect = element.getBoundingClientRect();
     return windowHeight - rect.height;
 }
 
