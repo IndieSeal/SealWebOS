@@ -180,7 +180,11 @@ b{
 }
 
 #container3D{
+    position: absolute;
     pointer-events: none;
+
+    width: 100vw;
+    height: 100vh;
 }
 
 #container3D canvas{

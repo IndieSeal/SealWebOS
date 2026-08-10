@@ -6,7 +6,9 @@ import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/js
 import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
 
 import { deltaTime } from './time.js';
+import { SubscribeToZIndex } from "./window_global.js";
 
+const modelSize = 7; // Smaller is bigger
 const rotationSpeed = 4;
 let objToRender = 'seal';
 
@@ -22,6 +24,8 @@ loader.load(
     function(gltf){
         object = gltf.scene;
         scene.add(object);
+
+        SubscribeToZIndex((index) => { renderer.domElement.style.zIndex = index + 2000});
     },
     function(xhr){
         console.log((xhr.loaded / xhr.total * 100) + '% loaded');
@@ -32,7 +36,7 @@ loader.load(
 );
 
 const renderer = new THREE.WebGLRenderer({ alpha: true });
-renderer.setSize(window.innerWidth / 7, window.innerHeight / 7);
+renderer.setSize(window.innerWidth / modelSize, window.innerHeight / modelSize);
 
 document.getElementById('container3D').appendChild(renderer.domElement);
 camera.position.z = 250;
@@ -61,6 +65,8 @@ function animate(){
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
+var isSelectingSeal = false;
+
 document.addEventListener("mousedown", (event) => {
     const rect = renderer.domElement.getBoundingClientRect();
 
@@ -71,12 +77,53 @@ document.addEventListener("mousedown", (event) => {
 
     if (object) {
         const intersects = raycaster.intersectObject(object, true);
-        if (intersects.length > 0) onMouseStartSelect();
+        if (intersects.length > 0) onMouseStartSelect(event);
     }
 });
 
-function onMouseStartSelect(){
+var previousCursorX = 0;
+var previousCursorY = 0;
 
+var grabXOffset = 0;
+var grabYOffset = 0;
+
+function onMouseStartSelect(event){
+    isSelectingSeal = true;
+
+    document.addEventListener('mouseup', onMouseEndSelect);
+    document.addEventListener('mousemove', onMouseMoved);
+
+    const rect = renderer.domElement.getBoundingClientRect();
+    grabXOffset = event.clientX - rect.left;
+    grabYOffset = event.clientY - rect.top;
+
+    delayedDrag(event.clientX, event.clientY);
+}
+
+function onMouseMoved(event){
+    let cursorX = event.clientX;
+    let cursorY = event.clientY;
+    
+    renderer.domElement.style.left = `${cursorX - grabXOffset}px`;
+    renderer.domElement.style.top = `${cursorY - grabYOffset}px`;
+
+    requestAnimationFrame(() => delayedDrag(cursorX, cursorY));
+
+    let xDifference = cursorX - previousCursorX;
+    let yDifference = cursorY - previousCursorY;
+
+    let force = Math.sqrt((xDifference * xDifference) + (yDifference * yDifference));
+    console.log(force);
+}
+
+function delayedDrag(x, y){
+    previousCursorX = x;
+    previousCursorY = y;
+}
+
+function onMouseEndSelect(event){
+    document.removeEventListener('mouseup', onMouseEndSelect);
+    document.removeEventListener('mousemove', onMouseMoved);
 }
 
 //#endregion
