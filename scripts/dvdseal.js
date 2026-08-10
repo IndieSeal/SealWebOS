@@ -91,7 +91,7 @@ document.addEventListener("mousedown", (event) => {
 });
 
 const loweringSpeed = 3;
-const forceMultiplier = 0.5;
+const forceMultiplier = 0.02;
 
 var cursorX = 0;
 var cursorY = 0;
@@ -145,16 +145,10 @@ function onMouseMoved(event){
 
     requestAnimationFrame(() => delayedDrag(cursorX, cursorY));
 
-    let xDifference = cursorX - previousCursorX;
-    let yDifference = cursorY - previousCursorY;
+    directionX = cursorX - previousCursorX;
+    directionY = cursorY - previousCursorY;
 
-    if(xDifference > 0) directionX = 1;
-    else if(xDifference < 0) directionX = -1;
-
-    if(yDifference > 0) directionY = 1;
-    else if(yDifference < 0) directionY = -1;
-
-    let force = Math.sqrt((xDifference * xDifference) + (yDifference * yDifference));
+    let force = Math.sqrt((directionX * directionX) + (directionY * directionY));
     speed = force * forceMultiplier;
 }
 

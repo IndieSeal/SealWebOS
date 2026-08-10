@@ -28,7 +28,8 @@
 }
 
 #movingsealwindow{
-  background-color: #efefef;
+  background: #dbd4ab;
+  background: linear-gradient(0deg, rgba(219, 212, 171, 0.3) 0%, rgba(191, 235, 255, 0.3) 100%);
 
   width: 300px;
   
@@ -37,7 +38,8 @@
 }
 
 #sandbuilderwindow{
-  background-color: #efefef;
+  background: #dbd4ab;
+  background: linear-gradient(0deg, rgba(219, 212, 171, 0.3) 0%, rgba(191, 235, 255, 0.3) 100%);
 
   width: 300px;
   

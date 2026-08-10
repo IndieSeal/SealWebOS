@@ -50,12 +50,23 @@ export function addCategoryAudio(categoryName, audio){
 }
 
 class Category{
+    volume = 1;
     audioList = [];
-    constructor(categoryName){
+
+    constructor(categoryName, slider = undefined){
         this.name = categoryName;
+
+        if(slider != undefined) {
+            this.slider = slider;
+            this.slider.addEventListener('input', (e) => this.changeVolume(e.target.value));
+        }
     }
 
     addAudio = (audio) => {
         this.audioList.push(audio);
+    }
+
+    changeVolume = (volume) => {
+        this.audioList.forEach(audio => audio.volume = volume);
     }
 }

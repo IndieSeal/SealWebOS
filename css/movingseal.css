@@ -2,22 +2,35 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 32px;
-    height: 32px;
-    background-color: rgb(255, 255, 255);
+    width: 64px;
+    height: 64px;
+    background-color: rgb(180, 241, 230);
+
+    border: solid white 3px;
+
+    border-radius: 10px;
 }
 
 .brush-option_box .innerBox{
     color: transparent;
-    width: 24px;
-    height: 24px;
-    border: solid white 2px;
+    width: 64px;
+    height: 64px;
+    border: none;
 
     pointer-events: none;
 }
 
-.brush-option_box.active .innerBox{
-    border: solid aqua 2px;
+.brush-option_box .innerSmallBox{
+    color: transparent;
+    width: 48px;
+    height: 48px;
+    border: none;
+
+    pointer-events: none;
+}
+
+.brush-option_box.active{
+    border: solid rgb(255, 179, 0) 5px;
 }
 
 .brush-options{

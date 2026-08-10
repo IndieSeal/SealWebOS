@@ -174,7 +174,7 @@ export class PaintOption{
         this.boxPrefab = `
             <button id="${this.myId}" class="brush-option_box">
                 <div class="innerBox">
-                    <img src="${this.src}">
+                    <img style="image-rendering: pixelated;" src="${this.src}">
                 </div>
             </button>
         `;
