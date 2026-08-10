@@ -1,5 +1,5 @@
 import { SubscribeToZIndex } from "./window_global.js";
-import { playBreakGlassAudio, setupAudioEvents } from "./audio.js";
+import { playAirWooshAudio, playBreakGlassAudio, setupAudioEvents } from "./audio.js";
 import { clamp, instantiateBeforeEnd } from "./mathf.js";
 import { getMaxX, getMaxY } from "./bounds.js";
 
@@ -20,6 +20,8 @@ function brickYou(){
 
     brickScreenElement.style.display = 'flex';
     latestTimeout = setTimeout(unBrickYou, 1200);
+
+    setTimeout(playAirWooshAudio, 300);
 }
 
 const brokenPrefab = `

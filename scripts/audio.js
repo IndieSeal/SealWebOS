@@ -78,6 +78,12 @@ export function playBreakGlassAudio(){
   playAudio(breakGlass);
 }
 
+var airWoosh = document.getElementById("airWoosh"); 
+airWoosh.volume = 1;
+export function playAirWooshAudio(){
+  playAudio(airWoosh);
+}
+
 function playAudio(audio, interrupt = false, pause = true){
   if(!hasBeenEnabled) return;
   if(interrupt || (pause && audio.currentTime > 0.1)) stopAudio(audio);

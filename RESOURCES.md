@@ -10,6 +10,8 @@ Used Images:
 - [Sand Background](https://jooinn.com/sand-texture-3.html)
 
 Used Sounds:
+- [Air Woosh](https://pixabay.com/sound-effects/film-special-effects-air-84482/)
+- [Broken Glass](https://pixabay.com/sound-effects/household-glass-broken-43626/)
 - [Background Sound (Water)](https://freesound.org/s/203158/)
 
 ## Seal Clicker
