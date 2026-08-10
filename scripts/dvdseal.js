@@ -13,7 +13,7 @@ let objToRender = 'seal';
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-let object;
+let object = undefined;
 
 const loader = new GLTFLoader();
 
@@ -32,10 +32,10 @@ loader.load(
 );
 
 const renderer = new THREE.WebGLRenderer({ alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(window.innerWidth / 7, window.innerHeight / 7);
 
 document.getElementById('container3D').appendChild(renderer.domElement);
-camera.position.z = 500;
+camera.position.z = 250;
 
 const topLight = new THREE.DirectionalLight(0xffffff, 1);
 topLight.position.set(500, 500, 500);
@@ -45,6 +45,7 @@ scene.add(topLight);
 const ambientLight = new THREE.AmbientLight(0x333333, 5);
 scene.add(ambientLight);
 
+animate();
 function animate(){
     requestAnimationFrame(animate);
 
@@ -52,10 +53,30 @@ function animate(){
     renderer.render(scene, camera);
 }
 
-/*window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-});*/
+//#region Raycasting
 
-animate();
+// Had to use AI :[
+// I couldn't find any good sources for raycasting
+
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+document.addEventListener("mousedown", (event) => {
+    const rect = renderer.domElement.getBoundingClientRect();
+
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    if (object) {
+        const intersects = raycaster.intersectObject(object, true);
+        if (intersects.length > 0) onMouseStartSelect();
+    }
+});
+
+function onMouseStartSelect(){
+
+}
+
+//#endregion
