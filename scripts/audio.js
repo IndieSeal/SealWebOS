@@ -37,16 +37,19 @@ function onClick(){
 
 var hoverAudio = document.getElementById("hoverAudio"); 
 hoverAudio.volume = 0.6;
+addCategoryAudio('ui', hoverAudio);
 export function playHoverAudio(){
   playAudio(hoverAudio, true);
 }
 
 var selectAudio = document.getElementById("selectAudio"); 
+addCategoryAudio('ui', selectAudio);
 export function playSelectAudio(){
   playAudio(selectAudio);
 }
 
 var sealClicker_Click = document.getElementById("sealclicker-click"); 
+addCategoryAudio('ui', sealClicker_Click);
 export function sealClicker_playClickAudio(){
   playAudio(sealClicker_Click);
 }
@@ -58,32 +61,35 @@ export function sealClicker_playBuyAudio(){
 }
 
 var sealClicker_Squish = document.getElementById("sealclicker-squish"); 
-sealClicker_Squish.volume = 0.15;
+sealClicker_Squish.volume = 0.1;
+addCategoryAudio('ui', sealClicker_Squish);
 export function sealClicker_playSquishAudio(){
   playAudio(sealClicker_Squish);
 }
 
 var smallBoom = document.getElementById("smallBoom"); 
+addCategoryAudio('sfx', smallBoom);
 export function playSmallBoomAudio(){
   playAudio(smallBoom);
 }
 
 var bigBoom = document.getElementById("bigBoom"); 
-addCategoryAudio('sfx', bigBoom);
 bigBoom.volume = 0.2;
+addCategoryAudio('sfx', bigBoom);
 export function playBigBoomAudio(){
   playAudio(bigBoom);
 }
 
 var breakGlass = document.getElementById("breakGlass"); 
-addCategoryAudio('sfx', breakGlass);
 breakGlass.volume = 0.4;
+addCategoryAudio('sfx', breakGlass);
 export function playBreakGlassAudio(){
   playAudio(breakGlass);
 }
 
 var airWoosh = document.getElementById("airWoosh"); 
 airWoosh.volume = 1;
+addCategoryAudio('sfx', airWoosh);
 export function playAirWooshAudio(){
   playAudio(airWoosh);
 }
@@ -130,6 +136,7 @@ var dragAudio = document.getElementById("dragAudio");
 dragAudio.loop = true;
 dragAudio.volume = 0;
 dragAudio.playbackRate = 2;
+var dragCategoryAudio = addCategoryAudio('ui', dragAudio);
 
 var currentValue = 0;
 
@@ -144,7 +151,8 @@ export function setDragAudioVolume(window, value){
   if(value > MAX_VOLUME) value = MAX_VOLUME;
   currentValue = clamp(0, MAX_VOLUME, lerp(currentValue, value, dragLerpSpeed * deltaTime)).toFixed(3);
 
-  dragAudio.volume = currentValue;
+  //dragAudio.volume = currentValue;
+  dragCategoryAudio.changeBaseVolume(currentValue);
 }
 
 export function setDragMaster(window){

@@ -252,6 +252,7 @@ const explosionPrefab = `
     <img style="pointer-events: none;" src="https://i.giphy.com/pKWCBvHevLcMU.webp">
 `;
 
+var buildWindows = [];
 export class BuildingWindow{
     paintOptionList = [];
     currentOption = undefined;
@@ -262,6 +263,8 @@ export class BuildingWindow{
     index = 0;
     
     constructor(id){
+        buildWindows.push(this);
+
         this.myId = id;
         this.paintOptions = document.getElementById(`${this.myId}-options`);
         this.disableText = document.getElementById(`${this.myId}-text`);
@@ -330,7 +333,15 @@ export class BuildingWindow{
         else this.currentBrushState = EBrushState.NONE;
     }
 
-    changeBrush = () => {
+    changeBrush = (recurse = true) => {
+        if(!recurse){
+            buildWindows.forEach(wind => {
+                if(wind == this) return;
+
+                wind.changeBrush(false);
+            });
+        }
+        
         document.removeEventListener('mousedown', this.spawnPaintOption);
         document.documentElement.classList.remove('brush');
         document.documentElement.classList.remove('eraser');

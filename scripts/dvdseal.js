@@ -31,9 +31,7 @@ loader.load(
 
         SubscribeToZIndex((index) => { renderer.domElement.style.zIndex = index + 2000});
     },
-    function(xhr){
-        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-    },
+    function(xhr){ },
     function(error){
         console.error(error);
     }

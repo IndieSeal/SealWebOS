@@ -14,9 +14,9 @@ const audioSliderPrefab = `
 export function createAudioSetting(audioRef, name){
     let instance = instantiateBeforeEnd(audioSliderPrefab, audioSettingsHolder);
 
-    let settingsNameElement = document.getElementsByClassName('settingsName')[0];
-    let audioSliderElement = document.getElementsByClassName('audioSlider')[0];
-    let audioValueElement = document.getElementsByClassName('audioSetting-value')[0];
+    let settingsNameElement = instance.getElementsByClassName('settingsName')[0];
+    let audioSliderElement = instance.getElementsByClassName('audioSlider')[0];
+    let audioValueElement = instance.getElementsByClassName('audioSetting-value')[0];
 
     settingsNameElement.innerHTML = `${name}`;
     audioValueElement.innerHTML = `${audioRef.volume * 100}%`;
@@ -35,38 +35,66 @@ function updateAudioSetting(e, audioValElement, audioRef){
 var categories = [];
 export function addCategoryAudio(categoryName, audio){
     let category = categories.find(cat => cat.name == categoryName);
-    if(category != undefined){
-        category.audioList.push(audio);
-
-        console.log("pushed into category!");
+    if(category == undefined) {
+        category = new Category(categoryName);
+        console.log(`Created category: ${categoryName}`);
     }
-    else{
-        let newCategory = new Category(categoryName);
-        categories.push(newCategory);
-
-        newCategory.addAudio(audio);
-        console.log(`added a new category! Which is: ${categoryName}`);
-    }
+    
+    let catAudio = new CategoryAudio(audio);
+    category.addAudio(catAudio);
+    
+    return catAudio;
 }
 
 class Category{
     volume = 1;
     audioList = [];
 
-    constructor(categoryName, slider = undefined){
+    constructor(categoryName){
+        categories.push(this);
+        
         this.name = categoryName;
 
-        if(slider != undefined) {
-            this.slider = slider;
-            this.slider.addEventListener('input', (e) => this.changeVolume(e.target.value));
-        }
+        this.instance = instantiateBeforeEnd(audioSliderPrefab, audioSettingsHolder);
+
+        this.settingsNameElement = this.instance.getElementsByClassName('settingsName')[0];
+        this.audioSliderElement = this.instance.getElementsByClassName('audioSlider')[0];
+        this.audioValueElement = this.instance.getElementsByClassName('audioSetting-value')[0];
+
+        this.settingsNameElement.innerHTML = `${this.name}`;
+        this.audioValueElement.innerHTML = `${this.volume * 100}%`;
+        this.audioSliderElement.value = this.volume;
+
+        this.audioSliderElement.addEventListener('input', (e) => this.updateCategoryAudioSetting());
     }
 
     addAudio = (audio) => {
         this.audioList.push(audio);
     }
 
-    changeVolume = (volume) => {
-        this.audioList.forEach(audio => audio.volume = volume);
+    updateCategoryAudioSetting = () => {
+        let value = this.audioSliderElement.value;
+
+        this.audioList.forEach(audio => audio.changeVolume(value));
+        this.audioValueElement.innerHTML = `${Math.round(value * 100)}%`;
+    }
+}
+
+class CategoryAudio{
+    constructor(audioRef){
+        this.audioRef = audioRef;
+        this.baseVolume = audioRef.volume;
+
+        this.latestVol = 1;
+    }
+
+    changeVolume = (vol) => {
+        this.latestVol = vol;
+        this.audioRef.volume = this.baseVolume * vol;
+    }
+
+    changeBaseVolume = (baseVol) => {
+        this.baseVolume = baseVol;
+        this.audioRef.volume = this.baseVolume * this.latestVol;
     }
 }
