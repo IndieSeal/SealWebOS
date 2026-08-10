@@ -178,3 +178,14 @@ b{
     justify-content: space-around;
     align-items: center;
 }
+
+#container3D canvas{
+    width: 10vw;
+    height: 10vh;
+    position: absolute;
+
+    z-index: 99999;
+
+    top: 0;
+    left: 0;
+}

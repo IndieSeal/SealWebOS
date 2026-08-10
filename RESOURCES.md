@@ -9,6 +9,9 @@ Used Tutorials:
 Used Images:
 - [Sand Background](https://jooinn.com/sand-texture-3.html)
 
+Used Models:
+- [Spinning Seal](https://sketchfab.com/3d-models/toon-characters-3d-style-lowpolyflat-seal-dcb997351230416382fc1e84624f127d)
+
 Used Sounds:
 - [Air Woosh](https://pixabay.com/sound-effects/film-special-effects-air-84482/)
 - [Broken Glass](https://pixabay.com/sound-effects/household-glass-broken-43626/)
