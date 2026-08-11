@@ -60,3 +60,7 @@ Used Images:
 - [Sand Castle](https://pngimg.com/image/70925)
 - [Starfish](https://freesvg.org/starfish)
 - [Sand Dollar](https://freesvg.org/sand-dollar)
+
+## DVD Seal
+Used Sounds:
+- [Squish](https://pixabay.com/sound-effects/film-special-effects-squish-pop-256410/)

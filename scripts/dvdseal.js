@@ -5,7 +5,7 @@ import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module
 import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
 
-import { sealClicker_playSquishAudio } from './audio.js';
+import { playSquishGrabAudio, sealClicker_playSquishAudio } from './audio.js';
 import { deltaTime } from './time.js';
 import { SubscribeToZIndex } from "./window_global.js";
 import { clamp, instantiateBeforeEnd, lerp } from "./mathf.js";
@@ -154,6 +154,7 @@ function onMouseStartSelect(event){
     directionX = 0;
     directionY = 0;
 
+    playSquishGrabAudio();
     document.documentElement.classList.add('forceGrab');
 }
 

@@ -89,27 +89,11 @@
     }
 }
 
-.waves .fish{
+.sea_fish{
     position: relative;
-    width: 70px;
     z-index: 5;
-
-    top: calc(50% - 90px);
-    left: calc(100%);
-
-    animation: fishMover 28s linear infinite;
-}
-
-@keyframes fishMover {
-    0%{
-        left: calc(100%);
-    }
-
-    25%{
-        left: calc(0% - 100px);
-    }
-
-    100%{
-        left: calc(0% - 100px);
-    }
+    
+    width: 96px;
+    height: 96px;
+    object-fit: contain;
 }

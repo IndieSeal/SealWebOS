@@ -69,7 +69,7 @@ export function sealClicker_playSquishAudio(){
 }
 
 var smallBoom = document.getElementById("smallBoom"); 
-smallBoom.volume = 0.7;
+smallBoom.volume = 0.3;
 addCategoryAudio('sfx', smallBoom);
 export function playSmallBoomAudio(){
   playAudio(smallBoom);
@@ -108,6 +108,12 @@ foxyScream.volume = 0.1;
 addCategoryAudio('sfx', foxyScream);
 export function playFoxyScreamAudio(){
   playAudio(foxyScream);
+}
+
+var squishGrab = document.getElementById("squishGrab"); 
+addCategoryAudio('sfx', squishGrab);
+export function playSquishGrabAudio(){
+  playAudio(squishGrab, true);
 }
 
 function playAudio(audio, interrupt = false, pause = true){

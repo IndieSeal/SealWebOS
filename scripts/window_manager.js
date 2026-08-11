@@ -252,8 +252,8 @@ export function getWindow(id){
 }
 
 var welcomeWindow = new Window("welcome", true, true, 'Introduction', './imgs/AppIcons/AboutMe.png');
+var settingsWindow = new Window("settingswindow", false, true, 'Settings', './imgs/AppIcons/Settings.svg');
 var sealtokWindow = new Window("sealtok", false, true, 'SealTok', './imgs/AppIcons/Sealtok.png');
 var sealClickerWindow = new Window("sealclicker", false, false, 'Seal Clicker', './imgs/AppIcons/SealClicker.png');
 var movingSealWindow = new Window("movingsealwindow", false, true, 'Moving Seals', './imgs/AppIcons/MovingSeals.svg');
 var sandbuilderWindow = new Window("sandbuilderwindow", false, true, 'Sand Builder', './imgs/AppIcons/Beach.svg');
-var settingsWindow = new Window("settingswindow", false, true, 'Settings', './imgs/AppIcons/Settings.svg');
