@@ -95,3 +95,35 @@ class CategoryAudio{
         this.audioRef.volume = this.baseVolume * this.latestVol;
     }
 }
+
+const toggleSettingsHolder = document.getElementById('setting-optionsGeneral');
+const togglePrefab = `
+    <div class="audioSetting">
+        <p class="settingsName">Setting Name</p>
+        <div class="sliderHolder">
+            <input class="checkbox" type="checkbox">
+            <p class="audioSetting-value">100%</p>
+        </div>
+    </div>
+`;
+
+export function createToggleSetting(defaultValue, name, callback){
+    let instance = instantiateBeforeEnd(togglePrefab, toggleSettingsHolder);
+
+    let settingsNameElement = instance.getElementsByClassName('settingsName')[0];
+    let checkboxElement = instance.getElementsByClassName('checkbox')[0];
+    let checkboxValueElement = instance.getElementsByClassName('audioSetting-value')[0];
+
+    settingsNameElement.innerHTML = `${name}`;
+    checkboxElement.checked = defaultValue;
+    checkboxValueElement.innerHTML = `${ checkboxElement.checked ? 'Active' : 'Disabled' }`;
+    
+    checkboxElement.addEventListener('click', (e) => updateToggleSetting(e, checkboxElement, checkboxValueElement, callback));
+}
+
+function updateToggleSetting(e, checkboxElement, checkboxValueElement, callback){
+    let value = checkboxElement.checked;
+
+    checkboxValueElement.innerHTML = `${ checkboxElement.checked ? 'Active' : 'Disabled' }`;
+    callback(value);
+}

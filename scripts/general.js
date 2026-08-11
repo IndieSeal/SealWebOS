@@ -2,6 +2,7 @@ import { SubscribeToZIndex } from "./window_global.js";
 import { playAirWooshAudio, playBreakGlassAudio, playFoxyScreamAudio, setupAudioEvents } from "./audio.js";
 import { clamp, instantiateBeforeEnd } from "./mathf.js";
 import { getMaxX, getMaxY } from "./bounds.js";
+import { createToggleSetting } from "./settings.js";
 
 //#region Brick You
 
@@ -10,6 +11,8 @@ companionSeal.onclick = brickYou;
 setupAudioEvents(companionSeal);
 
 const brickScreenElement = document.getElementById('brick-screen');
+brickScreenElement.load();
+
 SubscribeToZIndex((index) => brickScreenElement.style.zIndex = index + 1000);
 
 var latestTimeout = undefined;
@@ -17,13 +20,13 @@ var latestTimeout = undefined;
 function brickYou(){
     if(latestTimeout != undefined) clearTimeout(latestTimeout);
     
+    brickScreenElement.style.display = 'flex';
+
     brickScreenElement.currentTime = 0;
     brickScreenElement.play();
 
-    brickScreenElement.style.display = 'flex';
-    latestTimeout = setTimeout(unBrickYou, 1200);
-
     setTimeout(playAirWooshAudio, 300);
+    latestTimeout = setTimeout(unBrickYou, 1200);
 }
 
 const brokenPrefab = `
@@ -56,19 +59,22 @@ const foxyJumpscare = document.getElementById('foxy-jumpscare');
 SubscribeToZIndex((index) => foxyJumpscare.style.zIndex = index + 1001);
 var latestJumpscareTimeout = undefined;
 var canPlayJumpscare = false;
+var isJumpscareEnabled = false;
+
+createToggleSetting(isJumpscareEnabled, '1 in 1000 for a Jumpscare', (checked) => { isJumpscareEnabled = checked } );
 
 document.addEventListener('onAutoplayEnabled', () => { canPlayJumpscare = true; })
 
-const specificValue = 50;
+const specificValue = 376;
 
 function rollChance(){
-    let randomValue = Math.ceil(Math.random() * 100);
+    let randomValue = Math.ceil(Math.random() * 1000);
     if(randomValue == specificValue) jumpscare();
 }
 setInterval(rollChance, 1000);
 
 function jumpscare(){
-    if(!canPlayJumpscare) return;
+    if(!isJumpscareEnabled || !canPlayJumpscare) return;
     
     if(latestJumpscareTimeout != undefined) clearTimeout(latestJumpscareTimeout);
 
