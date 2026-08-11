@@ -25,7 +25,8 @@
         <link rel="stylesheet" type="text/css" href="./css/settings.css">
     </head>
     <body id="body">
-        <video id="brick-screen" style="display: none; object-fit:contain; width: 100vw; height: 100vh; position: absolute; pointer-events: none;" src="./imgs/Brick.webm" autoplay></video>
+        <video id="brick-screen" style="display: none; object-fit:contain; width: 100vw; height: 100vh; position: absolute; pointer-events: none;" src="./imgs/Brick.webm"></video>
+        <video id="foxy-jumpscare" style="display: none; object-fit:contain; width: 100vw; height: 100vh; position: absolute; pointer-events: none;" src="./imgs/FoxyJumpscare.webm"></video>
         <div id="container3D"></div>
         
         <!-- NAVIGATION BAR -->
@@ -278,6 +279,8 @@
         <audio id="airWoosh"> <source src="./sounds/airwoosh.mp3" type="audio/mpeg"> </audio>
         <audio id="breakGlass"> <source src="./sounds/breakglass.mp3" type="audio/mpeg"> </audio>
 
+        <audio id="foxyScream"> <source src="./sounds/foxyScream.mp3" type="audio/mpeg"> </audio>
+
         <!-- Apply Scripts -->
         <script type="module" src="./scripts/mathf.js"></script>
         <script type="module" src="./scripts/settings.js"></script>
@@ -315,8 +318,7 @@
             + For the top bar that shows if an app is open, not-selected or minimized/closed, there should be another color for when it's minimized, as
                 currently not-selected and minimized/closed are the same, which can be confusing (at least for me :/)
             + Make a size slider for items of Moving Seal && Sand Builder
-            + Try to fix cat brick not working
-            + Jumpscare
+            + Option to disable jumpscare in settings
             + Fix raycasting with events
             + Draw icons for apps
         -->
