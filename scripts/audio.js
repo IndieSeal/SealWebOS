@@ -43,6 +43,7 @@ export function playHoverAudio(){
 }
 
 var selectAudio = document.getElementById("selectAudio"); 
+selectAudio.volume = 0.7;
 addCategoryAudio('ui', selectAudio);
 export function playSelectAudio(){
   playAudio(selectAudio);
