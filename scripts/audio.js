@@ -69,6 +69,7 @@ export function sealClicker_playSquishAudio(){
 }
 
 var smallBoom = document.getElementById("smallBoom"); 
+smallBoom.volume = 0.7;
 addCategoryAudio('sfx', smallBoom);
 export function playSmallBoomAudio(){
   playAudio(smallBoom);
@@ -79,6 +80,13 @@ bigBoom.volume = 0.2;
 addCategoryAudio('sfx', bigBoom);
 export function playBigBoomAudio(){
   playAudio(bigBoom);
+}
+
+var placeObject = document.getElementById("placeObject"); 
+placeObject.volume = 0.5;
+addCategoryAudio('sfx', placeObject);
+export function playPlaceObjectAudio(){
+  playAudio(placeObject, true);
 }
 
 var breakGlass = document.getElementById("breakGlass"); 

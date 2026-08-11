@@ -5,6 +5,7 @@ import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module
 import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
 
+import { sealClicker_playSquishAudio } from './audio.js';
 import { deltaTime } from './time.js';
 import { SubscribeToZIndex } from "./window_global.js";
 import { clamp, instantiateBeforeEnd, lerp } from "./mathf.js";
@@ -74,7 +75,16 @@ function animate(){
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
-document.addEventListener("mousedown", (event) => {
+document.addEventListener('mousemove', (event) => {
+    if(isRaycastHittingObject(event)) document.documentElement.classList.add('overSomething');
+    else document.documentElement.classList.remove('overSomething');
+});
+
+document.addEventListener('mousedown', (event) => {
+    if(isRaycastHittingObject(event)) onMouseStartSelect(event);
+});
+
+function isRaycastHittingObject(event){
     const rect = renderer.domElement.getBoundingClientRect();
 
     mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -84,9 +94,11 @@ document.addEventListener("mousedown", (event) => {
 
     if (object) {
         const intersects = raycaster.intersectObject(object, true);
-        if (intersects.length > 0) onMouseStartSelect(event);
+        if (intersects.length > 0) return true;
     }
-});
+
+    return false;
+}
 
 const loweringSpeed = 3;
 const forceMultiplier = 0.02;
@@ -129,6 +141,8 @@ function onMouseStartSelect(event){
     speed = 0;
     directionX = 0;
     directionY = 0;
+
+    document.documentElement.classList.add('forceGrab');
 }
 
 function onMouseMoved(event){
@@ -160,11 +174,16 @@ function onMouseEndSelect(event){
     document.removeEventListener('mousemove', onMouseMoved);
 
     isSelectingSeal = false;
+
+    document.documentElement.classList.remove('forceGrab');
 }
 
 //#endregion
 
 //#region Movement
+
+var hitMaxX = false;
+var hitMaxY = false;
 
 moveSeal();
 function moveSeal(){
@@ -173,10 +192,28 @@ function moveSeal(){
     speed = lerp(speed, 0, loweringSpeed * deltaTime);
     if(!firstSelect || isSelectingSeal) return;
 
+    if(currentX < 0 || currentX > getMaxX(renderer.domElement)) {
+    }
+    if(currentY < getMinY() || currentY > getMaxY(renderer.domElement)) {
+        sealClicker_playSquishAudio();
+    }
     currentX = getClampedX(renderer.domElement, currentX + (speed * directionX));
     currentY = getClampedY(renderer.domElement, currentY + (speed * directionY));
-    if(currentX == 0 || currentX == getMaxX(renderer.domElement)) directionX *= -1;
-    if(currentY == getMinY() || currentY == getMaxY(renderer.domElement)) directionY *= -1;
+    if(currentX == 0 || currentX == getMaxX(renderer.domElement)) {
+        if(!hitMaxX) sealClicker_playSquishAudio();
+
+        directionX *= -1;
+        hitMaxX = true;
+    }
+    else hitMaxX = false;
+    
+    if(currentY == getMinY() || currentY == getMaxY(renderer.domElement)) {
+        if(!hitMaxY) sealClicker_playSquishAudio();
+
+        directionY *= -1;
+        hitMaxY = true;
+    }
+    else hitMaxY = false;
     
     renderer.domElement.style.left = `${currentX}px`;
     renderer.domElement.style.top = `${currentY}px`;

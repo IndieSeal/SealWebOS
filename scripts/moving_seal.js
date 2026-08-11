@@ -1,4 +1,4 @@
-import { playBigBoomAudio, playSmallBoomAudio, setupAudioEvents } from "./audio.js";
+import { playBigBoomAudio, playPlaceObjectAudio, playSmallBoomAudio, setupAudioEvents } from "./audio.js";
 import { getClampedX, getClampedY, getMaxX, getMaxY, navbarRect } from "./bounds.js";
 import { lerp, distance, randomBool, abs, clamp, destroyAfter, pingpong, instantiateBeforeEnd } from "./mathf.js";
 import { deltaTime } from "./time.js";
@@ -223,6 +223,8 @@ export class PaintOption{
 
         if(createDefault) this.buildWindow.paintInstanceList.push(new PaintInstance(this.buildWindow, this.instanceIndex, instance, imageElement));
 
+        playPlaceObjectAudio();
+        
         return [instance, imageElement];
     }
 }
@@ -352,7 +354,6 @@ export class BuildingWindow{
         document.documentElement.classList.remove('brush');
         document.documentElement.classList.remove('eraser');
         document.body.style.pointerEvents = 'auto';
-        console.log(document.body.style.pointerEvents);
 
         this.disableText.style.display = 'none';
 

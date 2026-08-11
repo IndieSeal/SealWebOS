@@ -54,6 +54,7 @@ Used Videos:
 Used Sounds:
 - [Explosion](https://pixabay.com/sound-effects/film-special-effects-retro-explode-1-236678/)
 - [Big Explosion](https://pixabay.com/sound-effects/film-special-effects-hq-explosion-6288/)
+- [Place Object](https://pixabay.com/sound-effects/film-special-effects-bloop-2-186531/)
 
 ## Sand Builder
 Used Images:

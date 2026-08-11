@@ -34,6 +34,8 @@
 .navbar .companion-seal{
     all: unset;
     
+    cursor: var(--point-cursor);
+    
     margin-left: 10px;
 
     padding: 0px;
