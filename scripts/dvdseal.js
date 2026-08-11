@@ -10,6 +10,7 @@ import { deltaTime } from './time.js';
 import { SubscribeToZIndex } from "./window_global.js";
 import { clamp, instantiateBeforeEnd, lerp } from "./mathf.js";
 import { getClampedX, getClampedY, getMaxX, getMaxY, getMinY } from "./bounds.js";
+import { isPainting } from "./moving_seal.js";
 
 //#region 3D Model
 
@@ -76,11 +77,22 @@ const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
 document.addEventListener('mousemove', (event) => {
-    if(isRaycastHittingObject(event)) document.documentElement.classList.add('overSomething');
-    else document.documentElement.classList.remove('overSomething');
+    if(isPainting() || isSelectingSeal) return;
+    
+    if(isRaycastHittingObject(event)) {
+        document.documentElement.classList.add('overSomething');
+
+        document.body.style.pointerEvents = 'none';
+    }
+    else{
+        document.documentElement.classList.remove('overSomething');
+        document.body.style.pointerEvents = 'auto';
+    }
 });
 
 document.addEventListener('mousedown', (event) => {
+    if(isPainting()) return;
+
     if(isRaycastHittingObject(event)) onMouseStartSelect(event);
 });
 
@@ -176,6 +188,8 @@ function onMouseEndSelect(event){
     isSelectingSeal = false;
 
     document.documentElement.classList.remove('forceGrab');
+
+    document.body.style.pointerEvents = 'auto';
 }
 
 //#endregion
