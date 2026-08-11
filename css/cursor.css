@@ -5,15 +5,15 @@
 }
 
 html.brush{
-    --normal-cursor: url('../imgs/WiiHand/drawing_brush.svg') 3 3, auto;
+    --normal-cursor: url('../imgs/WiiHand/drawing_brush2.svg') 3 3, auto;
     --point-cursor: url('../imgs/WiiHand/CursorPoint32.png') 3 3, auto;
-    --grab-cursor: url('../imgs/WiiHand/drawing_brush.svg') 3 3, auto;
+    --grab-cursor: url('../imgs/WiiHand/drawing_brush2.svg') 3 3, auto;
 }
 
 html.eraser{
-    --normal-cursor: url('../imgs/WiiHand/drawing_eraser.svg') 3 3, auto;
+    --normal-cursor: url('../imgs/WiiHand/drawing_eraser2.svg') 3 3, auto;
     --point-cursor: url('../imgs/WiiHand/CursorPoint32.png') 3 3, auto;
-    --grab-cursor: url('../imgs/WiiHand/drawing_eraser.svg') 3 3, auto;
+    --grab-cursor: url('../imgs/WiiHand/drawing_eraser2.svg') 3 3, auto;
 }
 
 html.overSomething{
