@@ -84,7 +84,7 @@ function jumpscare(){
     foxyJumpscare.play();
 
     foxyJumpscare.style.display = 'flex';
-    latestJumpscareTimeout = setTimeout(unjumpscare, 1200);
+    latestJumpscareTimeout = setTimeout(unjumpscare, 750);
 }
 
 function unjumpscare(){
