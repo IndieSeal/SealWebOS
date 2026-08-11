@@ -1,8 +1,7 @@
 # Resources
 Used Tutorials:
-- [This really cool guide from HC](https://jams.hackclub.com/batch/webOS)
+- [This really cool guide from Hack Club!](https://jams.hackclub.com/batch/webOS)
 - [Tutorial I used at the beginning before I learnt more in-depth on my own and in HC's Summer Camp](https://www.youtube.com/watch?v=MYFgtnKMDp4)
-- [Physics, haven't gotten around to use it, but I plan on doing it](https://www.youtube.com/watch?v=CQatPBnOCXE)
 
 ## General
 
