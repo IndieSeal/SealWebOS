@@ -61,7 +61,7 @@ var latestJumpscareTimeout = undefined;
 var canPlayJumpscare = false;
 var isJumpscareEnabled = false;
 
-createToggleSetting(isJumpscareEnabled, '1 in 1000 for a Jumpscare', (checked) => { isJumpscareEnabled = checked } );
+createToggleSetting(isJumpscareEnabled, '1 in 1000 for a Jumpscare', (checked) => { isJumpscareEnabled = checked; } );
 
 document.addEventListener('onAutoplayEnabled', () => { canPlayJumpscare = true; })
 

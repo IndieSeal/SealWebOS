@@ -14,19 +14,26 @@ const audioSliderPrefab = `
 export function createAudioSetting(audioRef, name){
     let instance = instantiateBeforeEnd(audioSliderPrefab, audioSettingsHolder);
 
+    var lsID = `audio_${name}`;
+    
     let settingsNameElement = instance.getElementsByClassName('settingsName')[0];
     let audioSliderElement = instance.getElementsByClassName('audioSlider')[0];
     let audioValueElement = instance.getElementsByClassName('audioSetting-value')[0];
 
-    settingsNameElement.innerHTML = `${name}`;
-    audioValueElement.innerHTML = `${audioRef.volume * 100}%`;
-    audioSliderElement.value = audioRef.volume;    
+    var volume = localStorage.getItem(lsID) ?? audioRef.volume;
     
-    audioSliderElement.addEventListener('input', (e) => updateAudioSetting(e, audioValueElement, audioRef));
+    settingsNameElement.innerHTML = `${name}`;
+    audioValueElement.innerHTML = `${volume * 100}%`;
+    audioSliderElement.value = volume;  
+    audioRef.volume = volume;  
+    
+    audioSliderElement.addEventListener('input', (e) => updateAudioSetting(e, lsID, audioValueElement, audioRef));
 }
 
-function updateAudioSetting(e, audioValElement, audioRef){
+function updateAudioSetting(e, lsID, audioValElement, audioRef){
     let value = e.target.value;
+
+    localStorage.setItem(lsID, value);
 
     audioRef.volume = value;
     audioValElement.innerHTML = `${Math.round(value * 100)}%`;
@@ -51,6 +58,9 @@ class Category{
         categories.push(this);
         
         this.name = categoryName;
+        this.lsID = `audioCategory_${this.name}`;
+        
+        this.volume = localStorage.getItem(this.lsID) ?? this.volume;
 
         this.instance = instantiateBeforeEnd(audioSliderPrefab, audioSettingsHolder);
 
@@ -67,13 +77,15 @@ class Category{
 
     addAudio = (audio) => {
         this.audioList.push(audio);
+        this.updateCategoryAudioSetting();
     }
 
     updateCategoryAudioSetting = () => {
-        let value = this.audioSliderElement.value;
+        this.volume = this.audioSliderElement.value;
+        localStorage.setItem(this.lsID, this.volume);
 
-        this.audioList.forEach(audio => audio.changeVolume(value));
-        this.audioValueElement.innerHTML = `${Math.round(value * 100)}%`;
+        this.audioList.forEach(audio => audio.changeVolume(this.volume));
+        this.audioValueElement.innerHTML = `${Math.round(this.volume * 100)}%`;
     }
 }
 
@@ -110,20 +122,32 @@ const togglePrefab = `
 export function createToggleSetting(defaultValue, name, callback){
     let instance = instantiateBeforeEnd(togglePrefab, toggleSettingsHolder);
 
+    var lsID = `toggle_${name}`;
+
+    // it returns a string so I have to do a check dang, everything in this language is dynamic, BUT NOT THIS? really?
+    let exists = localStorage.getItem(lsID);
+    var checkedValue = undefined;
+
+    if(exists) checkedValue = exists == 'true' ? true : false;
+    else checkedValue = defaultValue;
+    
     let settingsNameElement = instance.getElementsByClassName('settingsName')[0];
     let checkboxElement = instance.getElementsByClassName('checkbox')[0];
     let checkboxValueElement = instance.getElementsByClassName('audioSetting-value')[0];
 
     settingsNameElement.innerHTML = `${name}`;
-    checkboxElement.checked = defaultValue;
-    checkboxValueElement.innerHTML = `${ checkboxElement.checked ? 'Active' : 'Disabled' }`;
+    checkboxElement.checked = checkedValue;
+
+    checkboxValueElement.innerHTML = `${ checkedValue ? 'Active' : 'Disabled' }`;
     
-    checkboxElement.addEventListener('click', (e) => updateToggleSetting(e, checkboxElement, checkboxValueElement, callback));
+    checkboxElement.addEventListener('click', (e) => updateToggleSetting(e, lsID, checkboxElement, checkboxValueElement, callback));
 }
 
-function updateToggleSetting(e, checkboxElement, checkboxValueElement, callback){
+function updateToggleSetting(e, lsID, checkboxElement, checkboxValueElement, callback){
     let value = checkboxElement.checked;
 
     checkboxValueElement.innerHTML = `${ checkboxElement.checked ? 'Active' : 'Disabled' }`;
     callback(value);
+
+    localStorage.setItem(lsID, value);
 }
