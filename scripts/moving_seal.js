@@ -302,7 +302,7 @@ export class BuildingWindow{
     }
 
     setPaintMode = () => {
-        this.changeBrush();
+        this.changeBrush(this);
 
         if(this.currentBrushState != EBrushState.PAINT){
             this.currentBrushState = EBrushState.PAINT;
@@ -319,7 +319,7 @@ export class BuildingWindow{
         else this.currentBrushState = EBrushState.NONE;
     }
     setEraserMode = () =>{
-        this.changeBrush();
+        this.changeBrush(this);
 
         if(this.currentBrushState != EBrushState.ERASER){
             this.currentBrushState = EBrushState.ERASER;
@@ -333,12 +333,18 @@ export class BuildingWindow{
         else this.currentBrushState = EBrushState.NONE;
     }
 
-    changeBrush = (recurse = true) => {
-        if(!recurse){
-            buildWindows.forEach(wind => {
-                if(wind == this) return;
+    setNone = () => {
+        this.changeBrush(undefined);
+        this.currentBrushState = EBrushState.NONE;
+    }
 
-                wind.changeBrush(false);
+    changeBrush = (originWindow) => {
+        //Set brush to none if it's from another window
+        if(originWindow != undefined && originWindow.myId == this.myId){
+            buildWindows.forEach(wind => {
+                if(wind.myId == originWindow.myId) return;
+
+                wind.setNone();
             });
         }
         
@@ -346,6 +352,7 @@ export class BuildingWindow{
         document.documentElement.classList.remove('brush');
         document.documentElement.classList.remove('eraser');
         document.body.style.pointerEvents = 'auto';
+        console.log(document.body.style.pointerEvents);
 
         this.disableText.style.display = 'none';
 
@@ -368,14 +375,28 @@ export class BuildingWindow{
         e = e || window.event;
         e.preventDefault();
 
+        if(this.currentBrushState != EBrushState.PAINT || this.isOtherHittingValidElement(e)) return;
+
+        this.currentOption.tryPlace(e.clientX, e.clientY);
+    }
+
+    isHittingValidElement = (e) => {
         let hittingValidElement = false;
         this.paintOptionList.forEach(option => {
             if(e.target.id == option.boxElement.id) hittingValidElement = true;
         });
 
-        if(this.currentBrushState != EBrushState.PAINT || hittingValidElement || e.target.id == this.spawnSealButton.id || e.target.id == this.eraserSealButton.id || e.target.id == this.nukeSealButton.id) return;
+        if(e.target.id == this.spawnSealButton.id || e.target.id == this.eraserSealButton.id || e.target.id == this.nukeSealButton.id) hittingValidElement = true;
+        return hittingValidElement;
+    }
 
-        this.currentOption.tryPlace(e.clientX, e.clientY);
+    isOtherHittingValidElement = (e) => {
+        let hitting = false;
+        buildWindows.forEach(wind => {
+            if(wind.isHittingValidElement(e)) hitting = true;
+        });
+
+        return hitting;
     }
 
     tryDeleteInstance = (paintInstance, force = false) => {

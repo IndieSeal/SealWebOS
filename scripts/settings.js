@@ -35,10 +35,7 @@ function updateAudioSetting(e, audioValElement, audioRef){
 var categories = [];
 export function addCategoryAudio(categoryName, audio){
     let category = categories.find(cat => cat.name == categoryName);
-    if(category == undefined) {
-        category = new Category(categoryName);
-        console.log(`Created category: ${categoryName}`);
-    }
+    if(category == undefined) category = new Category(categoryName);
     
     let catAudio = new CategoryAudio(audio);
     category.addAudio(catAudio);
