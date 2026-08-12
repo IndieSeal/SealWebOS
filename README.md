@@ -3,7 +3,7 @@
 This is my very own web Seal-Themed fake OS!<br>
 I just really love seals and I wanted to make an OS about them lol.
 
-https://github.com/user-attachments/assets/10f2fdb6-a371-4cef-9351-712dcc024740
+https://github.com/user-attachments/assets/37d35359-999d-45b1-ab3a-e7e06abcf415
 
 [Try it here!!](https://indieseal.github.io/SealWebOS/)
 <br><br>
@@ -15,6 +15,7 @@ https://github.com/user-attachments/assets/10f2fdb6-a371-4cef-9351-712dcc024740
 - **Sand Builder:** Do you think the OS looks a bit empty? How about you decorate it yourself! Place stars, sand castles and more!
 - **Settings:** Just to change the volume of certain elements or disable certain options if you don't wanna get spooked.
 - **Even More:** You will have to find these yourself, some cool little things that are not that hidden, but there's no indicator of them being there.
+- **Saved:** Apps like Seal Clicker and Settings have their progress saved, so don't be afraid to refresh the page, though do be afraid of deleting your Moving Seals and Sand Builds.
 
 ## Proud of:
 All of the systems are easily expandable, if you were to fork this repository and you took the time to see what my code looks like, you would be able to see that it's pretty easy to create a new window, or create a variation of the existing ones.<br>
