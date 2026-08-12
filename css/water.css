@@ -90,10 +90,12 @@
 }
 
 .sea_fish{
-    position: relative;
+    position: absolute;
     z-index: 5;
     
     width: 96px;
     height: 96px;
     object-fit: contain;
+
+    pointer-events: auto;
 }

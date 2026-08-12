@@ -58,3 +58,7 @@ export function instantiateBeforeEnd(prefab, parent){
 export function destroyAfter(element, millis){
     setTimeout(() => element.remove(), millis);
 }
+
+export function isPositionInsideRect(x, y, rect){
+    return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+}
