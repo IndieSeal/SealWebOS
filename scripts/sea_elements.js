@@ -1,9 +1,10 @@
 import { getClampedX, getClampedY, getMaxX, getMaxY, navbarRect } from "./bounds.js";
 import { deltaTime } from "./time.js";
 import { playSquishGrabAudio } from "./audio.js";
-import { isPositionInsideRect, randomBool } from "./mathf.js";
+import { instantiateBeforeEnd, isPositionInsideRect, randomBool } from "./mathf.js";
 import { biggestZIndex } from "./window_global.js";
 import { companionSeal, companionSealImage, fixYou } from "./general.js";
+import { isPainting } from "./moving_seal.js";
 
 const fishHolder = document.getElementById('fish_holder');
 
@@ -27,11 +28,12 @@ class Fish{
     
     speed = 300;
     
-    constructor(id){
-        this.myId = id;
-
-        this.fishElement = document.getElementById(this.myId);
+    constructor(src, minX = 56, maxX = 112){
+        this.fishElement = instantiateBeforeEnd(`<img id="examplefish" class="sea_fish" src="${src}"></img>`, fishHolder);
         this.fishElement.onmousedown = this.startDragging;
+
+        this.minX = minX;
+        this.maxX = maxX;
 
         this.regularZIndex = this.fishElement.style.zIndex;
 
@@ -62,13 +64,20 @@ class Fish{
         this.isResetting = true;
         setTimeout(() => {
             this.currentX = getMaxX(this.fishElement) + this.fishElement.getBoundingClientRect().width;
-            this.currentY = Math.random() * (fishHolder.getBoundingClientRect().height / 3) * (randomBool() ? 1 : -1);
+            this.currentY = Math.random() * (fishHolder.getBoundingClientRect().height / 4) * (randomBool() ? 1 : -1);
+            this.currentY += 100;
+
+            let randomSize = (Math.random() * (this.maxX - this.minX)) + this.minX;
+            this.fishElement.style.width = `${randomSize}px`;
+            this.fishElement.style.height = `${randomSize}px`;
             
             this.isResetting = false;
         }, Math.ceil(Math.random() * 5000));
     }
 
     startDragging = (e) => {
+        if(isPainting()) return;
+        
         e = e || window.event;
         e.preventDefault();
 
@@ -129,4 +138,12 @@ class Fish{
     }
 }
 
-new Fish('examplefish');
+new Fish('./imgs/Fish_1.svg');
+new Fish('./imgs/Fish_1.svg');
+new Fish('./imgs/Fish_1.svg');
+new Fish('./imgs/Fish_1.svg');
+
+new Fish('./imgs/Fish_3.svg', 16, 32);
+new Fish('./imgs/Fish_3.svg', 16, 32);
+new Fish('./imgs/Fish_3.svg', 16, 32);
+new Fish('./imgs/Fish_3.svg', 16, 32);

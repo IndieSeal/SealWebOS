@@ -60,6 +60,7 @@ export function fixYou(){
 
     companionSealImage.classList.add('bite');
     
+    //Could be cool for a CSS animation for them to dissapear!
     shatteredScreens.forEach(element => element.remove());
     shatteredScreens = [];
 
