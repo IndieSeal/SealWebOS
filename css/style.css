@@ -32,15 +32,15 @@
 html {
   cursor: var(--normal-cursor);
 
-  width: 100vw;
-  height: 100vh;
+  width: 100dvw;
+  height: 100dvh;
 }
 
 body{
     overflow-x: hidden;
     overflow-y: hidden;
 
-    height: 100vh;
+    height: 100dvh;
 
     background-image: url('https://jooinn.com/images/beach-sand-pattern-5.jpg');
     background-size: cover;
