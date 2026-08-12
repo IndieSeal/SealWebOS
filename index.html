@@ -128,7 +128,7 @@
                     <div style="display: flex; min-width: 30%; width: 30%; height: 100%; flex-direction: column; align-items: center;">
                         <div style="border-radius: 12px; width: 85%; margin-top: 10%; background-color: var(--window-header-color)">
                             <h1 class="bebas-neue-regular" style="margin: 0; text-align: center;"><b>FEED THE SEAL!!</b></h1>
-                            <h1 id="sealclicker-score" style="margin: 0; text-align: center;">Points: 0</h1>
+                            <h1 id="sealclicker-score" style="margin: 0; text-align: center; overflow-wrap: break-word;">Points: 0</h1>
                             <h4 id="sealclicker-score_persecond" style="margin: 0; text-align: center;">per second: 0</h4>
                         </div>
                         <div id="sealclicker-seal" style="justify-self: center; align-self: center; margin: auto 0;">
@@ -264,7 +264,8 @@
             <div class="wave" id="wave2"></div>
             <div class="wave" id="wave3"></div>
             <div class="wave" id="wave4"></div>
-            <div id="fish_holder" style="display: flex; width: 100%; height: 100%; align-items: center; justify-content: flex-end;">
+            <div id="fish_holder" style="display: flex; width: 100%; height: 100%; align-items: center; pointer-events: none;">
+                <!-- Content added through 'sea_elements.js' -->
             </div>
         </div>
         
@@ -287,6 +288,7 @@
         <audio id="foxyScream"> <source src="./sounds/foxyScream.mp3" type="audio/mpeg"> </audio>
 
         <audio id="squishGrab"> <source src="./sounds/grab.mp3" type="audio/mpeg"> </audio>
+        <audio id="bite"> <source src="./sounds/ShortBite.mp3" type="audio/mpeg"> </audio>
 
         <!-- Apply Scripts -->
         <script type="module" src="./scripts/mathf.js"></script>
@@ -315,9 +317,8 @@
             + A tamagotchi app where you have to take care off a seal and you have to drag the fish to them to feed them and pet them muejeje
             + Sealirus.exe, you can install it, and if you do a bunch of annoying pop-ups will appear of seals trying to get your attention
             + Museal, an app where you can make music by adding seal sounds onto a grid and then play it! :]
-            + Make a Trash Can where you can erase apps and get unique animations for deleating each one.
-            + Feed the seal to fix your screen (changing the fish below)
-            + Spawn more fish in the sea (PLEASE)
+            + Make a Trash Can where you can erase apps and get unique animations for deleating each one ( I do have some of these videos edited, but the scope
+              of the project is getting too big so I'm not doing this one until maybe another day I want to revisit this project )
 
             + come on alex, you can think of more ideas, you got this ( yes i talk to myself, also, what are you doing here reading MY ideas, huh? >:[ )
             + if you're actually reading this, should this be considered an easter egg? Congrats I guess, OOOH, WHAT IF:
@@ -330,6 +331,7 @@
                 currently not-selected and minimized/closed are the same, which can be confusing (at least for me :/)
             + Make a size slider for items of Moving Seal && Sand Builder
             + Seal Clicker save to localstorage but be careful of integer limits because I don't want anything crashing accidentaly or breaking.
+            + DVD Seal should have priority over fish!
         -->
     </body>
 </html>

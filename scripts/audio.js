@@ -103,6 +103,13 @@ export function playAirWooshAudio(){
   playAudio(airWoosh);
 }
 
+var bite = document.getElementById("bite"); 
+bite.volume = 0.8;
+addCategoryAudio('sfx', bite);
+export function playBiteAudio(){
+  playAudio(bite);
+}
+
 var foxyScream = document.getElementById("foxyScream"); 
 foxyScream.volume = 0.1;
 addCategoryAudio('sfx', foxyScream);

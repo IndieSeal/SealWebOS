@@ -1,12 +1,14 @@
 import { SubscribeToZIndex } from "./window_global.js";
-import { playAirWooshAudio, playBreakGlassAudio, playFoxyScreamAudio, setupAudioEvents } from "./audio.js";
+import { playAirWooshAudio, playBiteAudio, playBreakGlassAudio, playFoxyScreamAudio, setupAudioEvents } from "./audio.js";
 import { clamp, instantiateBeforeEnd } from "./mathf.js";
 import { getMaxX, getMaxY } from "./bounds.js";
 import { createToggleSetting } from "./settings.js";
+import { explosionPrefab } from "./moving_seal.js";
 
 //#region Brick You
 
-const companionSeal = document.getElementById('companion-seal');
+export const companionSeal = document.getElementById('companion-seal');
+export const companionSealImage = companionSeal.querySelector('img');
 companionSeal.onclick = brickYou;
 setupAudioEvents(companionSeal);
 
@@ -16,6 +18,7 @@ brickScreenElement.load();
 SubscribeToZIndex((index) => brickScreenElement.style.zIndex = index + 1000);
 
 var latestTimeout = undefined;
+var shatteredScreens = [];
 
 function brickYou(){
     if(latestTimeout != undefined) clearTimeout(latestTimeout);
@@ -40,8 +43,9 @@ function unBrickYou(){
     playBreakGlassAudio();
     
     let brokenElement = instantiateBeforeEnd(brokenPrefab, document.body);
-    SubscribeToZIndex((index) => brokenElement.style.zIndex = index + 1100);
+    shatteredScreens.push(brokenElement);
 
+    SubscribeToZIndex((index) => brokenElement.style.zIndex = index + 1100);
     brokenElement.style.transform = `rotate(${Math.random() * 360}deg)`;
     
     let maxX = getMaxX(undefined);
@@ -50,6 +54,22 @@ function unBrickYou(){
     let maxY = getMaxY(undefined);
     brokenElement.style.top = `${clamp(0, maxY, Math.random() * maxY)}px`;
 }
+
+export function fixYou(){
+    playBiteAudio();
+
+    companionSealImage.classList.add('bite');
+    
+    //Could be cool for a CSS animation for them to dissapear!
+    shatteredScreens.forEach(element => element.remove());
+    shatteredScreens = [];
+
+    setTimeout(finishFixYou, 1000);
+}
+
+function finishFixYou(){
+    companionSealImage.classList.remove('bite');
+} 
 
 //#endregion
 

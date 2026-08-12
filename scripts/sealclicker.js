@@ -129,6 +129,9 @@ const autoclickerUpgradeRowParent = document.getElementById("upgrade-visual-rows
 const scoreText = document.getElementById("sealclicker-score");
 var points = 0;
 
+let item = localStorage.getItem('sealClicker-points');
+if(item != null) points = parseFloat(item);
+
 const UPGRADE_NAME_SUFFIX = "_name";
 const UPGRADE_ICON_SUFFIX = "_icon";
 const UPGRADE_ROW_SUFFIX = "_upgrade-row";
@@ -155,11 +158,14 @@ class UpgradeInformation{
 }
 
 class Upgrade{
+    lsId = undefined;
     amount = 0;
     
     constructor(upgradeID, upgradeInformation, basePrice, priceMultiplier){
         this.upgradeID = upgradeID;
         this.upgradeInfo = upgradeInformation;
+
+        this.lsId = `sealClicker-upgrade_${this.upgradeID}`
 
         this.basePrice = basePrice;
         this.priceMultiplier = priceMultiplier;
@@ -171,7 +177,7 @@ class Upgrade{
         });
     }
 
-    setup = () =>{
+    setup(){
         this.upgradeNameElement = document.getElementById(this.upgradeID + UPGRADE_NAME_SUFFIX);
         this.upgradeIconElement = document.getElementById(this.upgradeID + UPGRADE_ICON_SUFFIX);
 
@@ -267,6 +273,16 @@ class AutoclickerUpgrade extends Upgrade{
                 upgrade: this,
             },
         });
+
+        let item = localStorage.getItem(this.lsId);
+        if(item != null) {
+            let amount = parseInt(item);
+            this.amount = amount;
+            
+            for (let index = 0; index < amount; index++) this.instantiateRowSeal(); 
+
+            onUpgradeBought(undefined, false);
+        }
     }
 
     getProduction = function(){
@@ -297,8 +313,13 @@ class AutoclickerUpgrade extends Upgrade{
     buyUpgrade(){
         if(!super.buyUpgrade()) return;
 
+        this.instantiateRowSeal();
+        localStorage.setItem(this.lsId, this.amount);
+    }
+
+    instantiateRowSeal = () => {
         this.upgradeRowElement.style.display = 'flex';
-        
+
         let instance = instantiateBeforeEnd(this.htmlRowItemPrefab, this.upgradeRowElement);
         instance.onmousedown = sealClicker_playSquishAudio;
     }
@@ -319,6 +340,13 @@ class MultiplierUpgrade extends Upgrade{
         generalUpgradeParent.insertAdjacentHTML('beforeend', this.upgradePrefab);
 
         allGeneralUpgrades.push(this);
+
+        let item = localStorage.getItem(this.lsId);
+        if(item != null) {
+            onBuyFunction();
+            onUpgradeBought(undefined, false);
+            return;
+        }
         
         this.onBuyFunction = onBuyFunction;
         this.conditionFunction = conditionFunction;
@@ -339,6 +367,9 @@ class MultiplierUpgrade extends Upgrade{
 
         this.buyElement.style.display = "none";
         this.onBuyFunction();
+        let item = localStorage.getItem(this.lsId);
+        if(item != null) this.buyElement.style.display = "none";
+        localStorage.setItem(this.lsId, true);
 
         super.buyUpgrade();
         return true;
@@ -352,14 +383,22 @@ class MultiplierUpgrade extends Upgrade{
             this.isUnlocked = true;
         }
     }
+
+    setup(){
+        super.setup();
+
+        let item = localStorage.getItem(this.lsId);
+        if(item != null) this.buyElement.style.display = "none";
+    }
 }
 
 function sumPoints(newPoints){
     points += newPoints;
+    localStorage.setItem('sealClicker-points', points);
     scoreText.innerHTML = `Points: ${Math.floor(points).toLocaleString('en-US')}`;
 }
 
-function onUpgradeBought(upgrade)
+function onUpgradeBought(upgrade, playAudio = true)
 {
     let score = 0;
     allAutoclickers.forEach(element => {
@@ -367,8 +406,10 @@ function onUpgradeBought(upgrade)
     });
 
     totalScorePerSecond.innerHTML = `per second: ${score.toLocaleString('en-US')}`;
-    document.dispatchEvent(upgrade.onUpgradeBought);
 
+    if(!playAudio) return;
+
+    document.dispatchEvent(upgrade.onUpgradeBought);
     sealClicker_playBuyAudio();
 }
 
@@ -574,3 +615,10 @@ function onTooltipExitItem(upgrade){
 }
 
 //#endregion
+
+function clearValueKeys(){
+    localStorage.removeItem('sealClicker-points');
+
+    allAutoclickers.forEach(x => localStorage.removeItem(x.lsId));
+    allGeneralUpgrades.forEach(x => localStorage.removeItem(x.lsId));
+}

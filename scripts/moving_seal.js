@@ -250,7 +250,7 @@ const EBrushState = {
     ERASER: "eraser"
 };
 
-const explosionPrefab = `
+export const explosionPrefab = `
     <img style="pointer-events: none;" src="https://i.giphy.com/pKWCBvHevLcMU.webp">
 `;
 

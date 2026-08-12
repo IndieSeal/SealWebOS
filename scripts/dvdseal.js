@@ -43,7 +43,7 @@ const renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(window.innerWidth / modelSize, window.innerHeight / modelSize);
 
 renderer.domElement.style.left = `calc(90% - 100px)`;
-renderer.domElement.style.top = `calc(90% - 80px)`;
+renderer.domElement.style.top = `calc(20% - 80px)`;
 
 const container = document.getElementById('container3D');
 container.appendChild(renderer.domElement);

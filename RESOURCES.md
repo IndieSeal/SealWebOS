@@ -15,6 +15,7 @@ Used Sounds:
 - [Air Woosh](https://pixabay.com/sound-effects/film-special-effects-air-84482/)
 - [Broken Glass](https://pixabay.com/sound-effects/household-glass-broken-43626/)
 - [Background Sound (Water)](https://freesound.org/s/203158/)
+- [Bite](https://pixabay.com/sound-effects/horror-monster-bite-44538/)
 
 ## Seal Clicker
 Used Images:
