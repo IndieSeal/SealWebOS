@@ -59,7 +59,7 @@ class Window{
   latestZIndex = 0;
   switchable = false;
   
-  constructor(id, openByDefault, movableWindow, appName, iconPath){
+  constructor(id, openByDefault, movableWindow, appName, iconPath, forceEvents){
     this.myId = id;
 
     this.window = document.querySelector("#" + id);
@@ -107,6 +107,11 @@ class Window{
     this.openIcon = document.getElementById(id + OPEN_SUFFIX);
     this.windowMinimizer = document.getElementById(id + MINIMIZE_SUFFIX);
     this.windowCloser = document.getElementById(id + CLOSE_SUFFIX);
+
+    if(forceEvents){
+      this.windowMinimizer.style.pointerEvents = 'auto';
+      this.windowCloser.style.pointerEvents = 'auto';
+    }
 
     setupAudioEvents(this.windowMinimizer);
     setupAudioEvents(this.windowCloser);
@@ -255,5 +260,5 @@ var welcomeWindow = new Window("welcome", true, true, 'Introduction', './imgs/Ap
 var settingsWindow = new Window("settingswindow", false, true, 'Settings', './imgs/AppIcons/Settings.svg');
 var sealtokWindow = new Window("sealtok", false, true, 'SealTok', './imgs/AppIcons/Sealtok.png');
 var sealClickerWindow = new Window("sealclicker", false, false, 'Seal Clicker', './imgs/AppIcons/SealClicker.png');
-var movingSealWindow = new Window("movingsealwindow", false, true, 'Moving Seals', './imgs/AppIcons/MovingSeals.svg');
-var sandbuilderWindow = new Window("sandbuilderwindow", false, true, 'Sand Builder', './imgs/AppIcons/Beach.svg');
+var movingSealWindow = new Window("movingsealwindow", false, true, 'Moving Seals', './imgs/AppIcons/MovingSeals.svg', true);
+var sandbuilderWindow = new Window("sandbuilderwindow", false, true, 'Sand Builder', './imgs/AppIcons/Beach.svg', true);

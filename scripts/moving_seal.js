@@ -3,6 +3,7 @@ import { getClampedX, getClampedY, getMaxX, getMaxY, navbarRect } from "./bounds
 import { lerp, distance, randomBool, abs, clamp, destroyAfter, pingpong, instantiateBeforeEnd } from "./mathf.js";
 import { deltaTime } from "./time.js";
 import { biggestZIndex, IncreaseZIndex, SubscribeToZIndex, UnsubscribeToZIndex } from "./window_global.js";
+import { getWindow } from "./window_manager.js";
 
 class PaintInstance{
     destroying = false;
@@ -264,10 +265,18 @@ export class BuildingWindow{
     paintInstanceList = [];
     index = 0;
     
-    constructor(id){
+    constructor(id, window){
         buildWindows.push(this);
 
         this.myId = id;
+        this.window = window;
+
+        document.addEventListener('onWindowClose', (e) => {
+            if(e.detail.windowID == this.window.myId){
+                this.setNone();
+            }
+        });
+        
         this.paintOptions = document.getElementById(`${this.myId}-options`);
         this.disableText = document.getElementById(`${this.myId}-text`);
 
@@ -420,7 +429,7 @@ export class BuildingWindow{
 
 //#endregion
 
-var sealBuildWindow = new BuildingWindow('movingSeal');
+var sealBuildWindow = new BuildingWindow('movingSeal', getWindow('movingsealwindow'));
 var sealOption1 = new SealOption(1, sealBuildWindow, "paint-greyseal", './imgs/MovingSeal/Seal1_right0.png');
 var sealOption2 = new SealOption(2, sealBuildWindow, "paint-polarseal", './imgs/MovingSeal/Seal2_right0.png');
 sealBuildWindow.setup([sealOption1, sealOption2]);
