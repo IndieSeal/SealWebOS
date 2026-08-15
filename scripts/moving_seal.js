@@ -209,7 +209,9 @@ export class PaintOption{
         this.ghostInstance.style.zIndex = biggestZIndex + 200;
     }
 
-    tryPlace = (x, y) => {
+    tryPlace = (e, x, y) => {
+        if(this.buildWindow.window.draggableElement.isOverClossables(e)) return;
+        
         this.onPlace(x + this.offsetX, y + this.offsetY);
     }
 
@@ -387,7 +389,7 @@ export class BuildingWindow{
 
         if(this.currentBrushState != EBrushState.PAINT || this.isOtherHittingValidElement(e)) return;
 
-        this.currentOption.tryPlace(e.clientX, e.clientY);
+        this.currentOption.tryPlace(e, e.clientX, e.clientY);
     }
 
     isHittingValidElement = (e) => {

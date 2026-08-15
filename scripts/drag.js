@@ -57,8 +57,14 @@ class DraggableElement{
     //this.header.style.pointerEvents = "none";
   }
 
+  isOverClossables = (e) => {
+    if(e.target.id == this.myId + MINIMIZE_SUFFIX || e.target.id == this.myId + CLOSE_SUFFIX) return true;
+
+    return false;
+  }
+
   startDragging = (e) => {
-    if(e.target.id == this.myId + MINIMIZE_SUFFIX || e.target.id == this.myId + CLOSE_SUFFIX) return;
+    if(this.isOverClossables(e)) return;
 
     e = e || window.event;
     e.preventDefault();
