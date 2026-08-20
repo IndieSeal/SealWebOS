@@ -140,6 +140,7 @@ export function createToggleSetting(defaultValue, name, callback){
 
     checkboxValueElement.innerHTML = `${ checkedValue ? 'Active' : 'Disabled' }`;
     
+    callback(checkedValue);
     checkboxElement.addEventListener('click', (e) => updateToggleSetting(e, lsID, checkboxElement, checkboxValueElement, callback));
 }
 
