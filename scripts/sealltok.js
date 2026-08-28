@@ -64,6 +64,7 @@ var showFirstExtra = false;
 
 var scrolledVideosIndex = 0;
 changeVideo();
+videoElement.pause();
 
 document.addEventListener('onWindowOpen', (e) => {
     if(e.detail.windowID == 'sealtok') videoElement.play();
@@ -78,7 +79,6 @@ function changeVideo(){
 
     videoElement.src = `${currentVideo.videoURL}`;
     videoElement.load();
-    videoElement.pause();
 
     videoElement.style.objectPosition = `${currentVideo.leftOffset} ${currentVideo.topOffset}`;
     
