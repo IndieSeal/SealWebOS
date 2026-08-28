@@ -11,6 +11,93 @@ const audioSliderPrefab = `
     </div>
 `;
 
+const settingsCategoryHolder = document.getElementById('settingsCategory-holder');
+function getCategory(name){
+    let id = `settingsCategory_${name}`;
+    
+    let category = document.getElementById(id);
+    if(category == undefined){
+        const categoryPrefab = `
+            <div class="separate-box settingsBox">
+                <h3>${name}</h3>
+                <div class="settings-holder" id="${id}">
+                    <!-- Content added through 'settings.js' -->
+                </div>
+            </div>
+        `;
+        
+        let instance = instantiateBeforeEnd(categoryPrefab, settingsCategoryHolder);
+        category = instance.getElementsByClassName('settings-holder')[0];
+    }
+
+    return category;
+}
+
+/*getCategory("a1");
+getCategory("a2");
+getCategory("a3");
+getCategory("a3");*/
+
+class Setting{
+    constructor(name, category, defaultValue){
+        this.lsID = `${category}_${name}`;
+        this.value = localStorage.getItem(lsID) ?? defaultValue;
+
+        this.category = getCategory(category);
+    }
+}
+
+class SliderSetting extends Setting{
+    constructor(name, category, defaultValue){
+        super(name, category, defaultValue);
+
+        const sliderPrefab = `
+            <div class="audioSetting">
+                <p class="settingsName">${name}</p>
+                <div class="sliderHolder">
+                    <input class="audioSlider" type="range" min="${min}" max="${max}" step="${step}" value="${value}">
+                    <p class="audioSetting-value">100%</p>
+                </div>
+            </div>
+        `;
+
+        let instance = instantiateBeforeEnd(sliderPrefab, getCategory(category));
+        this.element = instance.getElementsByClassName('audioSlider')[0];
+        this.valueElement = instance.getElementsByClassName('audioSetting-value')[0];
+
+        this.element.addEventListener('input', this.onSliderChanged);
+    }
+
+    onSliderChanged(e){
+        let value = e.target.value;
+
+        localStorage.setItem(lsID, value);
+
+        audioRef.volume = value;
+        audioValElement.innerHTML = `${Math.round(value * 100)}%`;
+    }
+}
+
+export function createSliderSetting(name, category, min, max, value, step, finalization = "%"){
+    var lsID = `slider_${name}`;
+    var value = localStorage.getItem(lsID) ?? value;
+
+    const sliderPrefab = `
+        <div class="audioSetting">
+            <p class="settingsName">${name}</p>
+            <div class="sliderHolder">
+                <input class="audioSlider" type="range" min="${min}" max="${max}" step="${step}" value="${value}">
+                <p class="audioSetting-value">100%</p>
+            </div>
+        </div>
+    `;
+
+    let sliderElement = instance.getElementsByClassName('audioSlider')[0];
+    let sliderValueElement = instance.getElementsByClassName('audioSetting-value')[0];
+
+    audioSliderElement.addEventListener('input', (e) => updateAudioSetting(e, lsID, sliderValueElement));
+}
+
 export function createAudioSetting(audioRef, name){
     let instance = instantiateBeforeEnd(audioSliderPrefab, audioSettingsHolder);
 
@@ -39,10 +126,10 @@ function updateAudioSetting(e, lsID, audioValElement, audioRef){
     audioValElement.innerHTML = `${Math.round(value * 100)}%`;
 }
 
-var categories = [];
+var audioCategories = [];
 export function addCategoryAudio(categoryName, audio){
-    let category = categories.find(cat => cat.name == categoryName);
-    if(category == undefined) category = new Category(categoryName);
+    let category = audioCategories.find(cat => cat.name == categoryName);
+    if(category == undefined) category = new AudioCategory(categoryName);
     
     let catAudio = new CategoryAudio(audio);
     category.addAudio(catAudio);
@@ -50,12 +137,12 @@ export function addCategoryAudio(categoryName, audio){
     return catAudio;
 }
 
-class Category{
+class AudioCategory{
     volume = 1;
     audioList = [];
 
     constructor(categoryName){
-        categories.push(this);
+        audioCategories.push(this);
         
         this.name = categoryName;
         this.lsID = `audioCategory_${this.name}`;

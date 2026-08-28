@@ -273,6 +273,11 @@ export class BuildingWindow{
         this.myId = id;
         this.window = window;
 
+        document.addEventListener('onWindowMinimize', (e) => {
+            if(e.detail.windowID == this.window.myId){
+                this.setNone();
+            }
+        });
         document.addEventListener('onWindowClose', (e) => {
             if(e.detail.windowID == this.window.myId){
                 this.setNone();

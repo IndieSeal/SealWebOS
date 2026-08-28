@@ -227,17 +227,19 @@
 
         <div id="settingswindow" class="windows" style="display: none;">
             <!-- Window Insides -->
-            <div class="window_body child_text" style="padding: 5px; padding-top: 0; box-sizing: border-box; height: 450px;">
+            <div class="window_body child_text" id="settingsCategory-holder" style="padding: 5px; padding-top: 0; box-sizing: border-box; height: 450px;">
                 <h1 style="width: 100%; height: 30px; text-align: center; margin-top: 10px;"><b>General Settings</b><br></h1>
-                <div class="separate-box" style="margin-top: 25px; width: 100%; overflow: hidden; box-sizing: border-box;">
+                
+                <!-- Content added through 'settings.js' -->
+                <div class="separate-box settingsBox">
                     <h3>Options</h3>
-                    <div id="setting-optionsGeneral" style="display: flex; width: 100%; height: 100%; flex-direction: column;">
+                    <div class="settings-holder" id="setting-optionsGeneral">
                         <!-- Content added through 'settings.js' -->
                     </div>
                 </div>
-                <div class="separate-box" style="margin-top: 25px; width: 100%; overflow: hidden; box-sizing: border-box;">
+                <div class="separate-box settingsBox">
                     <h3>Audio</h3>
-                    <div id="setting-audioGeneral" style="display: flex; width: 100%; height: 100%; flex-direction: column;">
+                    <div class="settings-holder" id="setting-audioGeneral">
                         <!-- Content added through 'settings.js' -->
                     </div>
                 </div>
@@ -273,7 +275,7 @@
         <audio id="hoverAudio"> <source src="./sounds/beep.mp3" type="audio/mpeg"> </audio>
         <audio id="selectAudio"> <source src="./sounds/select.wav" type="audio/wav"> </audio>
         <audio id="dragAudio"> <source src="./sounds/drag.wav" type="audio/wav"> </audio>
-        <audio id="seaBackground"> <source src="./sounds/SeaBackground.wav" type="audio/wav"> </audio>
+        <audio id="seaBackground"> <source src="./sounds/SeaBackground.ogg" type="audio/ogg"> </audio>
         <audio id="sealclicker-click"> <source src="./sounds/sealclicker/click.mp3" type="audio/mpeg"> </audio>
         <audio id="sealclicker-buy"> <source src="./sounds/sealclicker/buySeal.mp3" type="audio/mpeg"> </audio>
         <audio id="sealclicker-squish"> <source src="./sounds/sealclicker/squish.wav" type="audio/wav"> </audio>

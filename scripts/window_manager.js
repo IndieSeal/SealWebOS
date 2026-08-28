@@ -128,6 +128,12 @@ class Window{
       },
     });
 
+    this.onWindowMinimize = new CustomEvent("onWindowMinimize", {
+      detail: {
+        windowID: this.myId,
+      },
+    });
+
     this.onWindowClose = new CustomEvent("onWindowClose", {
       detail: {
         windowID: this.myId,
@@ -183,6 +189,7 @@ class Window{
 
     this.window.classList.add("close");
 
+    document.dispatchEvent(this.onWindowMinimize);
     minimizeWindow(this);
   }
 
