@@ -78,6 +78,7 @@ function changeVideo(){
 
     videoElement.src = `${currentVideo.videoURL}`;
     videoElement.load();
+    videoElement.pause();
 
     videoElement.style.objectPosition = `${currentVideo.leftOffset} ${currentVideo.topOffset}`;
     
