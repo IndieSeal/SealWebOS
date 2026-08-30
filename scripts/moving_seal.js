@@ -154,8 +154,12 @@ class MovingSeal extends PaintInstance{
 
 export class PaintOption{
     instanceIndex = 0;
+
+    // This will change the CSS animations, so I have to make the CSS scale be done here in the JS
+    curScale = 1;
+    curRotation = 0;
     
-    constructor(buildingWindow, id, src, sizeX = 64, sizeY = 64, offsetX = -64, offsetY = -64){        
+    constructor(buildingWindow, id, src, sizeX = 64, sizeY = 64, offsetX = -64, offsetY = -64, scalable = true, rotatable = false){        
         this.buildWindow = buildingWindow;
         
         this.myId = id;
@@ -165,6 +169,9 @@ export class PaintOption{
         this.sizeY = sizeY;
         this.offsetX = offsetX;
         this.offsetY = offsetY;
+
+        this.canBeScaled = scalable;
+        this.canBeRotated = rotatable;
 
         this.placeablePrefab = `
             <div class="placeable" style="width: ${sizeX}px; height: ${sizeY}px;">
@@ -196,6 +203,10 @@ export class PaintOption{
 
     createGhost = () => {
         this.ghostInstance.style.display = 'inline';
+
+        let rotString = this.canBeRotated ? `rotate(${this.curRotation}deg)` : "";
+        let scaleString = this.canBeScaled ? `scale(${this.curScale})` : "";
+        this.ghostInstance.style.transform = `${rotString} ${scaleString}`;
     }
     
     destroyGhost = () => {
@@ -222,6 +233,10 @@ export class PaintOption{
         instance.style.left = `${x}px`;
         instance.style.top = `${y}px`;
 
+        let rotString = this.canBeRotated ? `rotate(${this.curRotation}deg)` : "";
+        let scaleString = this.canBeScaled ? `scale(${this.curScale})` : "";
+        instance.style.transform = `${rotString} ${scaleString}`;
+
         let imageElement = instance.querySelector('img');
 
         if(createDefault) this.buildWindow.paintInstanceList.push(new PaintInstance(this.buildWindow, this.instanceIndex, instance, imageElement));
@@ -234,7 +249,7 @@ export class PaintOption{
 
 class SealOption extends PaintOption{
     constructor(uniqueSeal, buildingWindow, id, src, sizeX = 64, sizeY = 64, offsetX = -32, offsetY = -32){
-        super(buildingWindow, id, src, sizeX, sizeY, offsetX, offsetY);
+        super(buildingWindow, id, src, sizeX, sizeY, offsetX, offsetY, false, false);
 
         this.uniqueSeal = uniqueSeal;
     }
@@ -317,6 +332,8 @@ export class BuildingWindow{
         this.currentOption = paintOption;
         this.currentOption.boxElement.classList.add('active');
         if(this.currentBrushState == EBrushState.PAINT && showGhost) this.currentOption.createGhost();
+
+        if(showGhost) this.forceSetPaint();
     }
 
     setPaintMode = () => {
@@ -336,6 +353,12 @@ export class BuildingWindow{
         }
         else this.currentBrushState = EBrushState.NONE;
     }
+
+    forceSetPaint = () => {
+        this.currentBrushState = EBrushState.NONE;
+        this.setPaintMode();
+    }
+
     setEraserMode = () =>{
         this.changeBrush(this);
 
