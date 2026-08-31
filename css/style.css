@@ -56,6 +56,18 @@ button:active{
     cursor: var(--grab-cursor);
 }
 
+input[type="range"] {
+    cursor: var(--point-cursor);
+}
+
+input[type="range"]:active {
+    cursor: var(--grab-cursor);
+}
+
+input[type="checkbox"] {
+    cursor: var(--point-cursor);
+}
+
 area{
     cursor: var(--point-cursor);
 }

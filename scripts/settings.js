@@ -33,17 +33,18 @@ function getCategory(name){
     return category;
 }
 
-/*getCategory("a1");
-getCategory("a2");
-getCategory("a3");
-getCategory("a3");*/
-
 class Setting{
     constructor(name, category, defaultValue){
         this.lsID = `${category}_${name}`;
-        this.value = localStorage.getItem(lsID) ?? defaultValue;
+        this.defaultValue = defaultValue;
+
+        this.value = localStorage.getItem(lsID) ?? this.defaultValue;
 
         this.category = getCategory(category);
+    }
+
+    applyResetSettings(){
+        console.log("This was not overriden");
     }
 }
 
@@ -70,36 +71,29 @@ class SliderSetting extends Setting{
 
     onSliderChanged(e){
         let value = e.target.value;
-
         localStorage.setItem(lsID, value);
 
-        audioRef.volume = value;
         audioValElement.innerHTML = `${Math.round(value * 100)}%`;
+
+        //audioRef.volume = value;
+        this.setValue(value);
+    }
+
+    setValue(val){
+        
     }
 }
 
-export function createSliderSetting(name, category, min, max, value, step, finalization = "%"){
-    var lsID = `slider_${name}`;
-    var value = localStorage.getItem(lsID) ?? value;
+class AudioSetting extends SliderSetting{
+    constructor(name, category, audioRef){
+        super(name, category, audioRef.volume);
 
-    const sliderPrefab = `
-        <div class="audioSetting">
-            <p class="settingsName">${name}</p>
-            <div class="sliderHolder">
-                <input class="audioSlider" type="range" min="${min}" max="${max}" step="${step}" value="${value}">
-                <p class="audioSetting-value">100%</p>
-            </div>
-        </div>
-    `;
-
-    let sliderElement = instance.getElementsByClassName('audioSlider')[0];
-    let sliderValueElement = instance.getElementsByClassName('audioSetting-value')[0];
-
-    audioSliderElement.addEventListener('input', (e) => updateAudioSetting(e, lsID, sliderValueElement));
+        this.audioRef = audioRef;
+    }
 }
 
-export function createAudioSetting(audioRef, name){
-    let instance = instantiateBeforeEnd(audioSliderPrefab, audioSettingsHolder);
+export function createAudioSetting(audioRef, name, categoryName = "Audio"){
+    let instance = instantiateBeforeEnd(audioSliderPrefab, getCategory(categoryName));
 
     var lsID = `audio_${name}`;
     
@@ -141,15 +135,15 @@ class AudioCategory{
     volume = 1;
     audioList = [];
 
-    constructor(categoryName){
+    constructor(audioCategoryName, categoryName = "Audio"){
         audioCategories.push(this);
         
-        this.name = categoryName;
+        this.name = audioCategoryName;
         this.lsID = `audioCategory_${this.name}`;
         
         this.volume = localStorage.getItem(this.lsID) ?? this.volume;
 
-        this.instance = instantiateBeforeEnd(audioSliderPrefab, audioSettingsHolder);
+        this.instance = instantiateBeforeEnd(audioSliderPrefab, getCategory(categoryName));
 
         this.settingsNameElement = this.instance.getElementsByClassName('settingsName')[0];
         this.audioSliderElement = this.instance.getElementsByClassName('audioSlider')[0];
@@ -195,7 +189,6 @@ class CategoryAudio{
     }
 }
 
-const toggleSettingsHolder = document.getElementById('setting-optionsGeneral');
 const togglePrefab = `
     <div class="audioSetting">
         <p class="settingsName">Setting Name</p>
@@ -206,8 +199,8 @@ const togglePrefab = `
     </div>
 `;
 
-export function createToggleSetting(defaultValue, name, callback){
-    let instance = instantiateBeforeEnd(togglePrefab, toggleSettingsHolder);
+export function createToggleSetting(defaultValue, name, callback, categoryName = "Options"){
+    let instance = instantiateBeforeEnd(togglePrefab, getCategory(categoryName));
 
     var lsID = `toggle_${name}`;
 
