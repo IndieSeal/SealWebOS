@@ -8,12 +8,16 @@ import { getWindow } from "./window_manager.js";
 class PaintInstance{
     destroying = false;
 
-    constructor(buildWindow, index, element, imageElement){
+    constructor(buildWindow, paintOption, index, element, imageElement){
         this.buildWindow = buildWindow;
+        this.paintOption = paintOption;
+        
         this.index = index;
         
         this.element = element;
         this.imageElement = imageElement;
+
+        this.saveData = undefined;
 
         this.element.onclick = this.tryDestroy;
     }
@@ -31,10 +35,23 @@ class PaintInstance{
         this.imageElement.remove();
         let explodeElement = instantiateBeforeEnd(explosionPrefab, this.element);
         
+        let index = this.buildWindow.paintInstanceList.indexOf(this);
+        this.buildWindow.paintInstanceList.splice(index, 1);
+        
+        this.paintOption.removeInstancesData(this);
+
         destroyAfter(this.element, 500);
         destroyAfter(explodeElement, 500);
 
         return true;
+    }
+}
+
+class PaintInstanceSaveData{
+    constructor(x, y, doDefault){
+        this.x = x;
+        this.y = y;
+        this.doDefault = doDefault;
     }
 }
 
@@ -60,8 +77,8 @@ class MovingSeal extends PaintInstance{
     animationDelay = clamp(300, 700, Math.random() * 900);
     animationFrame = 0;
 
-    constructor(buildWindow, index, element, imageElement, sealType = 1, x = undefined, y = undefined){
-        super(buildWindow, index, element, imageElement);
+    constructor(buildWindow, paintOption, index, element, imageElement, sealType = 1, x = undefined, y = undefined){
+        super(buildWindow, paintOption, index, element, imageElement);
         
         this.sealType = sealType;
         SubscribeToZIndex(this.onZIndexIncreased);
@@ -158,11 +175,15 @@ export class PaintOption{
     // This will change the CSS animations, so I have to make the CSS scale be done here in the JS
     curScale = 1;
     curRotation = 0;
+
+    instanceDatas = [];
     
-    constructor(buildingWindow, id, src, sizeX = 64, sizeY = 64, offsetX = -64, offsetY = -64, scalable = true, rotatable = false){        
+    constructor(buildingWindow, id, src, sizeX = 64, sizeY = 64, offsetX = -64, offsetY = -64, scalable = true, rotatable = false, autoLoadData = true){        
         this.buildWindow = buildingWindow;
         
         this.myId = id;
+        this.instanceDataId = `${this.myId}_instanceData`;
+
         this.src = src;
 
         this.sizeX = sizeX;
@@ -199,6 +220,30 @@ export class PaintOption{
         setupAudioEvents(this.boxElement);
 
         this.buildWindow.paintOptionList.push(this);
+
+        if(autoLoadData) this.loadInstancesData();
+    }
+
+    loadInstancesData = () => {
+        let listJson = localStorage.getItem(this.instanceDataId);
+        let list = JSON.parse(listJson);
+    
+        if(list != null){
+            list.forEach(saveData => {
+                this.onPlace(saveData.x, saveData.y, saveData.doDefault);
+            });
+        }
+    }
+
+    saveInstancesData = (pInstance) => {
+        this.instanceDatas.push(pInstance.saveData);
+        localStorage.setItem(this.instanceDataId, JSON.stringify(this.instanceDatas));
+    }
+
+    removeInstancesData = (pInstance) => {
+        let saveIndex = this.instanceDatas.indexOf(pInstance.saveData);
+        this.instanceDatas.splice(saveIndex, 1);
+        localStorage.setItem(this.instanceDataId, JSON.stringify(this.instanceDatas));
     }
 
     createGhost = () => {
@@ -239,7 +284,11 @@ export class PaintOption{
 
         let imageElement = instance.querySelector('img');
 
-        if(createDefault) this.buildWindow.paintInstanceList.push(new PaintInstance(this.buildWindow, this.instanceIndex, instance, imageElement));
+        let cInstance = new PaintInstance(this.buildWindow, this, this.instanceIndex, instance, imageElement);
+        cInstance.saveData = new PaintInstanceSaveData(x, y, createDefault);
+        this.saveInstancesData(cInstance);
+
+        if(createDefault) this.buildWindow.paintInstanceList.push(cInstance);
 
         playPlaceObjectAudio();
         
@@ -249,14 +298,16 @@ export class PaintOption{
 
 class SealOption extends PaintOption{
     constructor(uniqueSeal, buildingWindow, id, src, sizeX = 64, sizeY = 64, offsetX = -32, offsetY = -32){
-        super(buildingWindow, id, src, sizeX, sizeY, offsetX, offsetY, false, false);
+        super(buildingWindow, id, src, sizeX, sizeY, offsetX, offsetY, false, false, false);
 
         this.uniqueSeal = uniqueSeal;
+        this.loadInstancesData();        
     }
     
     onPlace(x, y){
+        console.log(`I'm being placed, im the following seal: ${this.uniqueSeal}`);
         var [element, image] = super.onPlace(x, y, false);
-        this.buildWindow.paintInstanceList.push(new MovingSeal(this.buildWindow, this.buildWindow.index++, element, image, this.uniqueSeal, x, y));
+        this.buildWindow.paintInstanceList.push(new MovingSeal(this.buildWindow, this, this.buildWindow.index++, element, image, this.uniqueSeal, x, y));
     }
 }
 
