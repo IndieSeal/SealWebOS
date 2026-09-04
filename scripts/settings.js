@@ -1,6 +1,5 @@
 import { instantiateBeforeEnd } from "./mathf.js";
 
-const audioSettingsHolder = document.getElementById('setting-audioGeneral');
 const audioSliderPrefab = `
     <div class="audioSetting">
         <p class="settingsName">Setting Name</p>
@@ -38,21 +37,27 @@ class Setting{
         this.lsID = `${category}_${name}`;
         this.defaultValue = defaultValue;
 
-        this.value = localStorage.getItem(lsID) ?? this.defaultValue;
+        this.value = localStorage.getItem(this.lsID) ?? this.defaultValue;
 
-        this.category = getCategory(category);
+        this.categoryName = category;
+        this.category = getCategory(this.categoryName);
     }
 
-    applyResetSettings(){
-        console.log("This was not overriden");
+    setValue(val){
+        this.value = val;
+        localStorage.setItem(this.lsID, val);
+    }
+
+    applyResetSettings = () => {
+        this.setValue(this.defaultValue);
     }
 }
 
 class SliderSetting extends Setting{
-    constructor(name, category, defaultValue){
+    constructor(name, category, defaultValue, min, max, step, value){
         super(name, category, defaultValue);
 
-        const sliderPrefab = `
+        this.sliderPrefab = `
             <div class="audioSetting">
                 <p class="settingsName">${name}</p>
                 <div class="sliderHolder">
@@ -62,7 +67,7 @@ class SliderSetting extends Setting{
             </div>
         `;
 
-        let instance = instantiateBeforeEnd(sliderPrefab, getCategory(category));
+        let instance = instantiateBeforeEnd(this.sliderPrefab, getCategory(category));
         this.element = instance.getElementsByClassName('audioSlider')[0];
         this.valueElement = instance.getElementsByClassName('audioSetting-value')[0];
 
@@ -71,24 +76,27 @@ class SliderSetting extends Setting{
 
     onSliderChanged(e){
         let value = e.target.value;
-        localStorage.setItem(lsID, value);
-
-        audioValElement.innerHTML = `${Math.round(value * 100)}%`;
-
-        //audioRef.volume = value;
         this.setValue(value);
     }
 
     setValue(val){
-        
+        super.setValue(val);
+
+        audioValElement.innerHTML = `${Math.round(val * 100)}%`;
     }
 }
 
 class AudioSetting extends SliderSetting{
     constructor(name, category, audioRef){
-        super(name, category, audioRef.volume);
+        super(name, category, audioRef.volume, 0, 1, 0.01, audioRef.volume);
 
         this.audioRef = audioRef;
+    }
+
+    setValue(val){
+        super.setValue(val);
+
+        this.audioRef.volume = val;
     }
 }
 
@@ -198,6 +206,59 @@ const togglePrefab = `
         </div>
     </div>
 `;
+
+class ToggleSetting extends Setting{
+    constructor(name, category, defaultValue, callback){
+        super(name, category, defaultValue);
+
+        this.togglePrefab = `
+            <div class="audioSetting">
+                <p class="settingsName">${name}</p>
+                <div class="sliderHolder">
+                    <input class="checkbox" type="checkbox">
+                    <p class="audioSetting-value">${this.getStateName()}</p>
+                </div>
+            </div>
+        `;
+
+        this.callback = callback;
+
+        this.instance = instantiateBeforeEnd(this.togglePrefab, getCategory(category));
+        this.checkboxElement = this.instance.getElementsByClassName('checkbox')[0];
+        this.checkboxValueElement = this.instance.getElementsByClassName('audioSetting-value')[0];
+
+        this.checkboxElement.addEventListener('click', this.updateToggleSetting);
+
+        this.setValue(this.value);
+    }
+
+    updateToggleSetting = () => {
+        this.setValue(this.checkboxElement.checked);
+    }
+
+    setValue(val){
+        super.setValue(String(val));
+
+        this.checkboxValueElement.innerHTML = this.getStateName();
+        this.checkboxElement.checked = this.getCheckedStatus();
+
+        this.callback(this.getCheckedStatus());
+    }
+
+    getCheckedStatus = () => {
+        return this.value == 'true';
+    }
+
+    getStateName = () => {
+        return this.getCheckedStatus() ? "Active" : "Disabled";
+    }
+}
+
+/* This should be working now, I just want to do some more testing, and optimize the code even further.
+let toggleSet = new ToggleSetting('Debug Toggle', 'Options', 'false', (val) => {
+    console.log(`I am a toggle, and my value isssss... ${val}`)
+});
+*/
 
 export function createToggleSetting(defaultValue, name, callback, categoryName = "Options"){
     let instance = instantiateBeforeEnd(togglePrefab, getCategory(categoryName));

@@ -305,7 +305,6 @@ class SealOption extends PaintOption{
     }
     
     onPlace(x, y){
-        console.log(`I'm being placed, im the following seal: ${this.uniqueSeal}`);
         var [element, image] = super.onPlace(x, y, false);
         this.buildWindow.paintInstanceList.push(new MovingSeal(this.buildWindow, this, this.buildWindow.index++, element, image, this.uniqueSeal, x, y));
     }
