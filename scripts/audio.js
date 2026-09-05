@@ -114,7 +114,7 @@ var foxyScream = document.getElementById("foxyScream");
 foxyScream.volume = 0.1;
 addCategoryAudio('sfx', foxyScream);
 export function playFoxyScreamAudio(){
-  playAudio(foxyScream);
+  playAudio(foxyScream, undefined, undefined, false);
 }
 
 var squishGrab = document.getElementById("squishGrab"); 
@@ -123,13 +123,15 @@ export function playSquishGrabAudio(){
   playAudio(squishGrab, true);
 }
 
-function playAudio(audio, interrupt = false, pause = true){
+function playAudio(audio, interrupt = false, pause = true, changePitch = true){
   if(!hasBeenEnabled) return;
   if(interrupt || (pause && audio.currentTime > 0.1)) stopAudio(audio);
-  
-  audio.preservesPitch = false;
 
-  audio.playbackRate = 0.9 + (Math.random() * 0.3);
+  if(changePitch){
+    audio.preservesPitch = false;
+    audio.playbackRate = 0.9 + (Math.random() * 0.3);
+  }
+
   audio.play();
 }
 

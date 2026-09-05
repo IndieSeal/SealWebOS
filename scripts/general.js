@@ -2,7 +2,7 @@ import { SubscribeToZIndex } from "./window_global.js";
 import { playAirWooshAudio, playBiteAudio, playBreakGlassAudio, playFoxyScreamAudio, setupAudioEvents } from "./audio.js";
 import { clamp, instantiateBeforeEnd } from "./mathf.js";
 import { getMaxX, getMaxY } from "./bounds.js";
-import { createToggleSetting } from "./settings.js";
+import { ToggleSetting } from "./settings.js";
 import { explosionPrefab } from "./moving_seal.js";
 
 //#region Brick You
@@ -81,7 +81,9 @@ var latestJumpscareTimeout = undefined;
 var canPlayJumpscare = false;
 var isJumpscareEnabled = false;
 
-createToggleSetting(isJumpscareEnabled, '1 in 1000 for a Jumpscare', (checked) => { isJumpscareEnabled = checked; } );
+const jumpscareSetting = new ToggleSetting('1 in 1000 for a Jumpscare', 'Options', isJumpscareEnabled, (val) => {
+    isJumpscareEnabled = val;
+});
 
 document.addEventListener('onAutoplayEnabled', () => { canPlayJumpscare = true; })
 
@@ -99,11 +101,12 @@ function jumpscare(){
     if(latestJumpscareTimeout != undefined) clearTimeout(latestJumpscareTimeout);
 
     playFoxyScreamAudio();
-    
+
+    foxyJumpscare.style.display = 'flex';
+
     foxyJumpscare.currentTime = 0;
     foxyJumpscare.play();
 
-    foxyJumpscare.style.display = 'flex';
     latestJumpscareTimeout = setTimeout(unjumpscare, 750);
 }
 

@@ -197,17 +197,7 @@ class CategoryAudio{
     }
 }
 
-const togglePrefab = `
-    <div class="audioSetting">
-        <p class="settingsName">Setting Name</p>
-        <div class="sliderHolder">
-            <input class="checkbox" type="checkbox">
-            <p class="audioSetting-value">100%</p>
-        </div>
-    </div>
-`;
-
-class ToggleSetting extends Setting{
+export class ToggleSetting extends Setting{
     constructor(name, category, defaultValue, callback){
         super(name, category, defaultValue);
 
@@ -252,44 +242,4 @@ class ToggleSetting extends Setting{
     getStateName = () => {
         return this.getCheckedStatus() ? "Active" : "Disabled";
     }
-}
-
-/* This should be working now, I just want to do some more testing, and optimize the code even further.
-let toggleSet = new ToggleSetting('Debug Toggle', 'Options', 'false', (val) => {
-    console.log(`I am a toggle, and my value isssss... ${val}`)
-});
-*/
-
-export function createToggleSetting(defaultValue, name, callback, categoryName = "Options"){
-    let instance = instantiateBeforeEnd(togglePrefab, getCategory(categoryName));
-
-    var lsID = `toggle_${name}`;
-
-    // it returns a string so I have to do a check dang, everything in this language is dynamic, BUT NOT THIS? really?
-    let exists = localStorage.getItem(lsID);
-    var checkedValue = undefined;
-
-    if(exists) checkedValue = exists == 'true' ? true : false;
-    else checkedValue = defaultValue;
-    
-    let settingsNameElement = instance.getElementsByClassName('settingsName')[0];
-    let checkboxElement = instance.getElementsByClassName('checkbox')[0];
-    let checkboxValueElement = instance.getElementsByClassName('audioSetting-value')[0];
-
-    settingsNameElement.innerHTML = `${name}`;
-    checkboxElement.checked = checkedValue;
-
-    checkboxValueElement.innerHTML = `${ checkedValue ? 'Active' : 'Disabled' }`;
-    
-    callback(checkedValue);
-    checkboxElement.addEventListener('click', (e) => updateToggleSetting(e, lsID, checkboxElement, checkboxValueElement, callback));
-}
-
-function updateToggleSetting(e, lsID, checkboxElement, checkboxValueElement, callback){
-    let value = checkboxElement.checked;
-
-    checkboxValueElement.innerHTML = `${ checkboxElement.checked ? 'Active' : 'Disabled' }`;
-    callback(value);
-
-    localStorage.setItem(lsID, value);
 }
