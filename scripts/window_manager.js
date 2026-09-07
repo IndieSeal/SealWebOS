@@ -1,5 +1,6 @@
 import { setupAudioEvents } from "./audio.js";
 import { createDraggableElement, getDraggableElement } from "./drag.js"
+import { ToggleSetting } from "./settings.js";
 import { TASKBAR_SUFFIX, OPEN_SUFFIX, MINIMIZE_SUFFIX, CLOSE_SUFFIX, TASKBAR_ONTOP_SUFFIX, biggestZIndex, IncreaseZIndex } from "./window_global.js";
 
 var selectedIcon = undefined;
@@ -263,9 +264,14 @@ export function getWindow(id){
   return undefined;
 }
 
-var welcomeWindow = new Window("welcome", true, true, 'Introduction', './imgs/AppIcons/AboutMe.png');
-var settingsWindow = new Window("settingswindow", false, true, 'Settings', './imgs/AppIcons/Settings.svg');
-var sealtokWindow = new Window("sealtok", false, true, 'SealTok', './imgs/AppIcons/Sealtok.png');
-var sealClickerWindow = new Window("sealclicker", false, false, 'Seal Clicker', './imgs/AppIcons/SealClicker.png');
-var movingSealWindow = new Window("movingsealwindow", false, true, 'Moving Seals', './imgs/AppIcons/MovingSeals.svg', true);
-var sandbuilderWindow = new Window("sandbuilderwindow", false, true, 'Sand Builder', './imgs/AppIcons/Beach.svg', true);
+var welcomeWindow = undefined;
+const showAlwaysToggle = new ToggleSetting('Show on startup', 'welcomeWindow_body', true, (val) => {
+  if(welcomeWindow != undefined) return;
+  welcomeWindow = new Window('welcome', val, true, 'Introduction', './imgs/AppIcons/AboutMe.png');
+});
+
+var settingsWindow = new Window('settingswindow', false, true, 'Settings', './imgs/AppIcons/Settings.svg');
+var sealtokWindow = new Window('sealtok', false, true, 'SealTok', './imgs/AppIcons/Sealtok.png');
+var sealClickerWindow = new Window('sealclicker', false, false, 'Seal Clicker', './imgs/AppIcons/SealClicker.png');
+var movingSealWindow = new Window('movingsealwindow', false, true, 'Moving Seals', './imgs/AppIcons/MovingSeals.svg', true);
+var sandbuilderWindow = new Window('sandbuilderwindow', false, true, 'Sand Builder', './imgs/AppIcons/Beach.svg', true);

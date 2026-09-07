@@ -68,7 +68,7 @@ class SliderSetting extends Setting{
             </div>
         `;
 
-        let instance = instantiateBeforeEnd(this.sliderPrefab, getCategory(category));
+        let instance = instantiateBeforeEnd(this.sliderPrefab, this.category);
         this.element = instance.getElementsByClassName('audioSlider')[0];
         this.valueElement = instance.getElementsByClassName('audioSetting-value')[0];
 
@@ -188,7 +188,7 @@ export class ToggleSetting extends Setting{
 
         this.callback = callback;
 
-        this.instance = instantiateBeforeEnd(this.togglePrefab, getCategory(category));
+        this.instance = instantiateBeforeEnd(this.togglePrefab, this.category);
         this.checkboxElement = this.instance.getElementsByClassName('checkbox')[0];
         this.checkboxValueElement = this.instance.getElementsByClassName('audioSetting-value')[0];
 
