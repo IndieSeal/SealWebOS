@@ -53,6 +53,7 @@ class Setting{
     }
 }
 
+// I should add a sound for when you change the slider, so it feels JUICIER, you know?
 class SliderSetting extends Setting{
     constructor(name, category, defaultValue, min, max, step, value){
         super(name, category, defaultValue);
@@ -74,23 +75,25 @@ class SliderSetting extends Setting{
         this.element.addEventListener('input', this.onSliderChanged);
     }
 
-    onSliderChanged(e){
-        let value = e.target.value;
-        this.setValue(value);
-    }
-
     setValue(val){
         super.setValue(val);
 
-        audioValElement.innerHTML = `${Math.round(val * 100)}%`;
+        this.element.value = val;
+        this.valueElement.innerHTML = `${Math.round(val * 100)}%`;
+    }
+
+    onSliderChanged = (e) => {
+        let value = e.target.value;
+        this.setValue(value);
     }
 }
 
-class AudioSetting extends SliderSetting{
+export class AudioSetting extends SliderSetting{
     constructor(name, category, audioRef){
         super(name, category, audioRef.volume, 0, 1, 0.01, audioRef.volume);
 
         this.audioRef = audioRef;
+        this.setValue(this.value);
     }
 
     setValue(val){
@@ -98,34 +101,6 @@ class AudioSetting extends SliderSetting{
 
         this.audioRef.volume = val;
     }
-}
-
-export function createAudioSetting(audioRef, name, categoryName = "Audio"){
-    let instance = instantiateBeforeEnd(audioSliderPrefab, getCategory(categoryName));
-
-    var lsID = `audio_${name}`;
-    
-    let settingsNameElement = instance.getElementsByClassName('settingsName')[0];
-    let audioSliderElement = instance.getElementsByClassName('audioSlider')[0];
-    let audioValueElement = instance.getElementsByClassName('audioSetting-value')[0];
-
-    var volume = localStorage.getItem(lsID) ?? audioRef.volume;
-    
-    settingsNameElement.innerHTML = `${name}`;
-    audioValueElement.innerHTML = `${volume * 100}%`;
-    audioSliderElement.value = volume;  
-    audioRef.volume = volume;  
-    
-    audioSliderElement.addEventListener('input', (e) => updateAudioSetting(e, lsID, audioValueElement, audioRef));
-}
-
-function updateAudioSetting(e, lsID, audioValElement, audioRef){
-    let value = e.target.value;
-
-    localStorage.setItem(lsID, value);
-
-    audioRef.volume = value;
-    audioValElement.innerHTML = `${Math.round(value * 100)}%`;
 }
 
 var audioCategories = [];

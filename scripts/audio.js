@@ -1,6 +1,6 @@
 import { clamp, lerp } from "./mathf.js";
 import { deltaTime } from "./time.js";
-import { addCategoryAudio, createAudioSetting } from "./settings.js";
+import { addCategoryAudio, AudioSetting } from "./settings.js";
 
 var buttons = document.querySelectorAll('button');
 buttons.forEach(button => {
@@ -161,7 +161,8 @@ window.addEventListener('pointerdown', (e) => {
 var seaBackground = document.getElementById("seaBackground");
 seaBackground.loop = true;
 seaBackground.volume = 0.05;
-createAudioSetting(seaBackground, 'Sea Ambient');
+
+const seaBackgroundOption = new AudioSetting('Sea Ambient', 'Music', seaBackground);
 
 var dragAudio = document.getElementById("dragAudio"); 
 dragAudio.loop = true;
