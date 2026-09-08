@@ -55,6 +55,11 @@ export function instantiateBeforeEnd(prefab, parent){
     return parent.lastElementChild;
 }
 
+export function instantiateAfterBegin(prefab, parent){
+    parent.insertAdjacentHTML('afterbegin', prefab);
+    return parent.lastElementChild;
+}
+
 export function destroyAfter(element, millis){
     setTimeout(() => element.remove(), millis);
 }

@@ -11,7 +11,6 @@ export const CLOSE_SUFFIX = "_close";
 export var biggestZIndex = 10;
 export function IncreaseZIndex(){
     biggestZIndex++;
-
     zIndexSubscribers.forEach(sub => sub(biggestZIndex));
 }
 

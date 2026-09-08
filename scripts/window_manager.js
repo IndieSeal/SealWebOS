@@ -1,5 +1,6 @@
 import { setupAudioEvents } from "./audio.js";
 import { createDraggableElement, getDraggableElement } from "./drag.js"
+import { instantiateAfterBegin, instantiateBeforeEnd } from "./mathf.js";
 import { ToggleSetting } from "./settings.js";
 import { TASKBAR_SUFFIX, OPEN_SUFFIX, MINIMIZE_SUFFIX, CLOSE_SUFFIX, TASKBAR_ONTOP_SUFFIX, biggestZIndex, IncreaseZIndex } from "./window_global.js";
 
@@ -98,9 +99,9 @@ class Window{
       </div>
     `;
 
-    this.window.insertAdjacentHTML('afterbegin', this.windowHeaderPrefab);
-    taskbar.insertAdjacentHTML('beforeend', this.taskbarPrefab);
-    desktopApps.insertAdjacentHTML('beforeend', this.desktopPrefab);
+    instantiateAfterBegin(this.windowHeaderPrefab, this.window);
+    instantiateBeforeEnd(this.taskbarPrefab, taskbar);
+    instantiateBeforeEnd(this.desktopPrefab, desktopApps);
 
     this.taskbar = document.getElementById(id + TASKBAR_SUFFIX);
     this.taskbar_ontop = document.getElementById(id + TASKBAR_ONTOP_SUFFIX);
@@ -239,9 +240,7 @@ class Window{
   }
 
   handleWindowTap = () => {
-    //I should make it so if you're already in that window, then don't increase the Z-Index, it's unnecesary
-    
-    IncreaseZIndex();
+    if(this.window.style.zIndex != biggestZIndex) IncreaseZIndex();
 
     this.window.style.zIndex = biggestZIndex;
     this.latestZIndex = biggestZIndex;
@@ -275,3 +274,4 @@ var sealtokWindow = new Window('sealtok', false, true, 'SealTok', './imgs/AppIco
 var sealClickerWindow = new Window('sealclicker', false, false, 'Seal Clicker', './imgs/AppIcons/SealClicker.png');
 var movingSealWindow = new Window('movingsealwindow', false, true, 'Moving Seals', './imgs/AppIcons/MovingSeals.svg', true);
 var sandbuilderWindow = new Window('sandbuilderwindow', false, true, 'Sand Builder', './imgs/AppIcons/Beach.svg', true);
+//var achievementWindow = new Window('achievementwindow', false, true, 'Achievements', './imgs/AppIcons/Beach.svg');
