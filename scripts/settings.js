@@ -55,7 +55,7 @@ class Setting{
 
 // I should add a sound for when you change the slider, so it feels JUICIER, you know?
 class SliderSetting extends Setting{
-    constructor(name, category, defaultValue, min, max, step, value){
+    constructor(name, category, defaultValue, min, max, step, value, setValueAtStart = false){
         super(name, category, defaultValue);
 
         this.sliderPrefab = `
@@ -73,6 +73,8 @@ class SliderSetting extends Setting{
         this.valueElement = instance.getElementsByClassName('audioSetting-value')[0];
 
         this.element.addEventListener('input', this.onSliderChanged);
+
+        if(setValueAtStart) this.setValue(this.value);
     }
 
     setValue(val){
@@ -112,6 +114,45 @@ export function addCategoryAudio(categoryName, audio){
     category.addAudio(catAudio);
     
     return catAudio;
+}
+
+// test it out!! plssss
+var newAudioCategories = [];
+export function addNewCategoryAudio(categoryName, audio){
+    let category = newAudioCategories.find(cat => cat.name == categoryName);
+    if(category == undefined) category = new AudioCategorySetting(categoryName);
+    
+    let catAudio = new CategoryAudio(audio);
+    category.addAudio(catAudio);
+    
+    return catAudio;
+}
+
+export class AudioCategorySetting extends SliderSetting{
+    currentVolume = 1;
+    audioList = [];
+
+    constructor(name, category){
+        super(name, category, 1, 0, 1, 0.01, 1, true);
+    }
+    
+    setValue(val){
+        super.setValue(val);
+
+        this.updateCategoryAudioSetting(val);
+    }
+
+    addAudio = (audio) => {
+        this.audioList.push(audio);
+        this.updateCategoryAudioSetting();
+    }
+
+    updateCategoryAudioSetting = (val) => {
+        this.volume = val;
+
+        this.audioList.forEach(audio => audio.changeVolume(this.volume));
+        this.valueElement.innerHTML = `${Math.round(this.volume * 100)}%`;
+    }
 }
 
 class AudioCategory{
