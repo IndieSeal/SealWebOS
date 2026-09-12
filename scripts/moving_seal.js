@@ -80,14 +80,18 @@ class MovingSeal extends PaintInstance{
     animationDelay = clamp(300, 700, Math.random() * 900);
     animationFrame = 0;
 
-    constructor(buildWindow, paintOption, index, element, imageElement, sealType = 1, x = undefined, y = undefined){
+    speedMultiplier = 1;
+
+    constructor(buildWindow, paintOption, index, element, imageElement, sealType = 1, x = undefined, y = undefined, customSpeed = undefined){
         super(buildWindow, paintOption, index, element, imageElement);
         
         this.sealType = sealType;
         SubscribeToZIndex(this.onZIndexIncreased);
 
-        this.currentX = getClampedX(this.element, x == undefined ? (Math.random() * getMaxX(this.element)) : x);
-        this.currentY = getClampedY(this.element, y == undefined ? (Math.random() * getMaxX(this.element)) : y);
+        this.currentX = getClampedX(this.element, x ?? (Math.random() * getMaxX(this.element)));
+        this.currentY = getClampedY(this.element, y ?? (Math.random() * getMaxX(this.element)));
+
+        if(customSpeed) this.speedMultiplier = customSpeed;
 
         this.randomizeNextPosition();
         this.moveSeal();
@@ -97,7 +101,7 @@ class MovingSeal extends PaintInstance{
     moveSeal = () => {
         if(this.destroying) return;
         
-        let velocity = baseSealVelocity * deltaTime;
+        let velocity = (baseSealVelocity * deltaTime) / this.speedMultiplier;
         
         // false: negative axis, true: positive axis, got it?
         let direction = false;
@@ -134,7 +138,7 @@ class MovingSeal extends PaintInstance{
         else if(!pause) requestAnimationFrame(this.moveSeal);
         else{
             pause = false;
-            setTimeout(this.moveSeal, clamp(minPauseTimeout, maxPauseTimeout, Math.random() * maxPauseTimeout));
+            setTimeout(this.moveSeal, clamp(minPauseTimeout, maxPauseTimeout, Math.random() * maxPauseTimeout * this.speedMultiplier));
         }
     }
 
@@ -307,7 +311,7 @@ class SealOption extends PaintOption{
     
     onPlace(x, y, createDefault = false, customScale = undefined, customRot = undefined){
         var [element, image] = super.onPlace(x, y, false, customScale, customRot);
-        this.buildWindow.paintInstanceList.push(new MovingSeal(this.buildWindow, this, this.buildWindow.index++, element, image, this.uniqueSeal, x, y));
+        this.buildWindow.paintInstanceList.push(new MovingSeal(this.buildWindow, this, this.buildWindow.index++, element, image, this.uniqueSeal, x, y, customScale));
     }
 }
 
