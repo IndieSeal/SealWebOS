@@ -123,6 +123,11 @@ export function playSquishGrabAudio(){
   playAudio(squishGrab, true);
 }
 
+addCategoryAudio('ui', squishGrab);
+export function playUISquishGrabAudio(){
+  playAudio(squishGrab, true);
+}
+
 function playAudio(audio, interrupt = false, pause = true, changePitch = true){
   if(!hasBeenEnabled) return;
   if(interrupt || (pause && audio.currentTime > 0.1)) stopAudio(audio);

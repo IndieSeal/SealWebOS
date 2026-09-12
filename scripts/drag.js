@@ -1,4 +1,4 @@
-import { playSquishGrabAudio, setDragAudioVolume, setDragMaster } from "./audio.js";
+import { playSquishGrabAudio, playUISquishGrabAudio, setDragAudioVolume, setDragMaster } from "./audio.js";
 import { getClampedX, getClampedY, getMaxX, getMaxY, navbarRect } from "./bounds.js";
 import { abs, clamp, lerp } from "./mathf.js";
 import { deltaTime } from "./time.js";
@@ -87,7 +87,7 @@ class DraggableElement{
 
     this.header.classList.add('active');
 
-    playSquishGrabAudio();
+    playUISquishGrabAudio();
 
     this.dragging = true;
     this.hasInitialDrag = true;

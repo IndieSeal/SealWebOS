@@ -33,6 +33,8 @@ function getCategory(name){
 }
 
 class Setting{
+    onValueSet = undefined;
+
     constructor(name, category, defaultValue){
         this.lsID = `${category}_${name}`;
         this.defaultValue = defaultValue;
@@ -46,6 +48,8 @@ class Setting{
     setValue(val){
         this.value = val;
         localStorage.setItem(this.lsID, val);
+
+        if(this.onValueSet != undefined) this.onValueSet(val);
     }
 
     applyResetSettings = () => {
@@ -54,7 +58,7 @@ class Setting{
 }
 
 // I should add a sound for when you change the slider, so it feels JUICIER, you know?
-class SliderSetting extends Setting{
+export class SliderSetting extends Setting{
     constructor(name, category, defaultValue, min, max, step, value, setValueAtStart = false){
         super(name, category, defaultValue);
 
@@ -87,6 +91,20 @@ class SliderSetting extends Setting{
     onSliderChanged = (e) => {
         let value = e.target.value;
         this.setValue(value);
+    }
+}
+
+export class LiteralSliderSetting extends SliderSetting{
+    constructor(name, category, defaultValue, min, max, step, value, setValueAtStart = false, finisher = 'x'){
+        super(name, category, defaultValue, min, max, step, value, setValueAtStart);
+
+        this.finisher = finisher;
+    }
+
+    setValue(val){
+        super.setValue(val);
+    
+        this.valueElement.innerHTML = `${val}${this.finisher}`;
     }
 }
 

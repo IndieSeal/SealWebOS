@@ -4,6 +4,7 @@ import { lerp, distance, randomBool, abs, clamp, destroyAfter, pingpong, instant
 import { deltaTime } from "./time.js";
 import { biggestZIndex, IncreaseZIndex, SubscribeToZIndex, UnsubscribeToZIndex } from "./window_global.js";
 import { getWindow } from "./window_manager.js";
+import { LiteralSliderSetting, SliderSetting } from "./settings.js";
 
 class PaintInstance{
     destroying = false;
@@ -48,9 +49,11 @@ class PaintInstance{
 }
 
 class PaintInstanceSaveData{
-    constructor(x, y, doDefault){
+    constructor(x, y, scale, rot, doDefault){
         this.x = x;
         this.y = y;
+        this.scale = scale;
+        this.rot = rot;
         this.doDefault = doDefault;
     }
 }
@@ -171,11 +174,6 @@ class MovingSeal extends PaintInstance{
 
 export class PaintOption{
     instanceIndex = 0;
-
-    // This will change the CSS animations, so I have to make the CSS scale be done here in the JS
-    curScale = 1;
-    curRotation = 0;
-
     instanceDatas = [];
     
     constructor(buildingWindow, id, src, sizeX = 64, sizeY = 64, offsetX = -64, offsetY = -64, scalable = true, rotatable = false, autoLoadData = true){        
@@ -230,7 +228,7 @@ export class PaintOption{
     
         if(list != null){
             list.forEach(saveData => {
-                this.onPlace(saveData.x, saveData.y, saveData.doDefault);
+                this.onPlace(saveData.x, saveData.y, saveData.doDefault, saveData.scale, saveData.rot);
             });
         }
     }
@@ -249,8 +247,8 @@ export class PaintOption{
     createGhost = () => {
         this.ghostInstance.style.display = 'inline';
 
-        let rotString = this.canBeRotated ? `rotate(${this.curRotation}deg)` : "";
-        let scaleString = this.canBeScaled ? `scale(${this.curScale})` : "";
+        let rotString = this.canBeRotated ? `rotate(${this.buildWindow.curRotation}deg)` : "";
+        let scaleString = this.canBeScaled ? `scale(${this.buildWindow.curScale})` : "";
         this.ghostInstance.style.transform = `${rotString} ${scaleString}`;
     }
     
@@ -271,21 +269,24 @@ export class PaintOption{
         this.onPlace(x + this.offsetX, y + this.offsetY);
     }
 
-    onPlace(x, y, createDefault = true){
+    onPlace(x, y, createDefault = true, customScale = undefined, customRot = undefined){
         this.instanceIndex++;
 
         let instance = instantiateBeforeEnd(this.placeablePrefab, document.body);
         instance.style.left = `${x}px`;
         instance.style.top = `${y}px`;
 
-        let rotString = this.canBeRotated ? `rotate(${this.curRotation}deg)` : "";
-        let scaleString = this.canBeScaled ? `scale(${this.curScale})` : "";
+        let scale = customScale ?? this.buildWindow.curScale;
+        let rotation = customRot ?? this.buildWindow.curRotation;
+
+        let rotString = this.canBeRotated ? `rotate(${rotation}deg)` : "";
+        let scaleString = this.canBeScaled ? `scale(${scale})` : "";
         instance.style.transform = `${rotString} ${scaleString}`;
 
         let imageElement = instance.querySelector('img');
 
         let cInstance = new PaintInstance(this.buildWindow, this, this.instanceIndex, instance, imageElement);
-        cInstance.saveData = new PaintInstanceSaveData(x, y, createDefault);
+        cInstance.saveData = new PaintInstanceSaveData(x, y, scale, rotation, createDefault);
         this.saveInstancesData(cInstance);
 
         if(createDefault) this.buildWindow.paintInstanceList.push(cInstance);
@@ -298,14 +299,14 @@ export class PaintOption{
 
 class SealOption extends PaintOption{
     constructor(uniqueSeal, buildingWindow, id, src, sizeX = 64, sizeY = 64, offsetX = -32, offsetY = -32){
-        super(buildingWindow, id, src, sizeX, sizeY, offsetX, offsetY, false, false, false);
+        super(buildingWindow, id, src, sizeX, sizeY, offsetX, offsetY, true, false, false);
 
         this.uniqueSeal = uniqueSeal;
         this.loadInstancesData();        
     }
     
-    onPlace(x, y){
-        var [element, image] = super.onPlace(x, y, false);
+    onPlace(x, y, createDefault = false, customScale = undefined, customRot = undefined){
+        var [element, image] = super.onPlace(x, y, false, customScale, customRot);
         this.buildWindow.paintInstanceList.push(new MovingSeal(this.buildWindow, this, this.buildWindow.index++, element, image, this.uniqueSeal, x, y));
     }
 }
@@ -331,6 +332,9 @@ export class BuildingWindow{
     
     paintInstanceList = [];
     index = 0;
+
+    curScale = 1;
+    curRotation = 0;
     
     constructor(id, window){
         buildWindows.push(this);
@@ -363,6 +367,23 @@ export class BuildingWindow{
         this.nukeSealButton = document.getElementById(`${this.myId}_nuke`);
         this.nukeSealButton.style.pointerEvents = 'auto';
         this.nukeSealButton.onclick = this.nukeInstances;
+
+        this.sizeSlider = new LiteralSliderSetting('Scale', `${this.myId}-Sliders`, 1, 0.3, 2, 0.05, 1, true);
+        this.rotationSlider = new LiteralSliderSetting('Rotation', `${this.myId}-Sliders`, 0, 0, 360, 1, 0, true, '°');
+
+        this.sizeSlider.onValueSet = this.onSizeChanged;
+        this.rotationSlider.onValueSet = this.onRotationChanged;
+
+        this.sizeSlider.setValue(this.sizeSlider.value);
+        this.rotationSlider.setValue(this.rotationSlider.value);
+    }
+
+    onSizeChanged = (val) => {
+        this.curScale = val;
+    }
+
+    onRotationChanged = (val) => {
+        this.curRotation = val;
     }
 
     setup = (paintOptions) => {
