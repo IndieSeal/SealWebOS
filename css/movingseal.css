@@ -71,3 +71,10 @@
     align-self: flex-end;
     text-align: center;
 }
+
+.movingSeals-sliders{
+    align-self: center;
+
+    margin-top: 20px;
+    width: 90%;
+}
