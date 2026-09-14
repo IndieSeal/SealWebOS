@@ -505,7 +505,11 @@ export class BuildingWindow{
             if(targetID == option.boxElement.id) hittingValidElement = true;
         });
 
-        if(targetID == this.sizeSlider.element.id || targetID == this.rotationSlider.element.id || targetID == this.spawnSealButton.id || targetID == this.eraserSealButton.id || targetID == this.nukeSealButton.id) hittingValidElement = true;
+        // this is outputting true, for some DANG reason :[ 
+        console.log(targetID == this.sizeSlider.element.id);
+        console.log(targetID == this.rotationSlider.element.id);
+
+        if(targetID == this.spawnSealButton.id || targetID == this.eraserSealButton.id || targetID == this.nukeSealButton.id) hittingValidElement = true;
         return hittingValidElement;
     }
 
