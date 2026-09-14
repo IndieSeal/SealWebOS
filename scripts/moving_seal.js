@@ -374,8 +374,11 @@ export class BuildingWindow{
 
         this.sizeSlider = new LiteralSliderSetting('Scale', `${this.myId}-Sliders`, 1, 0.3, 2, 0.05, 1, true);
         this.rotationSlider = new LiteralSliderSetting('Rotation', `${this.myId}-Sliders`, 0, 0, 360, 1, 0, true, '°');
+
         this.sizeSlider.element.style.pointerEvents = 'auto';
+        this.sizeSlider.element.id = `${this.myId}_sizeSlider`;
         this.rotationSlider.element.style.pointerEvents = 'auto';
+        this.rotationSlider.element.id = `${this.myId}_rotSlider`;
 
         this.sizeSlider.onValueSet = this.onSizeChanged;
         this.rotationSlider.onValueSet = this.onRotationChanged;
@@ -505,11 +508,7 @@ export class BuildingWindow{
             if(targetID == option.boxElement.id) hittingValidElement = true;
         });
 
-        // this is outputting true, for some DANG reason :[ 
-        console.log(targetID == this.sizeSlider.element.id);
-        console.log(targetID == this.rotationSlider.element.id);
-
-        if(targetID == this.spawnSealButton.id || targetID == this.eraserSealButton.id || targetID == this.nukeSealButton.id) hittingValidElement = true;
+        if(targetID == this.sizeSlider.element.id || targetID == this.rotationSlider.element.id || targetID == this.spawnSealButton.id || targetID == this.eraserSealButton.id || targetID == this.nukeSealButton.id) hittingValidElement = true;
         return hittingValidElement;
     }
 
