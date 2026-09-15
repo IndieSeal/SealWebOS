@@ -32,5 +32,9 @@
 }
 
 .audioSlider{
-    width: 275px;
+    width: 85%;
+}
+
+.audioSetting-value{
+    width: 15%;
 }

@@ -384,6 +384,11 @@ export class BuildingWindow{
         this.sizeSlider = new LiteralSliderSetting('Scale', `${this.myId}-Sliders`, 1, 0.3, 2, 0.05, 1, true);
         this.rotationSlider = new LiteralSliderSetting('Rotation', `${this.myId}-Sliders`, 0, 0, 360, 1, 0, true, '°');
 
+        this.sizeSlider.element.style.pointerEvents = 'auto';
+        this.sizeSlider.element.id = `${this.myId}_sizeSlider`;
+        this.rotationSlider.element.style.pointerEvents = 'auto';
+        this.rotationSlider.element.id = `${this.myId}_rotSlider`;
+
         this.sizeSlider.onValueSet = this.onSizeChanged;
         this.rotationSlider.onValueSet = this.onRotationChanged;
 
@@ -510,12 +515,14 @@ export class BuildingWindow{
     }
 
     isHittingValidElement = (e) => {
+        let targetID = e.target.id;
+
         let hittingValidElement = false;
         this.paintOptionList.forEach(option => {
-            if(e.target.id == option.boxElement.id) hittingValidElement = true;
+            if(targetID == option.boxElement.id) hittingValidElement = true;
         });
 
-        if(e.target.id == this.spawnSealButton.id || e.target.id == this.eraserSealButton.id || e.target.id == this.nukeSealButton.id) hittingValidElement = true;
+        if(targetID == this.sizeSlider.element.id || targetID == this.rotationSlider.element.id || targetID == this.spawnSealButton.id || targetID == this.eraserSealButton.id || targetID == this.nukeSealButton.id) hittingValidElement = true;
         return hittingValidElement;
     }
 
