@@ -346,14 +346,23 @@ export class BuildingWindow{
         this.myId = id;
         this.window = window;
 
+        document.addEventListener('onWindowOpen', (e) => {
+            if(e.detail.windowID == this.window.myId){
+                document.addEventListener('keydown', this.arrowKeyHandler);
+            }
+        });
         document.addEventListener('onWindowMinimize', (e) => {
             if(e.detail.windowID == this.window.myId){
                 this.setNone();
+
+                document.removeEventListener('keydown', this.arrowKeyHandler);
             }
         });
         document.addEventListener('onWindowClose', (e) => {
             if(e.detail.windowID == this.window.myId){
                 this.setNone();
+
+                document.removeEventListener('keydown', this.arrowKeyHandler);
             }
         });
         
@@ -380,6 +389,11 @@ export class BuildingWindow{
 
         this.sizeSlider.setValue(this.sizeSlider.value);
         this.rotationSlider.setValue(this.rotationSlider.value);
+    }
+
+    arrowKeyHandler = (e) => {
+        if(e.key == 'ArrowDown') this.sizeSlider.setValue(this.sizeSlider.value -= this.sizeSlider.step);
+        else if(e.key == 'ArrowUp') this.sizeSlider.setValue(this.sizeSlider.value += this.sizeSlider.step);
     }
 
     onSizeChanged = (val) => {

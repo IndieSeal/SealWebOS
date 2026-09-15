@@ -62,6 +62,8 @@ export class SliderSetting extends Setting{
     constructor(name, category, defaultValue, min, max, step, value, setValueAtStart = false){
         super(name, category, defaultValue);
 
+        this.step = step;
+
         this.sliderPrefab = `
             <div class="audioSetting">
                 <p class="settingsName">${name}</p>
