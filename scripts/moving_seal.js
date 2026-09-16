@@ -397,8 +397,21 @@ export class BuildingWindow{
     }
 
     arrowKeyHandler = (e) => {
-        if(e.key == 'ArrowDown') this.sizeSlider.setValue(this.sizeSlider.value -= this.sizeSlider.step);
-        else if(e.key == 'ArrowUp') this.sizeSlider.setValue(this.sizeSlider.value += this.sizeSlider.step);
+        if(this.currentBrushState != EBrushState.PAINT) return;
+
+        // Deselect sliders so they don't move at the same time
+        e = e || window.event;
+        e.preventDefault();
+
+        // Apply the size and rotation to the ghost
+
+        let currentSizeSliderValue = Number(this.sizeSlider.value);
+        let currentRotSliderValue = Number(this.rotationSlider.value);
+
+        if(e.key == 'ArrowDown') this.sizeSlider.setValue(currentSizeSliderValue -= this.sizeSlider.step);
+        else if(e.key == 'ArrowUp') this.sizeSlider.setValue(currentSizeSliderValue += this.sizeSlider.step);
+        else if(e.key == 'ArrowLeft') this.rotationSlider.setValue(currentRotSliderValue -= this.rotationSlider.step);
+        else if(e.key == 'ArrowRight') this.rotationSlider.setValue(currentRotSliderValue += this.rotationSlider.step);
     }
 
     onSizeChanged = (val) => {

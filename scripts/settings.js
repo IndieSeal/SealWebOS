@@ -1,4 +1,4 @@
-import { instantiateBeforeEnd } from "./mathf.js";
+import { clamp, instantiateBeforeEnd } from "./mathf.js";
 
 const audioSliderPrefab = `
     <div class="audioSetting">
@@ -62,6 +62,8 @@ export class SliderSetting extends Setting{
     constructor(name, category, defaultValue, min, max, step, value, setValueAtStart = false){
         super(name, category, defaultValue);
 
+        this.min = min;
+        this.max = max;
         this.step = step;
 
         this.sliderPrefab = `
@@ -84,10 +86,13 @@ export class SliderSetting extends Setting{
     }
 
     setValue(val){
-        super.setValue(val);
+        let value = clamp(this.min, this.max, Number(val));
+        
+        // For some reason it IS clamping, but it isn't showing as such in the value element?
+        super.setValue(value);
 
-        this.element.value = val;
-        this.valueElement.innerHTML = `${Math.round(val * 100)}%`;
+        this.element.value = value;
+        this.valueElement.innerHTML = `${Math.round(value * 100)}%`;
     }
 
     onSliderChanged = (e) => {
@@ -106,7 +111,7 @@ export class LiteralSliderSetting extends SliderSetting{
     setValue(val){
         super.setValue(val);
     
-        this.valueElement.innerHTML = `${val}${this.finisher}`;
+        this.valueElement.innerHTML = `${this.value}${this.finisher}`;
     }
 }
 
