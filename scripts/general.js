@@ -87,7 +87,7 @@ const jumpscareSetting = new ToggleSetting('1 in 1000 for a Jumpscare', 'Options
 
 document.addEventListener('onAutoplayEnabled', () => { canPlayJumpscare = true; })
 
-const specificValue = 376;
+const specificValue = 1;
 
 function rollChance(){
     let randomValue = Math.ceil(Math.random() * 1000);

@@ -87,8 +87,6 @@ export class SliderSetting extends Setting{
 
     setValue(val){
         let value = clamp(this.min, this.max, Number(val));
-        
-        // For some reason it IS clamping, but it isn't showing as such in the value element?
         super.setValue(value);
 
         this.element.value = value;

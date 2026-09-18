@@ -403,15 +403,16 @@ export class BuildingWindow{
         e = e || window.event;
         e.preventDefault();
 
-        // Apply the size and rotation to the ghost
-
         let currentSizeSliderValue = Number(this.sizeSlider.value);
         let currentRotSliderValue = Number(this.rotationSlider.value);
 
-        if(e.key == 'ArrowDown') this.sizeSlider.setValue(currentSizeSliderValue -= this.sizeSlider.step);
-        else if(e.key == 'ArrowUp') this.sizeSlider.setValue(currentSizeSliderValue += this.sizeSlider.step);
-        else if(e.key == 'ArrowLeft') this.rotationSlider.setValue(currentRotSliderValue -= this.rotationSlider.step);
-        else if(e.key == 'ArrowRight') this.rotationSlider.setValue(currentRotSliderValue += this.rotationSlider.step);
+        if(e.key == 'ArrowDown') this.sizeSlider.setValue((currentSizeSliderValue -= this.sizeSlider.step).toFixed(2));
+        if(e.key == 'ArrowUp') this.sizeSlider.setValue((currentSizeSliderValue += this.sizeSlider.step).toFixed(2));
+        if(e.key == 'ArrowLeft') this.rotationSlider.setValue((currentRotSliderValue -= this.rotationSlider.step).toFixed(2));
+        if(e.key == 'ArrowRight') this.rotationSlider.setValue((currentRotSliderValue += this.rotationSlider.step).toFixed(2));
+
+        // Apply the size and rotation to the ghost
+        this.currentOption.createGhost();
     }
 
     onSizeChanged = (val) => {
@@ -520,7 +521,10 @@ export class BuildingWindow{
 
     spawnPaintOption = (e) => {
         e = e || window.event;
-        e.preventDefault();
+
+        // NOT SURE IF DISABLING THIS WILL CAUSE BIG REPERCUSIONS THAT I FORGOT ABOUT, BUT!!!
+        // IT SOLVES THE SLIDER STUFF :D
+        //e.preventDefault();
 
         if(this.currentBrushState != EBrushState.PAINT || this.isOtherHittingValidElement(e)) return;
 
