@@ -417,10 +417,16 @@ export class BuildingWindow{
 
     onSizeChanged = (val) => {
         this.curScale = val;
+
+        if(this.currentBrushState != EBrushState.PAINT) return;
+        this.currentOption.createGhost();
     }
 
     onRotationChanged = (val) => {
         this.curRotation = val;
+
+        if(this.currentBrushState != EBrushState.PAINT) return;
+        this.currentOption.createGhost();
     }
 
     setup = (paintOptions) => {
