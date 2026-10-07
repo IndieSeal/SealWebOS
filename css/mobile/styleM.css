@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DynaPuff:wght@400..700&family=Noto+Sans+JP:wght@100..900&display=swap');
+
+* {
+    font-family: "Noto Sans JP", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+
+    color: black;
+
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+:root{
+    --primary-color: #c0f7f3;
+    --window-header-color: #2196F3;
+    --window-bright-header-color: rgb(54, 104, 145);
+    --window-selected-header-color: #2c5475;
+    
+    --font-size-m: 1.12rem;
+    --border-radius-s: 8px;
+
+    --window-buttons-width: 30px;
+
+    --minimize-button-color: gray;
+    --minimize-button-hover-color: #4d4d4d;
+
+    --close-button-color: red;
+    --close-button-hover-color: #af0000;
+}
+
+html {
+  cursor: var(--normal-cursor);
+
+  width: 100dvw;
+  height: 100dvh;
+}
+
+body{
+    overflow-x: hidden;
+    overflow-y: hidden;
+
+    height: 100dvh;
+
+    background-image: url('https://jooinn.com/images/beach-sand-pattern-5.jpg');
+    background-size: cover;
+}
+
+button{
+    cursor: var(--point-cursor);
+    border: none;
+    background: none;
+}
+
+button:active{
+    cursor: var(--grab-cursor);
+}
+
+input[type="range"] {
+    cursor: var(--point-cursor);
+}
+
+input[type="range"]:active {
+    cursor: var(--grab-cursor);
+}
+
+input[type="checkbox"] {
+    cursor: var(--point-cursor);
+}
+
+area{
+    cursor: var(--point-cursor);
+}
+
+area:active{
+    cursor: var(--grab-cursor);
+}
+
+img{
+    width: 100%;
+    object-fit: cover;
+
+    pointer-events: none;
+}
+
+.bebas-neue-regular {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+*,
+.dynapuff-regular {
+  font-family: "DynaPuff", system-ui;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+b{
+    font-weight: 600;
+}
+
+.rubik-spray-paint-regular {
+  font-family: "Rubik Spray Paint", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.desktop_app_icon{
+    width: 80px;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+    
+    text-align: center;
+    padding: 16px;
+    filter: drop-shadow(0 0 8px rgb(75, 101, 114));
+
+    gap: 5px;
+}
+
+.desktop_app_icon img{
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    box-shadow: 0 2px 4px black;
+}
+
+.desktop_app_icon p{
+    width: calc(100% + 32px);
+}
+
+.desktop_app_icon:hover{
+    cursor: var(--point-cursor);
+    
+    background-color: #2195f376;
+
+    backdrop-filter: blur(10px);
+}
+
+.desktop_app_icon.selected{
+    background-color: #2196F3;
+
+    backdrop-filter: blur(0px);
+}
+
+.desktop_app_icon p{
+    margin: 0px;
+    color: #000000;
+}
+
+@keyframes scale {
+    from{
+        transform: scale(0);
+    }
+
+    to{
+        transform: scale(1);
+    }
+}
+
+@keyframes scale-down {
+    from{
+        transform: scale(1);
+    }
+
+    to{
+        transform: scale(0);
+    }
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+
+    padding: 0;
+    margin: 0;
+
+    justify-content: space-around;
+    align-items: center;
+}
+
+.column{
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-around;
+    align-items: center;
+}
+
+#container3D{
+    position: absolute;
+    pointer-events: none;
+
+    width: 100vw;
+    height: 100vh;
+}
+
+#container3D canvas{
+    position: absolute;
+
+    pointer-events: none;
+    top: 300px;
+    left: 300px;
+}
